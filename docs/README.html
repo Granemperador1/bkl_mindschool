@@ -1,0 +1,798 @@
+<!doctype html>
+<html>
+  <head>
+    <title>README.md</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+
+    <style>
+      /* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+      /*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+      body {
+        font-family: var(
+          --vscode-markdown-font-family,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe WPC",
+          "Segoe UI",
+          "Ubuntu",
+          "Droid Sans",
+          sans-serif
+        );
+        font-size: var(--vscode-markdown-font-size, 14px);
+        padding: 0 26px;
+        line-height: var(--vscode-markdown-line-height, 22px);
+        word-wrap: break-word;
+      }
+
+      #code-csp-warning {
+        position: fixed;
+        top: 0;
+        right: 0;
+        color: white;
+        margin: 16px;
+        text-align: center;
+        font-size: 12px;
+        font-family: sans-serif;
+        background-color: #444444;
+        cursor: pointer;
+        padding: 6px;
+        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+      }
+
+      #code-csp-warning:hover {
+        text-decoration: none;
+        background-color: #007acc;
+        box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+      }
+
+      body.scrollBeyondLastLine {
+        margin-bottom: calc(100vh - 22px);
+      }
+
+      body.showEditorSelection .code-line {
+        position: relative;
+      }
+
+      body.showEditorSelection .code-active-line:before,
+      body.showEditorSelection .code-line:hover:before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: -12px;
+        height: 100%;
+      }
+
+      body.showEditorSelection li.code-active-line:before,
+      body.showEditorSelection li.code-line:hover:before {
+        left: -30px;
+      }
+
+      .vscode-light.showEditorSelection .code-active-line:before {
+        border-left: 3px solid rgba(0, 0, 0, 0.15);
+      }
+
+      .vscode-light.showEditorSelection .code-line:hover:before {
+        border-left: 3px solid rgba(0, 0, 0, 0.4);
+      }
+
+      .vscode-light.showEditorSelection .code-line .code-line:hover:before {
+        border-left: none;
+      }
+
+      .vscode-dark.showEditorSelection .code-active-line:before {
+        border-left: 3px solid rgba(255, 255, 255, 0.4);
+      }
+
+      .vscode-dark.showEditorSelection .code-line:hover:before {
+        border-left: 3px solid rgba(255, 255, 255, 0.6);
+      }
+
+      .vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+        border-left: none;
+      }
+
+      .vscode-high-contrast.showEditorSelection .code-active-line:before {
+        border-left: 3px solid rgba(255, 160, 0, 0.7);
+      }
+
+      .vscode-high-contrast.showEditorSelection .code-line:hover:before {
+        border-left: 3px solid rgba(255, 160, 0, 1);
+      }
+
+      .vscode-high-contrast.showEditorSelection
+        .code-line
+        .code-line:hover:before {
+        border-left: none;
+      }
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      a:focus,
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: 1px solid -webkit-focus-ring-color;
+        outline-offset: -1px;
+      }
+
+      hr {
+        border: 0;
+        height: 2px;
+        border-bottom: 2px solid;
+      }
+
+      h1 {
+        padding-bottom: 0.3em;
+        line-height: 1.2;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-weight: normal;
+      }
+
+      table {
+        border-collapse: collapse;
+      }
+
+      table > thead > tr > th {
+        text-align: left;
+        border-bottom: 1px solid;
+      }
+
+      table > thead > tr > th,
+      table > thead > tr > td,
+      table > tbody > tr > th,
+      table > tbody > tr > td {
+        padding: 5px 10px;
+      }
+
+      table > tbody > tr + tr > td {
+        border-top: 1px solid;
+      }
+
+      blockquote {
+        margin: 0 7px 0 5px;
+        padding: 0 16px 0 10px;
+        border-left-width: 5px;
+        border-left-style: solid;
+      }
+
+      code {
+        font-family:
+          Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace,
+          "Droid Sans Fallback";
+        font-size: 1em;
+        line-height: 1.357em;
+      }
+
+      body.wordWrap pre {
+        white-space: pre-wrap;
+      }
+
+      pre:not(.hljs),
+      pre.hljs code > div {
+        padding: 16px;
+        border-radius: 3px;
+        overflow: auto;
+      }
+
+      pre code {
+        color: var(--vscode-editor-foreground);
+        tab-size: 4;
+      }
+
+      /** Theming */
+
+      .vscode-light pre {
+        background-color: rgba(220, 220, 220, 0.4);
+      }
+
+      .vscode-dark pre {
+        background-color: rgba(10, 10, 10, 0.4);
+      }
+
+      .vscode-high-contrast pre {
+        background-color: rgb(0, 0, 0);
+      }
+
+      .vscode-high-contrast h1 {
+        border-color: rgb(0, 0, 0);
+      }
+
+      .vscode-light table > thead > tr > th {
+        border-color: rgba(0, 0, 0, 0.69);
+      }
+
+      .vscode-dark table > thead > tr > th {
+        border-color: rgba(255, 255, 255, 0.69);
+      }
+
+      .vscode-light h1,
+      .vscode-light hr,
+      .vscode-light table > tbody > tr + tr > td {
+        border-color: rgba(0, 0, 0, 0.18);
+      }
+
+      .vscode-dark h1,
+      .vscode-dark hr,
+      .vscode-dark table > tbody > tr + tr > td {
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+    </style>
+
+    <style>
+      /* Tomorrow Theme */
+      /* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+      /* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+      /* Tomorrow Comment */
+      .hljs-comment,
+      .hljs-quote {
+        color: #8e908c;
+      }
+
+      /* Tomorrow Red */
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-tag,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class,
+      .hljs-regexp,
+      .hljs-deletion {
+        color: #c82829;
+      }
+
+      /* Tomorrow Orange */
+      .hljs-number,
+      .hljs-built_in,
+      .hljs-builtin-name,
+      .hljs-literal,
+      .hljs-type,
+      .hljs-params,
+      .hljs-meta,
+      .hljs-link {
+        color: #f5871f;
+      }
+
+      /* Tomorrow Yellow */
+      .hljs-attribute {
+        color: #eab700;
+      }
+
+      /* Tomorrow Green */
+      .hljs-string,
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-addition {
+        color: #718c00;
+      }
+
+      /* Tomorrow Blue */
+      .hljs-title,
+      .hljs-section {
+        color: #4271ae;
+      }
+
+      /* Tomorrow Purple */
+      .hljs-keyword,
+      .hljs-selector-tag {
+        color: #8959a8;
+      }
+
+      .hljs {
+        display: block;
+        overflow-x: auto;
+        color: #4d4d4c;
+        padding: 0.5em;
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+    </style>
+
+    <style>
+      /*
+ * Markdown PDF CSS
+ */
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu",
+          "Droid Sans", sans-serif, "Meiryo";
+        padding: 0 12px;
+      }
+
+      pre {
+        background-color: #f8f8f8;
+        border: 1px solid #cccccc;
+        border-radius: 3px;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+      }
+
+      pre:not(.hljs) {
+        padding: 23px;
+        line-height: 19px;
+      }
+
+      blockquote {
+        background: rgba(127, 127, 127, 0.1);
+        border-color: rgba(0, 122, 204, 0.5);
+      }
+
+      .emoji {
+        height: 1.4em;
+      }
+
+      code {
+        font-size: 14px;
+        line-height: 19px;
+      }
+
+      /* for inline code */
+      :not(pre):not(.hljs) > code {
+        color: #c9ae75; /* Change the old color so it seems less like an error */
+        font-size: inherit;
+      }
+
+      /* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+      .page {
+        page-break-after: always;
+      }
+    </style>
+
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+  </head>
+  <body>
+    <script>
+      mermaid.initialize({
+        startOnLoad: true,
+        theme:
+          document.body.classList.contains("vscode-dark") ||
+          document.body.classList.contains("vscode-high-contrast")
+            ? "dark"
+            : "default",
+      });
+    </script>
+    <h1 id="%F0%9F%8E%93-mindschool---sistema-de-gesti%C3%B3n-de-aprendizaje">
+      🎓 MindSchool - Sistema de Gestión de Aprendizaje
+    </h1>
+    <p>
+      <a href="https://laravel.com"
+        ><img
+          src="https://img.shields.io/badge/Laravel-11-red.svg"
+          alt="Laravel"
+      /></a>
+      <a href="https://reactjs.org"
+        ><img src="https://img.shields.io/badge/React-18-blue.svg" alt="React"
+      /></a>
+      <a href="https://php.net"
+        ><img src="https://img.shields.io/badge/PHP-8.2-purple.svg" alt="PHP"
+      /></a>
+      <a href="https://mysql.com"
+        ><img
+          src="https://img.shields.io/badge/MySQL-8.0-orange.svg"
+          alt="MySQL"
+      /></a>
+      <a href="https://mongodb.com"
+        ><img
+          src="https://img.shields.io/badge/MongoDB-6.0-green.svg"
+          alt="MongoDB"
+      /></a>
+    </p>
+    <p>
+      <strong>MindSchool</strong> es un sistema de gestión de aprendizaje (LMS)
+      moderno y completo, desarrollado con las mejores tecnologías web. Permite
+      la administración de cursos, gestión de estudiantes y profesores, y el
+      seguimiento del progreso académico.
+    </p>
+    <h2 id="%F0%9F%9A%80-caracter%C3%ADsticas-principales">
+      🚀 Características Principales
+    </h2>
+    <h3 id="%F0%9F%91%A8%E2%80%8D%F0%9F%8F%AB-panel-de-profesores">
+      👨‍🏫 <strong>Panel de Profesores</strong>
+    </h3>
+    <ul>
+      <li>Dashboard moderno con mascota animada</li>
+      <li>Gestión de cursos y materias</li>
+      <li>Navegación por cuatrimestres</li>
+      <li>Visualización de grupos y estudiantes</li>
+      <li>Interfaz intuitiva y responsiva</li>
+    </ul>
+    <h3 id="%F0%9F%91%A8%E2%80%8D%F0%9F%8E%93-panel-de-estudiantes">
+      👨‍🎓 <strong>Panel de Estudiantes</strong>
+    </h3>
+    <ul>
+      <li>Dashboard con tareas pendientes</li>
+      <li>Lista de materias en formato Netflix</li>
+      <li>Tabla visual de tareas</li>
+      <li>Filtros por materia y estado</li>
+      <li>Diseño moderno y funcional</li>
+    </ul>
+    <h3 id="%F0%9F%91%A8%E2%80%8D%F0%9F%92%BC-panel-de-administrador">
+      👨‍💼 <strong>Panel de Administrador</strong>
+    </h3>
+    <ul>
+      <li>Gestión completa de usuarios</li>
+      <li>Administración de cursos</li>
+      <li>Reportes y estadísticas</li>
+      <li>Control de roles y permisos</li>
+    </ul>
+    <h2 id="%F0%9F%9B%A0%EF%B8%8F-tecnolog%C3%ADas-utilizadas">
+      🛠️ Tecnologías Utilizadas
+    </h2>
+    <h3 id="backend"><strong>Backend</strong></h3>
+    <ul>
+      <li><strong>Laravel 11</strong> - Framework PHP moderno</li>
+      <li><strong>Laravel Sanctum</strong> - Autenticación API</li>
+      <li><strong>MySQL</strong> - Base de datos principal</li>
+      <li><strong>MongoDB</strong> - Almacenamiento multimedia</li>
+      <li><strong>PHP 8.2</strong> - Lenguaje de programación</li>
+    </ul>
+    <h3 id="frontend"><strong>Frontend</strong></h3>
+    <ul>
+      <li><strong>React 18</strong> - Biblioteca de interfaz de usuario</li>
+      <li><strong>Vite</strong> - Herramienta de construcción</li>
+      <li><strong>Axios</strong> - Cliente HTTP</li>
+      <li><strong>CSS3</strong> - Estilos modernos</li>
+    </ul>
+    <h3 id="base-de-datos"><strong>Base de Datos</strong></h3>
+    <ul>
+      <li>
+        <strong>MySQL</strong> - Datos principales (usuarios, cursos, tareas)
+      </li>
+      <li><strong>MongoDB</strong> - Contenido multimedia y recursos</li>
+    </ul>
+    <h2 id="%F0%9F%93%8A-estado-del-proyecto">📊 Estado del Proyecto</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Módulo</th>
+          <th>Estado</th>
+          <th>Tests</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Autenticación</strong></td>
+          <td>✅ Funcionando</td>
+          <td>5/5 ✅</td>
+        </tr>
+        <tr>
+          <td><strong>Gestión de Cursos</strong></td>
+          <td>✅ Funcionando</td>
+          <td>10/10 ✅</td>
+        </tr>
+        <tr>
+          <td><strong>Panel Profesores</strong></td>
+          <td>✅ Funcionando</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td><strong>Panel Estudiantes</strong></td>
+          <td>✅ Funcionando</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td><strong>Panel Admin</strong></td>
+          <td>🟡 En desarrollo</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td><strong>Sistema de Tareas</strong></td>
+          <td>🟡 En desarrollo</td>
+          <td>-</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      <strong>Tests Totales</strong>: 19/67 pasando (28.4%) -
+      <em>En proceso de corrección</em>
+    </p>
+    <h2 id="%F0%9F%9A%80-instalaci%C3%B3n-y-configuraci%C3%B3n">
+      🚀 Instalación y Configuración
+    </h2>
+    <h3 id="requisitos-previos"><strong>Requisitos Previos</strong></h3>
+    <ul>
+      <li>PHP 8.2+</li>
+      <li>Composer</li>
+      <li>Node.js 18+</li>
+      <li>MySQL 8.0+</li>
+      <li>MongoDB 6.0+</li>
+    </ul>
+    <h3 id="1-clonar-el-repositorio">
+      <strong>1. Clonar el Repositorio</strong>
+    </h3>
+    <pre
+      class="hljs"
+    ><code><div>git <span class="hljs-built_in">clone</span> https://github.com/tu-usuario/mindschool.git
+<span class="hljs-built_in">cd</span> mindschool
+</div></code></pre>
+    <h3 id="2-configurar-backend-laravel">
+      <strong>2. Configurar Backend (Laravel)</strong>
+    </h3>
+    <pre class="hljs"><code><div><span class="hljs-built_in">cd</span> backend
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan db:seed
+php artisan serve
+</div></code></pre>
+    <h3 id="3-configurar-frontend-react">
+      <strong>3. Configurar Frontend (React)</strong>
+    </h3>
+    <pre class="hljs"><code><div><span class="hljs-built_in">cd</span> frontend
+npm install
+npm run dev
+</div></code></pre>
+    <h3 id="4-configurar-base-de-datos">
+      <strong>4. Configurar Base de Datos</strong>
+    </h3>
+    <pre class="hljs"><code><div><span class="hljs-comment"># MySQL</span>
+mysql -u root -p
+CREATE DATABASE mindschool;
+GRANT ALL PRIVILEGES ON mindschool.* TO <span class="hljs-string">'mindschool_user'</span>@<span class="hljs-string">'localhost'</span>;
+
+<span class="hljs-comment"># MongoDB</span>
+mongo
+use mindschool
+</div></code></pre>
+    <h2 id="%F0%9F%93%81-estructura-del-proyecto">
+      📁 Estructura del Proyecto
+    </h2>
+    <pre class="hljs"><code><div>miprojecto_mindschool/
+├── backend/                 # Backend Laravel
+│   ├── app/
+│   │   ├── Models/            # Modelos de datos
+│   │   ├── Http/Controllers/  # Controladores API
+│   │   └── Traits/           # Traits compartidos
+│   ├── database/
+│   │   ├── migrations/       # Migraciones BD
+│   │   └── seeders/         # Datos iniciales
+│   ├── routes/
+│   │   └── api.php          # Rutas API
+│   └── tests/               # Tests automáticos
+├── frontend/                # Frontend React
+│   ├── src/
+│   │   ├── componentes/     # Componentes reutilizables
+│   │   ├── paginas/        # Páginas principales
+│   │   ├── contexto/       # Context API
+│   │   ├── hooks/          # Custom hooks
+│   │   └── branding/       # Sistema de diseño
+│   └── public/             # Assets estáticos
+└── docs/                   # Documentación
+    ├── ESQUEMA_COMPLETO_SISTEMA.md
+    ├── DIAGRAMA_FLUJO_SISTEMA.md
+    └── DIAGRAMA_BASE_DATOS.md
+</div></code></pre>
+    <h2 id="%F0%9F%94%90-configuraci%C3%B3n-de-variables-de-entorno">
+      🔐 Configuración de Variables de Entorno
+    </h2>
+    <h3 id="backend-env"><strong>Backend (.env)</strong></h3>
+    <pre class="hljs"><code><div>DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=mindschool
+DB_USERNAME=root
+DB_PASSWORD=
+
+MONGODB_URI=mongodb://localhost:27017
+MONGODB_DATABASE=mindschool
+</div></code></pre>
+    <h3 id="frontend-env"><strong>Frontend (.env)</strong></h3>
+    <pre class="hljs"><code><div>VITE_API_URL=http://localhost:8000/api
+</div></code></pre>
+    <h2 id="%F0%9F%A7%AA-ejecutar-tests">🧪 Ejecutar Tests</h2>
+    <h3 id="backend-tests"><strong>Backend Tests</strong></h3>
+    <pre
+      class="hljs"
+    ><code><div><span class="hljs-built_in">cd</span> mindschool
+php artisan <span class="hljs-built_in">test</span>
+</div></code></pre>
+    <h3 id="frontend-tests-pr%C3%B3ximamente">
+      <strong>Frontend Tests</strong> (Próximamente)
+    </h3>
+    <pre class="hljs"><code><div><span class="hljs-built_in">cd</span> frontend
+npm <span class="hljs-built_in">test</span>
+</div></code></pre>
+    <h2 id="%F0%9F%93%9A-documentaci%C3%B3n">📚 Documentación</h2>
+    <ul>
+      <li>
+        <strong
+          ><a href="docs/ESQUEMA_COMPLETO_SISTEMA.md"
+            >Esquema Completo del Sistema</a
+          ></strong
+        >
+      </li>
+      <li>
+        <strong
+          ><a href="docs/DIAGRAMA_FLUJO_SISTEMA.md"
+            >Diagramas de Flujo</a
+          ></strong
+        >
+      </li>
+      <li>
+        <strong
+          ><a href="docs/DIAGRAMA_BASE_DATOS.md"
+            >Diagrama de Base de Datos</a
+          ></strong
+        >
+      </li>
+      <li>
+        <strong
+          ><a href="docs/INFORME_DETALLADO_PROYECTO.md"
+            >Informe Detallado</a
+          ></strong
+        >
+      </li>
+      <li>
+        <strong
+          ><a href="docs/RESUMEN_EJECUTIVO_RECOMENDACIONES.md"
+            >Resumen Ejecutivo</a
+          ></strong
+        >
+      </li>
+    </ul>
+    <h2 id="%F0%9F%94%84-api-endpoints">🔄 API Endpoints</h2>
+    <h3 id="autenticaci%C3%B3n"><strong>Autenticación</strong></h3>
+    <pre class="hljs"><code><div>POST /api/register     - Registro de usuario
+POST /api/login        - Inicio de sesión
+POST /api/logout       - Cerrar sesión
+GET  /api/user         - Obtener usuario actual
+</div></code></pre>
+    <h3 id="cursos"><strong>Cursos</strong></h3>
+    <pre class="hljs"><code><div>GET    /api/cursos              - Listar cursos
+POST   /api/cursos              - Crear curso
+GET    /api/cursos/{id}         - Ver curso específico
+PUT    /api/cursos/{id}         - Actualizar curso
+DELETE /api/cursos/{id}         - Eliminar curso
+</div></code></pre>
+    <h3 id="profesor"><strong>Profesor</strong></h3>
+    <pre
+      class="hljs"
+    ><code><div>GET /api/profesor/dashboard           - Dashboard del profesor
+GET /api/profesor/cursos              - Cursos del profesor
+GET /api/profesor/cursos/{id}/estudiantes - Estudiantes del curso
+</div></code></pre>
+    <h3 id="estudiante"><strong>Estudiante</strong></h3>
+    <pre
+      class="hljs"
+    ><code><div>GET /api/estudiante/dashboard      - Dashboard del estudiante
+GET /api/estudiante/materias       - Materias del estudiante
+GET /api/estudiante/tareas-pendientes - Tareas pendientes
+</div></code></pre>
+    <h2 id="%F0%9F%8E%A8-caracter%C3%ADsticas-de-dise%C3%B1o">
+      🎨 Características de Diseño
+    </h2>
+    <ul>
+      <li><strong>Tema Oscuro</strong>: Interfaz moderna con diseño oscuro</li>
+      <li><strong>Responsive</strong>: Compatible con dispositivos móviles</li>
+      <li>
+        <strong>Animaciones</strong>: Transiciones suaves y mascota animada
+      </li>
+      <li><strong>Accesibilidad</strong>: Diseño inclusivo y accesible</li>
+      <li><strong>UX Moderna</strong>: Experiencia de usuario intuitiva</li>
+    </ul>
+    <h2 id="%F0%9F%94%A7-desarrollo">🔧 Desarrollo</h2>
+    <h3 id="estructura-de-roles"><strong>Estructura de Roles</strong></h3>
+    <ul>
+      <li><strong>admin</strong>: Acceso completo al sistema</li>
+      <li><strong>profesor</strong>: Gestión de cursos y estudiantes</li>
+      <li><strong>estudiante</strong>: Acceso a materias y tareas</li>
+    </ul>
+    <h3 id="flujo-de-desarrollo"><strong>Flujo de Desarrollo</strong></h3>
+    <ol>
+      <li>
+        Crear rama feature:
+        <code>git checkout -b feature/nueva-funcionalidad</code>
+      </li>
+      <li>Desarrollar funcionalidad</li>
+      <li>Ejecutar tests: <code>php artisan test</code></li>
+      <li>Crear pull request</li>
+      <li>Code review y merge</li>
+    </ol>
+    <h2 id="%F0%9F%93%88-roadmap">📈 Roadmap</h2>
+    <h3 id="fase-1-actual"><strong>Fase 1 (Actual)</strong></h3>
+    <ul>
+      <li>✅ Sistema de autenticación</li>
+      <li>✅ Gestión de cursos</li>
+      <li>✅ Paneles de usuario</li>
+      <li>⚠️ Corrección de tests</li>
+      <li>⚠️ Sistema de tareas</li>
+    </ul>
+    <h3 id="fase-2-pr%C3%B3xima"><strong>Fase 2 (Próxima)</strong></h3>
+    <ul>
+      <li>📋 Sistema de calificaciones</li>
+      <li>📋 Notificaciones en tiempo real</li>
+      <li>📋 Reportes avanzados</li>
+      <li>📋 Optimización de rendimiento</li>
+    </ul>
+    <h3 id="fase-3-futura"><strong>Fase 3 (Futura)</strong></h3>
+    <ul>
+      <li>🚀 Videoconferencias integradas</li>
+      <li>🚀 Gamificación</li>
+      <li>🚀 Integración con herramientas externas</li>
+      <li>🚀 App móvil</li>
+    </ul>
+    <h2 id="%F0%9F%A4%9D-contribuir">🤝 Contribuir</h2>
+    <ol>
+      <li>Fork el proyecto</li>
+      <li>
+        Crear una rama feature (<code
+          >git checkout -b feature/AmazingFeature</code
+        >)
+      </li>
+      <li>
+        Commit los cambios (<code>git commit -m 'Add some AmazingFeature'</code
+        >)
+      </li>
+      <li>
+        Push a la rama (<code>git push origin feature/AmazingFeature</code>)
+      </li>
+      <li>Abrir un Pull Request</li>
+    </ol>
+    <h2 id="%F0%9F%93%84-licencia">📄 Licencia</h2>
+    <p>
+      Este proyecto está bajo la Licencia MIT. Ver el archivo
+      <code>LICENSE</code> para más detalles.
+    </p>
+    <h2 id="%F0%9F%91%A5-autores">👥 Autores</h2>
+    <ul>
+      <li>
+        <strong>Tu Nombre</strong> - <em>Desarrollo inicial</em> -
+        <a href="https://github.com/TuUsuario">TuUsuario</a>
+      </li>
+    </ul>
+    <h2 id="%F0%9F%99%8F-agradecimientos">🙏 Agradecimientos</h2>
+    <ul>
+      <li>Laravel Team por el framework</li>
+      <li>React Team por la biblioteca</li>
+      <li>Comunidad open source</li>
+    </ul>
+    <h2 id="%F0%9F%93%9E-contacto">📞 Contacto</h2>
+    <ul>
+      <li><strong>Email</strong>: tu-email@ejemplo.com</li>
+      <li>
+        <strong>GitHub</strong>:
+        <a href="https://github.com/TuUsuario">@TuUsuario</a>
+      </li>
+      <li>
+        <strong>LinkedIn</strong>:
+        <a href="https://linkedin.com/in/tu-perfil">Tu Perfil</a>
+      </li>
+    </ul>
+    <hr />
+    <p>
+      ⭐ <strong>Si este proyecto te resulta útil, ¡dale una estrella!</strong>
+    </p>
+  </body>
+</html>
