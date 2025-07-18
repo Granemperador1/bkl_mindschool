@@ -461,10 +461,6 @@ const Bienvenida = () => {
           }
         }
       `}</style>
-      {/* Mascota animada en la parte superior */}
-      <div className="mascota-landing">
-  <Mascota width={90} height={90} showVideo={true} />
-</div>
       {/* Barra de navegación especial para la landing */}
       <div className="landing-header" style={{
   width: "100%",
@@ -637,181 +633,28 @@ const Bienvenida = () => {
         </div>
       </section>
 
-      {/* GRID: BENEFICIOS + CURSOS DESTACADOS */}
-      <section
-        className="grid-beneficios-cursos"
-        style={{
-          width: "100%",
-          maxWidth: 1300,
-          margin: "32px auto 0 auto",
-          display: "grid",
-          gridTemplateColumns: "1fr 1.2fr",
-          gap: 32,
-          padding: "0 12px",
-          alignItems: "stretch",
-        }}
-      >
-        {/* Beneficios */}
-        <div
-          className="beneficios-block"
-          style={{
-            background: "rgba(34,46,58,0.96)",
-            borderRadius: 28,
-            boxShadow: "0 6px 32px #1e293b55",
-            padding: "32px 18px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 22,
-            justifyContent: "center",
-            minHeight: 340,
-          }}
-        >
-          <h2
-            style={{
-              color: "#bae6fd",
-              fontWeight: 800,
-              fontSize: 26,
-              marginBottom: 8,
-              letterSpacing: 1,
-            }}
-          >
-            ¿Por qué MindSchool?
-          </h2>
-          {beneficios.map((b, i) => (
-            <div
-              key={i}
-              style={{ display: "flex", alignItems: "center", gap: 16 }}
-            >
-              <span
-                style={{
-                  fontSize: 38,
-                  marginRight: 8,
-                  filter: "drop-shadow(0 2px 8px #fff5)",
-                }}
-              >
-                {b.icon}
-              </span>
-              <span style={{ color: "#fff", fontSize: 18, fontWeight: 600 }}>
-                {b.texto}
-              </span>
-            </div>
-          ))}
-        </div>
-        {/* Cursos destacados */}
-        <div
-          className="cursos-block"
-          style={{
-            background: "rgba(59,130,246,0.10)",
-            borderRadius: 28,
-            boxShadow: "0 4px 24px #2563eb22",
-            padding: "32px 18px",
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 18,
-            alignItems: "stretch",
-            minHeight: 340,
-          }}
-        >
-          {cursosDestacados.map((curso, idx) => (
-            <div
-              key={curso.nombre}
-              className="card-curso"
-              style={{
-                background: "#fff",
-                borderRadius: 18,
-                boxShadow: "0 2px 12px #2563eb22",
-                padding: "18px 12px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 10,
-                minHeight: 180,
-                width: "100%",
-                maxWidth: 320,
-                margin: "0 auto",
-                transition: "transform 0.18s, box-shadow 0.18s",
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "scale(1.04)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "scale(1)")
-              }
-            >
-              <img
-                src={curso.imagen}
-                alt={curso.nombre}
-                style={{
-                  width: "100%",
-                  height: 90,
-                  objectFit: "cover",
-                  borderRadius: 12,
-                  marginBottom: 8,
-                }}
-                loading="lazy"
-              />
-              <div
-                style={{
-                  color: "#3B82F6",
-                  fontWeight: 800,
-                  fontSize: 20,
-                  textAlign: "center",
-                  marginBottom: 4,
-                }}
-              >
-                {curso.nombre}
-              </div>
-              <div
-                style={{ color: "#222e3a", fontSize: 15, textAlign: "center" }}
-              >
-                {curso.descripcion}
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* BENEFICIOS: ¿Por qué MindSchool? */}
+      <section style={{ width: '100%', maxWidth: 1200, margin: '32px auto 0 auto', padding: '32px 18px', background: 'rgba(34,46,58,0.96)', borderRadius: 28, boxShadow: '0 6px 32px #1e293b55', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 22 }}>
+        <h2 style={{ color: '#bae6fd', fontWeight: 800, fontSize: 26, marginBottom: 8, letterSpacing: 1 }}>¿Por qué MindSchool?</h2>
+        {beneficios.map((b, i) => (
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <span style={{ fontSize: 38, marginRight: 8, filter: 'drop-shadow(0 2px 8px #fff5)' }}>{b.icon}</span>
+            <span style={{ color: '#fff', fontSize: 18, fontWeight: 600 }}>{b.texto}</span>
+          </div>
+        ))}
       </section>
 
-      {/* GRID: TESTIMONIOS + QUIZ */}
-      <section
-        style={{
-          width: "100%",
-          maxWidth: 1300,
-          margin: "32px auto 0 auto",
-          display: "grid",
-          gridTemplateColumns: "1.1fr 1fr",
-          gap: 32,
-          padding: "0 12px",
-          alignItems: "stretch",
-        }}
-      >
-        {/* Testimonios */}
-        <div
-          style={{
-            background: "rgba(34,46,58,0.96)",
-            borderRadius: 28,
-            boxShadow: "0 6px 32px #1e293b55",
-            padding: "32px 18px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: 340,
-            gap: 18,
-          }}
-        >
-          <h2
-            style={{
-              color: "#bae6fd",
-              fontWeight: 800,
-              fontSize: 26,
-              marginBottom: 8,
-              letterSpacing: 1,
-            }}
-          >
-            Testimonios
-          </h2>
-          <div style={{ width: "100%", maxWidth: 420, minHeight: 220 }}>
+      {/* QUIZ DE ORIENTACIÓN */}
+      <section style={{ width: '100%', maxWidth: 1200, margin: '32px auto 0 auto', padding: '32px 18px', background: 'rgba(59,130,246,0.10)', borderRadius: 28, boxShadow: '0 4px 24px #2563eb22', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 340 }}>
+        <h2 style={{ color: '#3B82F6', fontWeight: 800, fontSize: 24, marginBottom: 8 }}>¿No sabes por dónde empezar?</h2>
+        <QuizOrientacion />
+      </section>
+
+      {/* TESTIMONIOS */}
+      <section style={{ width: '100%', maxWidth: 1200, margin: '32px auto 0 auto', padding: '32px 18px', background: 'rgba(34,46,58,0.96)', borderRadius: 28, boxShadow: '0 6px 32px #1e293b55', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: 340, gap: 18 }}>
+        <h2 style={{ color: '#bae6fd', fontWeight: 800, fontSize: 26, marginBottom: 8, letterSpacing: 1 }}>Testimonios</h2>
+        {/* ...carrusel de testimonios... */}
+        <div style={{ width: "100%", maxWidth: 420, minHeight: 220 }}>
             {/* Aquí va el carrusel de testimonios existente */}
             {/* Testimonios */}
             <div
@@ -992,33 +835,18 @@ const Bienvenida = () => {
               `}</style>
             </div>
           </div>
-        </div>
-        {/* Quiz */}
-        <div
-          style={{
-            background: "rgba(59,130,246,0.10)",
-            borderRadius: 28,
-            boxShadow: "0 4px 24px #2563eb22",
-            padding: "32px 18px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: 340,
-          }}
-        >
-          <h2
-            style={{
-              color: "#3B82F6",
-              fontWeight: 800,
-              fontSize: 24,
-              marginBottom: 8,
-            }}
-          >
-            ¿No sabes por dónde empezar?
-          </h2>
-          <QuizOrientacion />
-        </div>
+        
+      </section>
+
+       {/* CURSOS DESTACADOS */}
+       <section style={{ width: '100%', maxWidth: 1200, margin: '32px auto 0 auto', padding: '32px 18px', background: 'rgba(59,130,246,0.10)', borderRadius: 28, boxShadow: '0 4px 24px #2563eb22', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 18, alignItems: 'stretch', minHeight: 340 }}>
+        {cursosDestacados.map((curso, idx) => (
+          <div key={curso.nombre} className="card-curso" style={{ background: '#fff', borderRadius: 18, boxShadow: '0 2px 12px #2563eb22', padding: '18px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, minHeight: 180, width: '100%', maxWidth: 320, margin: '0 auto', transition: 'transform 0.18s, box-shadow 0.18s', cursor: 'pointer' }}>
+            <img src={curso.imagen} alt={curso.nombre} style={{ width: '100%', height: 90, objectFit: 'cover', borderRadius: 12, marginBottom: 8 }} loading="lazy" />
+            <div style={{ color: '#3B82F6', fontWeight: 800, fontSize: 20, textAlign: 'center', marginBottom: 4 }}>{curso.nombre}</div>
+            <div style={{ color: '#222e3a', fontSize: 15, textAlign: 'center' }}>{curso.descripcion}</div>
+          </div>
+        ))}
       </section>
 
       {/* SOBRE NOSOTROS (quiénes somos + historia) */}
@@ -1121,31 +949,29 @@ const Bienvenida = () => {
         id="contacto"
         style={{
           width: "100%",
-          maxWidth: 900,
-          margin: "32px auto 48px auto",
-          padding: "0",
-          background: "rgba(59,130,246,0.12)",
-          borderRadius: 28,
-          boxShadow: "0 4px 24px #2563eb22",
+          maxWidth: 800,
+          margin: "40px auto",
+          background: "#fff",
+          borderRadius: 16,
+          boxShadow: "0 2px 12px #2563eb22",
+          padding: 0,
           display: "flex",
           flexDirection: "row",
           alignItems: "stretch",
-          gap: 0,
           overflow: "hidden",
-          flexWrap: "wrap",
         }}
       >
-        {/* Video de gato-estudio */}
+        {/* Video del gato que estudia */}
         <div
           style={{
             flex: 1,
-            minWidth: 220,
-            maxWidth: 320,
+            minWidth: 0,
             background: "#222e3a",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: 0,
+            padding: 24,
+            boxSizing: "border-box",
           }}
         >
           <video
@@ -1157,174 +983,126 @@ const Bienvenida = () => {
             style={{
               width: "100%",
               height: "100%",
+              maxWidth: 380,
+              maxHeight: 380,
+              minHeight: 220,
               objectFit: "cover",
-              borderRadius: 0,
+              borderRadius: 18,
+              display: "block",
+              background: "#222e3a",
+              boxShadow: "0 4px 24px #2563eb33",
             }}
           />
         </div>
         {/* Formulario de contacto */}
         <div
           style={{
-            flex: 2,
-            minWidth: 320,
-            maxWidth: 480,
-            background: "rgba(255,255,255,0.98)",
+            flex: 1,
+            minWidth: 0,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            padding: "38px 32px",
-            gap: 18,
+            padding: 24,
           }}
         >
-          <h2
-            style={{
-              color: "#3B82F6",
-              fontWeight: 800,
-              fontSize: 28,
-              marginBottom: 0,
-              letterSpacing: 1,
-            }}
-          >
+          <h2 style={{ color: "#2563EB", fontWeight: 800, fontSize: 24, marginBottom: 12 }}>
             Contáctanos
           </h2>
-          <p
-            style={{
-              color: "#222e3a",
-              fontSize: 17,
-              margin: 0,
-              textAlign: "center",
-            }}
-          >
-            ¿Tienes dudas, sugerencias o quieres colaborar? ¡Escríbenos o
-            síguenos en nuestras redes!
-          </p>
           <form
-            id="form-contacto"
-            style={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              gap: 14,
-              marginTop: 8,
-            }}
             onSubmit={handleSubmitContacto}
+            style={{ width: "100%", maxWidth: 340, display: "flex", flexDirection: "column", gap: 14 }}
             autoComplete="off"
           >
             <input
-              type="text"
               name="nombre"
-              placeholder="Tu nombre"
-              required
-              style={inputStyle}
+              type="text"
+              placeholder="Nombre"
               value={form.nombre}
               onChange={handleChange}
+              required
+              style={{ padding: 10, borderRadius: 6, border: "1px solid #cbd5e1" }}
             />
             <input
-              type="email"
               name="email"
-              placeholder="Tu email"
-              required
-              style={inputStyle}
+              type="email"
+              placeholder="Email"
               value={form.email}
               onChange={handleChange}
+              required
+              style={{ padding: 10, borderRadius: 6, border: "1px solid #cbd5e1" }}
             />
             <input
-              type="text"
               name="telefono"
-              placeholder="Tu teléfono (opcional)"
-              style={inputStyle}
+              type="text"
+              placeholder="Teléfono"
               value={form.telefono}
               onChange={handleChange}
+              style={{ padding: 10, borderRadius: 6, border: "1px solid #cbd5e1" }}
             />
             <input
-              type="text"
               name="asunto"
-              placeholder="Asunto (opcional)"
-              style={inputStyle}
+              type="text"
+              placeholder="Asunto"
               value={form.asunto}
               onChange={handleChange}
+              style={{ padding: 10, borderRadius: 6, border: "1px solid #cbd5e1" }}
             />
             <textarea
               name="mensaje"
-              placeholder="Tu mensaje"
-              required
-              style={{ ...inputStyle, minHeight: 80, resize: "vertical" }}
+              placeholder="Mensaje"
               value={form.mensaje}
               onChange={handleChange}
+              required
+              rows={3}
+              style={{ padding: 10, borderRadius: 6, border: "1px solid #cbd5e1", resize: "vertical" }}
             />
-            <button type="submit" style={buttonStyle} disabled={enviando}>
-              {enviando ? "Enviando..." : "Enviar mensaje"}
+            <button
+              type="submit"
+              disabled={enviando}
+              style={{
+                background: "#2563EB",
+                color: "#fff",
+                border: "none",
+                borderRadius: 8,
+                padding: "12px 0",
+                fontWeight: 700,
+                fontSize: 16,
+                cursor: enviando ? "not-allowed" : "pointer",
+                marginTop: 6,
+              }}
+            >
+              {enviando ? "Enviando..." : "Enviar"}
             </button>
-            {exito && (
-              <div
-                style={{
-                  color: "#16a34a",
-                  fontWeight: 700,
-                  fontSize: 17,
-                  marginTop: 6,
-                  animation: "fadeInExito 0.7s cubic-bezier(.4,2,.6,1)",
-                }}
-              >
-                {exito}
-              </div>
-            )}
-            {error && (
-              <div
-                style={{
-                  color: "#dc2626",
-                  fontWeight: 700,
-                  fontSize: 16,
-                  marginTop: 6,
-                  animation: "fadeInExito 0.7s cubic-bezier(.4,2,.6,1)",
-                }}
-              >
-                {error}
-              </div>
-            )}
-            <style>{`@keyframes fadeInExito { 0%{opacity:0;transform:translateY(20px);} 100%{opacity:1;transform:none;} }`}</style>
+            {exito && <div style={{ color: "#16a34a", fontWeight: 700 }}>{exito}</div>}
+            {error && <div style={{ color: "#dc2626", fontWeight: 700 }}>{error}</div>}
           </form>
-          <div
-            style={{
-              display: "flex",
-              gap: 18,
-              marginTop: 10,
-              flexWrap: "wrap",
-              justifyContent: "center",
-            }}
-          >
-            <a href="mailto:info@mindschool.com" style={linkStyle}>
-              ✉️ Email
-            </a>
-            <a href="tel:7228605849" style={linkStyle}>
-              📞 7228605849
-            </a>
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={linkStyle}
-            >
-              📘 Facebook
-            </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={linkStyle}
-            >
-              🐦 Twitter
-            </a>
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={linkStyle}
-            >
-              📸 Instagram
-            </a>
-          </div>
         </div>
+        {/* Estilos responsivos */}
+        <style>{`
+          @media (max-width: 700px) {
+            #contacto {
+              flex-direction: column !important;
+              max-width: 98vw !important;
+              border-radius: 10px !important;
+            }
+            #contacto > div {
+              max-width: 100vw !important;
+              padding: 0 !important;
+            }
+            #contacto video {
+              max-width: 100vw !important;
+              min-height: 180px !important;
+              max-height: 260px !important;
+              border-radius: 0 !important;
+              margin-top: 12px !important;
+              margin-bottom: 12px !important;
+            }
+            #contacto form {
+              max-width: 98vw !important;
+            }
+          }
+        `}</style>
       </section>
       {/* Easter Egg: Botón flotante e interacción */}
       <div style={{ position: "fixed", bottom: 32, right: 32, zIndex: 10000 }}>
@@ -1418,6 +1196,33 @@ const Bienvenida = () => {
           `}</style>
         </div>
       )}
+      {/* Footer profesional */}
+      <footer
+        style={{
+          width: "100%",
+          background: "#1e293b",
+          color: "#cbd5e1",
+          padding: "32px 0 18px 0",
+          marginTop: 48,
+          textAlign: "center",
+          borderTop: "2px solid #334155",
+        }}
+      >
+        <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 8 }}>
+          Hecho con <span style={{ color: "#ef4444", fontSize: 22, verticalAlign: "middle" }}>♥</span> para la educación
+        </div>
+        <div style={{ fontSize: 15, marginBottom: 12 }}>
+          &copy; {new Date().getFullYear()} MindSchool. Todos los derechos reservados.
+        </div>
+        <div style={{ display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap", fontSize: 15 }}>
+          <a href="/aviso-legal" style={{ color: "#60a5fa", textDecoration: "none" }}>Aviso legal</a>
+          <a href="/privacidad" style={{ color: "#60a5fa", textDecoration: "none" }}>Política de privacidad</a>
+          <a href="#contacto" style={{ color: "#60a5fa", textDecoration: "none" }}>Contacto</a>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" style={{ color: "#60a5fa", textDecoration: "none" }}>Facebook</a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={{ color: "#60a5fa", textDecoration: "none" }}>Twitter</a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={{ color: "#60a5fa", textDecoration: "none" }}>Instagram</a>
+        </div>
+      </footer>
     </div>
   );
 };
@@ -1599,7 +1404,7 @@ function QuizOrientacion() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `repeat(${preguntas[paso].opciones.length > 2 ? 2 : 1}, 1fr)`,
+          gridTemplateColumns: window.innerWidth < 600 ? "1fr" : `repeat(${preguntas[paso].opciones.length > 2 ? 2 : 1}, 1fr)`,
           gap: 18,
           width: "100%",
           justifyItems: "center",
@@ -1622,8 +1427,10 @@ function QuizOrientacion() {
               fontWeight: 700,
               cursor: animando ? "not-allowed" : "pointer",
               boxShadow: "0 2px 12px #3B82F655",
-              minWidth: 120,
+              minWidth: 0,
               minHeight: 54,
+              width: "100%",
+              margin: "0 0 8px 0",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",

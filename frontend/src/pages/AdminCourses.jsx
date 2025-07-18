@@ -6,7 +6,7 @@ import {
   SHADOWS,
   BORDER_RADIUS,
 } from "../theme/branding/branding";
-import useApi from "../hooks/useApi";
+import api from "../utils/axiosConfig";
 
 const AdminCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -20,7 +20,6 @@ const AdminCourses = () => {
   const [professors, setProfessors] = useState([]);
 
   const navigate = useNavigate();
-  const api = useApi();
 
   useEffect(() => {
     fetchCourses();

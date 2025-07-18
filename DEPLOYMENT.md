@@ -1,3 +1,7 @@
+# DEPLOYMENT
+
+> ⚡ Nota: Los scripts y archivos de despliegue ahora se encuentran en la carpeta `setup/`. El script principal para iniciar todo es `Dies_Irae.sh` en el directorio raíz.
+
 # 🚀 Guía de Deployment - MindSchool Beta
 
 ## 📋 Prerrequisitos

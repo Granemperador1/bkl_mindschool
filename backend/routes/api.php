@@ -34,14 +34,11 @@ Route::post('/contacto', [ContactoPublicoController::class, 'store']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     $user = $request->user();
-    
-    // Cargar los roles del usuario
+    // Forzar recarga de roles desde la base de datos
+    $user->syncRoles($user->roles()->pluck('name')->toArray());
     $user->load('roles');
-    
-    // Convertir roles a array simple para el frontend
     $user->roles = $user->roles->pluck('name')->toArray();
-    
-    return $user;
+    return response()->json($user);
 });
 
 // Rutas protegidas (requieren login)
@@ -50,9 +47,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     
     // Notificaciones
-    Route::get('/notificaciones', function (\Illuminate\Http\Request $request) {
-        return $request->user()->notifications;
-    });
+    Route::get('/notificaciones', [\App\Http\Controllers\Api\NotificationController::class, 'index']);
+    Route::post('/notificaciones/{id}/leer', [\App\Http\Controllers\Api\NotificationController::class, 'markAsRead']);
+    Route::post('/notificaciones/leertodas', [\App\Http\Controllers\Api\NotificationController::class, 'markAllAsRead']);
+    Route::delete('/notificaciones/{id}', [\App\Http\Controllers\Api\NotificationController::class, 'destroy']);
     
     // Cursos (todas las operaciones, incluyendo index y show)
     Route::apiResource('cursos', CursoController::class);
@@ -127,6 +125,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/users/{id}', [AdminController::class, 'deleteUser']);
     });
     
+    // Contactos para mensajería (accesible para usuarios autenticados)
+    Route::get('/usuarios/contactos', [UsuarioController::class, 'contactos']);
+    
     // Gestión de usuarios (solo admin)
     Route::middleware('role:admin')->group(function () {
         Route::apiResource('usuarios', UsuarioController::class);
@@ -170,4 +171,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cursos/{curso}/pagar', [\App\Http\Controllers\Api\PagoController::class, 'pagar']);
     // Pagos/ingresos del profesor
     Route::get('/profesor/pagos', [\App\Http\Controllers\Api\PagoController::class, 'pagosProfesor']);
+
+    // Perfil de usuario
+    Route::get('/perfil', [\App\Http\Controllers\Api\UsuarioController::class, 'perfil']);
+    Route::put('/perfil', [\App\Http\Controllers\Api\UsuarioController::class, 'actualizarPerfil']);
+    Route::put('/perfil/password', [\App\Http\Controllers\Api\UsuarioController::class, 'cambiarPassword']);
+    Route::put('/perfil/configuracion', [\App\Http\Controllers\Api\UsuarioController::class, 'actualizarConfiguracion']);
 });

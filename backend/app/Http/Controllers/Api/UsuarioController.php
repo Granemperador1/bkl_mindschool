@@ -143,4 +143,74 @@ class UsuarioController extends Controller
 
         return response()->json(['data' => $usuario]);
     }
+
+    /**
+     * Obtener datos de perfil del usuario autenticado
+     */
+    public function perfil(Request $request)
+    {
+        return response()->json(['data' => $request->user()]);
+    }
+
+    /**
+     * Actualizar datos de perfil (nombre, email, avatar, etc)
+     */
+    public function actualizarPerfil(Request $request)
+    {
+        $user = $request->user();
+        $data = $request->validate([
+            'name' => 'string|max:255',
+            'email' => 'email|max:255|unique:users,email,' . $user->id,
+            'avatar_url' => 'nullable|url',
+        ]);
+        $user->update($data);
+        return response()->json(['message' => 'Perfil actualizado', 'data' => $user]);
+    }
+
+    /**
+     * Cambiar contraseña
+     */
+    public function cambiarPassword(Request $request)
+    {
+        $user = $request->user();
+        $request->validate([
+            'password_actual' => 'required',
+            'password' => 'required|min:8|confirmed',
+        ]);
+        if (!\Hash::check($request->password_actual, $user->password)) {
+            return response()->json(['error' => 'La contraseña actual no es correcta'], 422);
+        }
+        $user->password = \Hash::make($request->password);
+        $user->save();
+        return response()->json(['message' => 'Contraseña actualizada']);
+    }
+
+    /**
+     * Actualizar configuración/preferencias del usuario
+     */
+    public function actualizarConfiguracion(Request $request)
+    {
+        $user = $request->user();
+        $data = $request->validate([
+            'configuracion' => 'array',
+        ]);
+        $user->configuracion = $data['configuracion'];
+        $user->save();
+        return response()->json(['message' => 'Configuración actualizada', 'data' => $user->configuracion]);
+    }
+
+    /**
+     * Obtener lista de contactos para mensajería (excluye admins y el propio usuario)
+     */
+    public function contactos(Request $request)
+    {
+        $user = $request->user();
+        $contactos = User::where('id', '!=', $user->id)
+            ->whereDoesntHave('roles', function($q) {
+                $q->where('name', 'admin');
+            })
+            ->select('id', 'name', 'email')
+            ->get();
+        return response()->json(['data' => $contactos]);
+    }
 } 

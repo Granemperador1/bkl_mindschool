@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import useApi from "../hooks/useApi";
+import api from "../utils/axiosConfig";
 import {
   COLORS,
   FONTS,
@@ -34,7 +34,6 @@ const ProfesorCursos = () => {
 
   const navigate = useNavigate();
   const { usuario } = useAuth();
-  const api = useApi();
 
   useEffect(() => {
     fetchCursos();

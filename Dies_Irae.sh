@@ -1,15 +1,14 @@
-#!/bin/bash
 
 # Script para iniciar automáticamente los servidores de frontend y backend
-# MindSchool - Servidor Automático
+# MindSchool - Servidor Automático (Dies Irae)
 
-echo "🚀 Iniciando servidores de MindSchool..."
+echo "🚀 Iniciando servidores de MindSchool (Dies Irae)..."
 echo "========================================"
 
 # Función para limpiar procesos al salir
 cleanup() {
     echo ""
-    echo "🛑 Deteniendo servidores..."
+    echo "🛑 Deteniendo servidores (Dies Irae)..."
     kill $FRONTEND_PID $BACKEND_PID 2>/dev/null
     exit 0
 }
@@ -87,13 +86,13 @@ FRONTEND_PID=$!
 sleep 5
 
 echo ""
-echo "✅ Servidores iniciados exitosamente!"
+echo "✅ Servidores iniciados exitosamente (Dies Irae)!"
 echo "========================================"
 echo "🌐 Frontend: http://localhost:5173"
 echo "🔧 Backend:  http://localhost:8000"
 echo "📊 API Docs: http://localhost:8000/api"
 echo ""
-echo "💡 Presiona Ctrl+C para detener ambos servidores"
+echo "💡 Presiona Ctrl+C para detener ambos servidores (Dies Irae)"
 echo ""
 
 # Mantener el script ejecutándose

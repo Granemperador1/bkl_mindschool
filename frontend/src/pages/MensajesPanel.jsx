@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import useApi from "../hooks/useApi";
+import api from "../utils/axiosConfig";
 import { useAuth } from "../context/AuthContext";
 import {
   COLORS,
@@ -12,7 +12,6 @@ import {
 } from "../theme/branding/branding";
 
 const MensajesPanel = () => {
-  const api = useApi();
   const { usuario } = useAuth();
   const [mensajes, setMensajes] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
@@ -52,8 +51,14 @@ const MensajesPanel = () => {
 
   const fetchUsuarios = async () => {
     try {
-      const response = await api.get("/usuarios");
-      setUsuarios(response.data.data || []);
+      // Si el usuario es admin, usa /usuarios; si no, usa /usuarios/contactos
+      if (usuario?.roles?.includes("admin")) {
+        const response = await api.get("/usuarios");
+        setUsuarios(response.data.data || []);
+      } else {
+        const response = await api.get("/usuarios/contactos");
+        setUsuarios(response.data.data || []);
+      }
     } catch (error) {
       console.error("Error fetching usuarios:", error);
     }

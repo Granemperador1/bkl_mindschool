@@ -12,7 +12,7 @@ import {
   SCHOOL_NAME,
 } from "../theme/branding/branding";
 import Mascota from "../theme/branding/Mascota";
-import useApi from "../hooks/useApi";
+import api from "../utils/axiosConfig";
 import CuatrimestreSelector from "../components/profesor/CuatrimestreSelector";
 import MateriasGrid from "../components/profesor/MateriasGrid";
 import GruposMenu from "../components/profesor/GruposMenu";
@@ -27,7 +27,6 @@ import CursosServicio from "../servicios/CursosServicio";
 
 function ProfesorPanel() {
   const { usuario } = useAuth();
-  const api = useApi();
   const [cuatrimestreSeleccionado, setCuatrimestreSeleccionado] =
     useState(null);
   const [materiaSeleccionada, setMateriaSeleccionada] = useState(null);

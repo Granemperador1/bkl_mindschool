@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import useApi from "../hooks/useApi";
+import api from "../utils/axiosConfig";
 import { useAuth } from "../context/AuthContext";
 import {
   COLORS,
@@ -12,7 +12,6 @@ import {
 } from "../theme/branding/branding";
 
 const RecursosPanel = () => {
-  const api = useApi();
   const { usuario } = useAuth();
   const [recursos, setRecursos] = useState([]);
   const [cursos, setCursos] = useState([]);

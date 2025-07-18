@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import useApi from "../hooks/useApi";
+import api from "../utils/axiosConfig";
 import {
   COLORS,
   FONTS,
@@ -14,7 +14,6 @@ import {
 
 const CalificacionesPanel = () => {
   const { usuario } = useAuth();
-  const api = useApi();
   const [calificaciones, setCalificaciones] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterTipo, setFilterTipo] = useState("");

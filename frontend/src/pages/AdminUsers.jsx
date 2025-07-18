@@ -6,7 +6,7 @@ import {
   SHADOWS,
   BORDER_RADIUS,
 } from "../theme/branding/branding";
-import useApi from "../hooks/useApi";
+import api from "../utils/axiosConfig";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -19,7 +19,6 @@ const AdminUsers = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   const navigate = useNavigate();
-  const api = useApi();
 
   useEffect(() => {
     fetchUsers();

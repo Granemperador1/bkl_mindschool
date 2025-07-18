@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import useApi from "../hooks/useApi";
+import api from "../utils/axiosConfig";
 
 const ProfesorPagos = () => {
-  const api = useApi();
   const [pagos, setPagos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,7 +20,7 @@ const ProfesorPagos = () => {
       }
     };
     fetchPagos();
-  }, [api]);
+  }, []);
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>

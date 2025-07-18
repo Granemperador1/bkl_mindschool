@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import useApi from "../hooks/useApi";
+import api from "../utils/axiosConfig";
 import {
   COLORS,
   FONTS,
@@ -33,7 +33,6 @@ const EstudianteDashboard = () => {
 
   const navigate = useNavigate();
   const { usuario, logout } = useAuth();
-  const api = useApi();
 
   useEffect(() => {
     fetchDashboardData();
@@ -47,8 +46,8 @@ const EstudianteDashboard = () => {
         api.get("/estudiante/materias"),
       ]);
 
-      setTareas(tareasResponse.data || []);
-      setMaterias(materiasResponse.data || []);
+      setTareas(Array.isArray(tareasResponse.data) ? tareasResponse.data : tareasResponse.data?.data || []);
+      setMaterias(Array.isArray(materiasResponse.data) ? materiasResponse.data : materiasResponse.data?.data || []);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
     } finally {
@@ -214,6 +213,7 @@ const EstudianteDashboard = () => {
       >
         {/* Header con mascota */}
         <div
+          className="dashboard-header"
           style={{
             display: "flex",
             alignItems: "center",
@@ -225,15 +225,17 @@ const EstudianteDashboard = () => {
             padding: SPACING[8],
             boxShadow: SHADOWS.lg,
             border: `1px solid ${COLORS.border}`,
+            gap: 32,
           }}
         >
-          <div>
+          <div style={{ minWidth: 0, flex: 1 }}>
             <h1
               style={{
                 fontSize: FONT_SIZES["4xl"],
                 fontWeight: FONT_WEIGHTS.bold,
                 marginBottom: SPACING[3],
                 color: COLORS.text,
+                wordBreak: "break-word",
               }}
             >
               ¡Hola, {usuario?.name || "Estudiante"}! 👋
@@ -285,6 +287,7 @@ const EstudianteDashboard = () => {
             </div>
           </div>
           <div
+            className="dashboard-header-video"
             style={{
               width: 120,
               height: 120,
@@ -295,6 +298,7 @@ const EstudianteDashboard = () => {
               borderRadius: BORDER_RADIUS.xl,
               background: COLORS.surfaceLight,
               boxShadow: SHADOWS.md,
+              flexShrink: 0,
             }}
           >
             <video
@@ -311,6 +315,7 @@ const EstudianteDashboard = () => {
 
         {/* Filtros */}
         <div
+          className="dashboard-filtros"
           style={{
             display: "flex",
             gap: SPACING[4],
@@ -330,6 +335,8 @@ const EstudianteDashboard = () => {
               fontSize: FONT_SIZES.base,
               fontWeight: FONT_WEIGHTS.medium,
               minWidth: 200,
+              flex: 1,
+              maxWidth: 320,
             }}
           >
             <option value="">Todas las materias</option>
@@ -352,6 +359,8 @@ const EstudianteDashboard = () => {
               fontSize: FONT_SIZES.base,
               fontWeight: FONT_WEIGHTS.medium,
               minWidth: 150,
+              flex: 1,
+              maxWidth: 220,
             }}
           >
             <option value="">Todos los estados</option>
@@ -363,6 +372,7 @@ const EstudianteDashboard = () => {
 
         {/* Grid de tareas */}
         <div
+          className="dashboard-tareas"
           style={{
             background: COLORS.surface,
             borderRadius: BORDER_RADIUS.xl,
@@ -374,6 +384,7 @@ const EstudianteDashboard = () => {
           }}
         >
           <table
+            className="dashboard-tareas-table"
             style={{ width: "100%", borderCollapse: "collapse", minWidth: 900 }}
           >
             <thead>
@@ -1104,6 +1115,51 @@ const EstudianteDashboard = () => {
           </div>
         </div>
       )}
+
+      {/* Estilos responsivos */}
+      <style>{`
+        @media (max-width: 700px) {
+          .dashboard-header {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 16px !important;
+            padding: 18px !important;
+          }
+          .dashboard-header-video {
+            width: 100% !important;
+            height: auto !important;
+            margin: 0 auto 12px auto !important;
+            justify-content: center !important;
+          }
+          .dashboard-header-video video {
+            width: 100% !important;
+            max-width: 220px !important;
+            height: auto !important;
+            margin: 0 auto !important;
+            display: block !important;
+          }
+          .dashboard-filtros {
+            flex-direction: column !important;
+            gap: 10px !important;
+          }
+          .dashboard-filtros select {
+            min-width: 0 !important;
+            max-width: 100vw !important;
+            width: 100% !important;
+            font-size: 1rem !important;
+          }
+          .dashboard-tareas {
+            padding: 8px !important;
+          }
+          .dashboard-tareas-table {
+            min-width: 520px !important;
+            font-size: 0.97rem !important;
+          }
+          .dashboard-tareas-table th, .dashboard-tareas-table td {
+            padding: 6px 4px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

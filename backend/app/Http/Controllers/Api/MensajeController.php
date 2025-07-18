@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMensajeRequest;
 use App\Models\Mensaje;
 use Illuminate\Http\Request;
+use App\Notifications\NotificacionPersonalizada;
 
 class MensajeController extends Controller
 {
@@ -34,6 +35,13 @@ class MensajeController extends Controller
             'remitente_id' => $request->user()->id, // o auth()->id()
             ...$validatedData,
         ]);
+
+        // Enviar notificación al destinatario
+        $destinatario = \App\Models\User::find($mensaje->destinatario_id);
+        if ($destinatario) {
+            $resumen = $mensaje->asunto . ': ' . \Str::limit($mensaje->contenido, 60);
+            $destinatario->notify(new NotificacionPersonalizada($resumen));
+        }
 
         return response()->json(['data' => $mensaje], 201);
     }
