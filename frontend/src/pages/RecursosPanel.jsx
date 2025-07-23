@@ -27,6 +27,7 @@ const RecursosPanel = () => {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [archivo, setArchivo] = useState(null);
 
   // Verificar permisos
   const canManageResources =
@@ -78,11 +79,22 @@ const RecursosPanel = () => {
     }
 
     try {
-      const response = await api.post("/recursos", {
-        ...form,
-        creador_id: usuario.id,
-      });
-
+      let response;
+      if (form.tipo === "imagen" && archivo) {
+        const formData = new FormData();
+        formData.append("titulo", form.titulo);
+        formData.append("descripcion", form.descripcion);
+        formData.append("tipo", "imagen");
+        formData.append("curso_id", form.curso_id);
+        formData.append("estado", form.estado);
+        formData.append("archivo", archivo);
+        response = await api.post("/recursos", formData, { headers: { "Content-Type": "multipart/form-data" } });
+      } else {
+        response = await api.post("/recursos", {
+          ...form,
+          creador_id: usuario.id,
+        });
+      }
       setRecursos([...recursos, response.data.data]);
       setShowForm(false);
       setForm({
@@ -93,6 +105,7 @@ const RecursosPanel = () => {
         curso_id: "",
         estado: "activo",
       });
+      setArchivo(null);
       setSuccess("Recurso creado exitosamente");
     } catch (error) {
       console.error("Error creating recurso:", error);
@@ -300,6 +313,16 @@ const RecursosPanel = () => {
             <option value="imagen">Imagen</option>
             <option value="enlace">Enlace</option>
           </select>
+          {/* Input file solo si es imagen */}
+          {form.tipo === "imagen" && (
+            <input
+              type="file"
+              accept="image/*"
+              onChange={e => setArchivo(e.target.files[0])}
+              style={{ width: "100%", marginBottom: SPACING[3] }}
+              required
+            />
+          )}
 
           <select
             name="curso_id"
@@ -332,6 +355,7 @@ const RecursosPanel = () => {
               padding: SPACING[3],
               borderRadius: BORDER_RADIUS.md,
               border: `1px solid ${COLORS.border}`,
+              display: form.tipo === "imagen" ? "none" : "block"
             }}
           />
 
@@ -451,7 +475,12 @@ const RecursosPanel = () => {
                   {recurso.descripcion}
                 </p>
 
-                {recurso.url && (
+                {/* Previsualización de imagen */}
+                {recurso.tipo === "imagen" && recurso.url && (
+                  <img src={recurso.url} alt={recurso.titulo} style={{ width: 220, borderRadius: 8, marginBottom: SPACING[3] }} />
+                )}
+
+                {recurso.tipo !== "imagen" && recurso.url && (
                   <a
                     href={recurso.url}
                     target="_blank"

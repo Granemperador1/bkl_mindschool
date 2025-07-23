@@ -43,21 +43,25 @@ class AsesoriaController extends Controller
         $validator = Validator::make($request->all(), [
             'profesor_id' => 'required|exists:users,id',
             'estudiante_id' => 'required|exists:users,id',
-            'fecha_hora_inicio' => 'required|date_format:H:i',
-            'fecha_hora_fin' => 'required|date_format:H:i',
+            'fecha_hora_inicio' => 'required|date_format:Y-m-d H:i:s',
+            'fecha_hora_fin' => 'required|date_format:Y-m-d H:i:s',
             'dia_semana' => 'required|string',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-        // Aquí podrías validar que el bloque esté disponible y no reservado
+        // Crear la asesoría usando las fechas tal cual llegan
+        // Generar enlace Jitsi único
+        $timestamp = now()->format('YmdHis');
+        $jitsiRoom = 'mindschool-asesoria-' . uniqid() . '-' . $timestamp;
+        $enlace = 'https://meet.jit.si/' . $jitsiRoom;
         $asesoria = Asesoria::create([
             'profesor_id' => $request->profesor_id,
             'estudiante_id' => $request->estudiante_id,
-            'fecha_hora_inicio' => now()->next($request->dia_semana)->setTimeFromTimeString($request->fecha_hora_inicio),
-            'fecha_hora_fin' => now()->next($request->dia_semana)->setTimeFromTimeString($request->fecha_hora_fin),
+            'fecha_hora_inicio' => $request->fecha_hora_inicio,
+            'fecha_hora_fin' => $request->fecha_hora_fin,
             'estado' => 'confirmada',
-            'enlace_videollamada' => null, // Generar enlace real en integración
+            'enlace_videollamada' => $enlace,
         ]);
         return response()->json($asesoria, 201);
     }

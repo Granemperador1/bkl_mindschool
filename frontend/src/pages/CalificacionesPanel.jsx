@@ -92,6 +92,35 @@ const CalificacionesPanel = () => {
     return true;
   });
 
+  // NUEVO: Exportar calificaciones
+  const handleExportar = async () => {
+    try {
+      if (!filterCurso) {
+        alert("Selecciona un curso para exportar sus calificaciones");
+        return;
+      }
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `/api/profesor/cursos/${filterCurso}/exportar-calificaciones`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (!response.ok) throw new Error("Error al exportar calificaciones");
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `calificaciones_curso_${filterCurso}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      alert("No se pudo exportar calificaciones");
+    }
+  };
+
   if (loading) {
     return (
       <div
@@ -257,6 +286,23 @@ const CalificacionesPanel = () => {
           <option value="publicada">Publicada</option>
           <option value="revisada">Revisada</option>
         </select>
+        <button
+          onClick={handleExportar}
+          style={{
+            background: COLORS.success,
+            color: COLORS.white,
+            border: "none",
+            borderRadius: BORDER_RADIUS.md,
+            padding: "10px 22px",
+            fontWeight: FONT_WEIGHTS.semibold,
+            fontSize: FONT_SIZES.base,
+            cursor: "pointer",
+            transition: "background 0.2s",
+            marginLeft: 12,
+          }}
+        >
+          <i className="fas fa-file-excel" style={{ marginRight: 8 }}></i> Exportar Excel
+        </button>
       </div>
 
       {/* Lista de Calificaciones */}

@@ -27,6 +27,7 @@ const EstudianteDashboard = () => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [uploadFile, setUploadFile] = useState(null);
+  const [entregaArchivos, setEntregaArchivos] = useState([]);
   const [comentarios, setComentarios] = useState("");
   const [filterMateria, setFilterMateria] = useState("");
   const [filterEstado, setFilterEstado] = useState("");
@@ -91,7 +92,8 @@ const EstudianteDashboard = () => {
       formData.append("archivo", uploadFile);
       formData.append("comentarios", comentarios);
 
-      await api.post(
+      // 1. Crear la entrega (POST a /estudiante/tareas/{id}/entregar)
+      const entregaRes = await api.post(
         `/estudiante/tareas/${selectedTarea.id}/entregar`,
         formData,
         {
@@ -100,6 +102,19 @@ const EstudianteDashboard = () => {
           },
         },
       );
+
+      // 2. Subir archivo multimedia a /api/multimedia si la entrega fue exitosa
+      if (entregaRes.data && entregaRes.data.entrega && entregaRes.data.entrega.id) {
+        const multimediaForm = new FormData();
+        multimediaForm.append("file", uploadFile);
+        multimediaForm.append("context", "entrega");
+        multimediaForm.append("context_id", entregaRes.data.entrega.id);
+        multimediaForm.append("type", uploadFile.type.startsWith("video") ? "video" : uploadFile.type.startsWith("image") ? "imagen" : "documento");
+        await api.post("/multimedia", multimediaForm, { headers: { "Content-Type": "multipart/form-data" } });
+        // Obtener archivos multimedia de la entrega
+        const archivosRes = await api.get(`/multimedia/entrega/${entregaRes.data.entrega.id}`);
+        setEntregaArchivos(archivosRes.data || []);
+      }
 
       alert("Tarea entregada exitosamente!");
       setShowUploadModal(false);
@@ -934,190 +949,69 @@ const EstudianteDashboard = () => {
       )}
 
       {/* Modal de subida de archivo */}
-      {showUploadModal && selectedTarea && (
+      {showUploadModal && (
         <div
           style={{
             position: "fixed",
             top: 0,
             left: 0,
-            right: 0,
-            bottom: 0,
-            background: COLORS.overlay,
-            backdropFilter: "blur(8px)",
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.6)",
+            zIndex: 1000,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            zIndex: 2000,
-            padding: SPACING[5],
           }}
+          onClick={() => setShowUploadModal(false)}
         >
           <div
             style={{
               background: COLORS.surface,
-              borderRadius: BORDER_RADIUS.xl,
-              padding: SPACING[8],
-              maxWidth: 500,
-              width: "100%",
-              boxShadow: SHADOWS["2xl"],
-              border: `1px solid ${COLORS.border}`,
+              borderRadius: 12,
+              maxWidth: 420,
+              width: "90vw",
+              padding: 32,
+              boxShadow: SHADOWS.lg,
+              position: "relative",
             }}
+            onClick={(e) => e.stopPropagation()}
           >
-            <div
+            <h2 style={{ fontSize: FONT_SIZES.xl, fontWeight: FONT_WEIGHTS.bold, color: COLORS.primary, marginBottom: 18 }}>
+              Entregar Tarea
+            </h2>
+            <input
+              type="file"
+              accept="video/*,image/*,application/pdf"
+              onChange={handleFileUpload}
+              style={{ width: "100%", marginBottom: 16 }}
+            />
+            <textarea
+              placeholder="Comentarios (opcional)"
+              value={comentarios}
+              onChange={(e) => setComentarios(e.target.value)}
+              style={{ width: "100%", minHeight: 60, marginBottom: 16, borderRadius: 6, border: `1px solid ${COLORS.border}` }}
+            />
+            <button
+              onClick={handleEntregarTarea}
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: SPACING[6],
+                background: COLORS.primary,
+                color: COLORS.white,
+                border: "none",
+                borderRadius: BORDER_RADIUS.md,
+                padding: `${SPACING[3]} ${SPACING[6]}`,
+                fontSize: FONT_SIZES.base,
+                fontWeight: FONT_WEIGHTS.semibold,
+                cursor: "pointer",
+                transition: TRANSITIONS.base,
+                boxShadow: SHADOWS.md,
+                width: "100%",
               }}
             >
-              <h2
-                style={{
-                  fontSize: FONT_SIZES["2xl"],
-                  fontWeight: FONT_WEIGHTS.bold,
-                  color: COLORS.text,
-                  margin: 0,
-                }}
-              >
-                Entregar Tarea
-              </h2>
-              <button
-                onClick={() => setShowUploadModal(false)}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  color: COLORS.textSecondary,
-                  fontSize: FONT_SIZES.xl,
-                  cursor: "pointer",
-                  padding: SPACING[2],
-                }}
-              >
-                ×
-              </button>
-            </div>
-
-            <div
-              style={{
-                background: COLORS.surfaceLight,
-                borderRadius: BORDER_RADIUS.lg,
-                padding: SPACING[4],
-                marginBottom: SPACING[6],
-                border: `2px dashed ${COLORS.border}`,
-                textAlign: "center",
-              }}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
-              <input
-                type="file"
-                onChange={handleFileUpload}
-                style={{ display: "none" }}
-                id="file-upload"
-              />
-              <label
-                htmlFor="file-upload"
-                style={{
-                  cursor: "pointer",
-                  display: "block",
-                }}
-              >
-                <i
-                  className="fas fa-cloud-upload-alt"
-                  style={{
-                    fontSize: FONT_SIZES["3xl"],
-                    color: COLORS.primary,
-                    marginBottom: SPACING[3],
-                  }}
-                ></i>
-                <p
-                  style={{
-                    fontSize: FONT_SIZES.base,
-                    color: COLORS.text,
-                    margin: 0,
-                  }}
-                >
-                  {uploadFile
-                    ? uploadFile.name
-                    : "Arrastra un archivo aquí o haz clic para seleccionar"}
-                </p>
-              </label>
-            </div>
-
-            <div style={{ marginBottom: SPACING[6] }}>
-              <label
-                style={{
-                  fontSize: FONT_SIZES.base,
-                  color: COLORS.text,
-                  fontWeight: FONT_WEIGHTS.medium,
-                  marginBottom: SPACING[2],
-                  display: "block",
-                }}
-              >
-                Comentarios (opcional)
-              </label>
-              <textarea
-                value={comentarios}
-                onChange={(e) => setComentarios(e.target.value)}
-                placeholder="Agrega comentarios sobre tu entrega..."
-                style={{
-                  width: "100%",
-                  minHeight: 100,
-                  padding: SPACING[3],
-                  border: `1px solid ${COLORS.border}`,
-                  borderRadius: BORDER_RADIUS.lg,
-                  background: COLORS.surfaceLight,
-                  color: COLORS.text,
-                  fontSize: FONT_SIZES.base,
-                  resize: "vertical",
-                }}
-              />
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                gap: SPACING[4],
-                justifyContent: "flex-end",
-              }}
-            >
-              <button
-                onClick={() => setShowUploadModal(false)}
-                style={{
-                  background: "transparent",
-                  border: `1px solid ${COLORS.border}`,
-                  color: COLORS.textSecondary,
-                  padding: `${SPACING[3]} ${SPACING[6]}`,
-                  borderRadius: BORDER_RADIUS.lg,
-                  fontSize: FONT_SIZES.base,
-                  fontWeight: FONT_WEIGHTS.medium,
-                  cursor: "pointer",
-                  transition: TRANSITIONS.base,
-                }}
-              >
-                Cancelar
-              </button>
-
-              <button
-                onClick={handleEntregarTarea}
-                disabled={!uploadFile}
-                style={{
-                  background: uploadFile
-                    ? COLORS.gradientPrimary
-                    : COLORS.surfaceHover,
-                  color: COLORS.text,
-                  border: "none",
-                  padding: `${SPACING[3]} ${SPACING[6]}`,
-                  borderRadius: BORDER_RADIUS.lg,
-                  fontSize: FONT_SIZES.base,
-                  fontWeight: FONT_WEIGHTS.semibold,
-                  cursor: uploadFile ? "pointer" : "not-allowed",
-                  transition: TRANSITIONS.base,
-                  boxShadow: SHADOWS.md,
-                }}
-              >
-                Entregar
-              </button>
-            </div>
+              Subir Entrega
+            </button>
+            {/* Previsualización del archivo subido */}
+            <PreviewArchivosDirect archivos={entregaArchivos} />
           </div>
         </div>
       )}
@@ -1169,5 +1063,27 @@ const EstudianteDashboard = () => {
     </div>
   );
 };
+
+// Componente para previsualizar archivos multimedia (recibe prop archivos directamente)
+function PreviewArchivosDirect({ archivos }) {
+  if (!archivos || !archivos.length) return null;
+  return (
+    <div style={{ marginTop: 12, display: "flex", gap: 16, flexWrap: "wrap" }}>
+      {archivos.map((a) => (
+        <div key={a._id} style={{ maxWidth: 220 }}>
+          {a.type === "video" ? (
+            <video src={a.url} controls style={{ width: "100%", borderRadius: 8 }} />
+          ) : a.type === "imagen" ? (
+            <img src={a.url} alt={a.filename} style={{ width: "100%", borderRadius: 8 }} />
+          ) : a.type === "documento" ? (
+            <a href={a.url} target="_blank" rel="noopener noreferrer" style={{ color: COLORS.primary }}>
+              <i className="fas fa-file-pdf" style={{ fontSize: 32 }}></i> {a.filename}
+            </a>
+          ) : null}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default EstudianteDashboard;

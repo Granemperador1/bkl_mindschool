@@ -47,13 +47,19 @@ class TareaController extends Controller
             'curso_id' => 'required|exists:cursos,id',
             'leccion_id' => 'nullable|exists:lecciones,id',
             'estado' => 'required|in:activa,inactiva,borrador',
-            'puntos_maximos' => 'required|integer|min:1|max:100'
+            'puntos_maximos' => 'required|integer|min:1|max:100',
+            'links' => 'nullable|array',
+            'links.*.url' => 'required_with:links|url',
+            'links.*.descripcion' => 'nullable|string',
+            'imagen_url' => 'nullable|string',
         ]);
-
-        $tarea = Tarea::create($request->all());
+        $data = $request->all();
+        if ($request->has('links')) {
+            $data['links'] = json_encode($request->links);
+        }
+        $tarea = Tarea::create($data);
         $tarea->load(['curso', 'leccion']);
-
-        return $this->successResponse($tarea, 'Tarea creada exitosamente', 201);
+        return response()->json(['data' => $tarea], 201);
     }
 
     /**
@@ -80,13 +86,19 @@ class TareaController extends Controller
             'curso_id' => 'exists:cursos,id',
             'leccion_id' => 'nullable|exists:lecciones,id',
             'estado' => 'in:activa,inactiva,borrador',
-            'puntos_maximos' => 'integer|min:1|max:100'
+            'puntos_maximos' => 'integer|min:1|max:100',
+            'links' => 'nullable|array',
+            'links.*.url' => 'required_with:links|url',
+            'links.*.descripcion' => 'nullable|string',
+            'imagen_url' => 'nullable|string',
         ]);
-
-        $tarea->update($request->all());
+        $data = $request->all();
+        if ($request->has('links')) {
+            $data['links'] = json_encode($request->links);
+        }
+        $tarea->update($data);
         $tarea->load(['curso', 'leccion']);
-
-        return $this->successResponse($tarea, 'Tarea actualizada exitosamente');
+        return response()->json(['data' => $tarea]);
     }
 
     /**

@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import api from "../../utils/axiosConfig";
 import AgendaCalendario from "./AgendaCalendario";
+import { useAuth } from "../../context/AuthContext";
 
 const EstudianteReservaAsesoria = () => {
+  const { usuario } = useAuth();
   const [profesores, setProfesores] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [profesorId, setProfesorId] = useState("");
   const [disponibilidad, setDisponibilidad] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     fetchProfesores();
@@ -42,6 +45,69 @@ const EstudianteReservaAsesoria = () => {
 
   const handleBuscar = () => {
     if (profesorId) fetchDisponibilidad(profesorId);
+  };
+
+  const diasSemana = {
+    'Lunes': 1,
+    'Martes': 2,
+    'Miércoles': 3,
+    'Miercoles': 3,
+    'Jueves': 4,
+    'Viernes': 5,
+    'Sábado': 6,
+    'Sabado': 6,
+    'Domingo': 0,
+  };
+
+  function getProximaFecha(diaSemana) {
+    const hoy = new Date();
+    const diaActual = hoy.getDay(); // Domingo=0, Lunes=1...
+    const diaObjetivo = diasSemana[diaSemana];
+    let diff = diaObjetivo - diaActual;
+    if (diff < 0) diff += 7;
+    if (diff === 0) {
+      // Si es hoy pero la hora ya pasó, sumar 7 días
+      return hoy;
+    }
+    const proxima = new Date(hoy);
+    proxima.setDate(hoy.getDate() + diff);
+    return proxima;
+  }
+
+  const handleSeleccionar = async (bloque) => {
+    try {
+      setLoading(true);
+      setError("");
+      setSuccess("");
+      // Calcular la próxima fecha real del día de la semana
+      const fecha = getProximaFecha(bloque.dia_semana);
+      const yyyy = fecha.getFullYear();
+      const mm = String(fecha.getMonth() + 1).padStart(2, '0');
+      const dd = String(fecha.getDate()).padStart(2, '0');
+      // Combinar fecha con hora usando espacio, no 'T'
+      const inicio = `${yyyy}-${mm}-${dd} ${bloque.hora_inicio}`;
+      const fin = `${yyyy}-${mm}-${dd} ${bloque.hora_fin}`;
+      // Depuración: mostrar payload
+      console.log({
+        profesor_id: profesorId,
+        estudiante_id: usuario?.id,
+        fecha_hora_inicio: inicio,
+        fecha_hora_fin: fin,
+        dia_semana: bloque.dia_semana,
+      });
+      await api.post("/asesorias/reservar", {
+        profesor_id: profesorId,
+        estudiante_id: usuario?.id,
+        fecha_hora_inicio: inicio,
+        fecha_hora_fin: fin,
+        dia_semana: bloque.dia_semana,
+      });
+      setSuccess("¡Asesoría reservada exitosamente!");
+    } catch (e) {
+      setError("No se pudo reservar la asesoría");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const profesoresFiltrados = profesores.filter((p) =>
@@ -115,10 +181,11 @@ const EstudianteReservaAsesoria = () => {
           <h4 style={{ marginTop: 24, color: "#333", borderBottom: "2px solid #007bff", paddingBottom: 8 }}>
             Disponibilidad del profesor
           </h4>
-          <AgendaCalendario disponibilidad={disponibilidad} onSeleccionar={() => {}} />
+          <AgendaCalendario disponibilidad={disponibilidad} onSelectSlot={handleSeleccionar} />
         </>
       )}
       {error && <div style={{ color: "red", marginTop: 12, padding: 8, backgroundColor: "#ffebee", borderRadius: 4 }}>{error}</div>}
+      {success && <div style={{ color: "green", marginTop: 12, padding: 8, backgroundColor: "#e8f5e9", borderRadius: 4 }}>{success}</div>}
     </div>
   );
 };

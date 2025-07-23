@@ -8,6 +8,7 @@ use App\Models\Curso;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ApiResponses;
+use Illuminate\Support\Facades\Storage;
 
 class RecursoController extends Controller
 {
@@ -67,10 +68,10 @@ class RecursoController extends Controller
                 'titulo' => 'required|string|max:255',
                 'descripcion' => 'required|string',
                 'tipo' => 'required|in:documento,video,audio,imagen,enlace',
-                'url' => 'nullable|url',
                 'curso_id' => 'required|exists:cursos,id',
                 'estado' => 'nullable|in:activo,inactivo',
-                'creador_id' => 'required|exists:users,id'
+                // 'creador_id' => 'required|exists:users,id',
+                'archivo' => 'required_if:tipo,imagen|image|max:2048',
             ]);
 
             if ($validator->fails()) {
@@ -85,7 +86,17 @@ class RecursoController extends Controller
                 }
             }
 
-            $recurso = Recurso::create($request->all());
+            $data = $request->only(['titulo', 'descripcion', 'tipo', 'curso_id', 'estado']);
+            $data['creador_id'] = auth()->id();
+
+            if ($request->tipo === 'imagen' && $request->hasFile('archivo')) {
+                $path = $request->file('archivo')->store('recursos/imagenes', 'public');
+                $data['url'] = '/storage/' . $path;
+            } else {
+                $data['url'] = $request->url;
+            }
+
+            $recurso = Recurso::create($data);
             $recurso->load(['curso', 'creador']);
 
             return $this->successResponse($recurso, 'Recurso creado exitosamente', 201);
@@ -167,7 +178,11 @@ class RecursoController extends Controller
                     return $this->errorResponse('No tienes permisos para eliminar este recurso', 403);
                 }
             }
-
+            // Eliminar archivo físico si es imagen
+            if ($recurso->tipo === 'imagen' && $recurso->url) {
+                $path = str_replace('/storage/', '', $recurso->url);
+                Storage::disk('public')->delete($path);
+            }
             $recurso->delete();
             return $this->successResponse(null, 'Recurso eliminado exitosamente');
         } catch (\Exception $e) {

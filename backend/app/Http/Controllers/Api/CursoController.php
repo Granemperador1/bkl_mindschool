@@ -467,6 +467,11 @@ class CursoController extends Controller
             return $this->errorResponse('El alumno ya está inscrito en el curso', 409);
         }
         $curso->alumnos()->attach($usuario->id, ['tipo_acceso' => 'invitacion']);
+        // NUEVO: Crear inscripción en la tabla inscripciones si no existe
+        \App\Models\Inscripcion::firstOrCreate(
+            ['user_id' => $usuario->id, 'curso_id' => $curso->id],
+            ['estado' => 'activo', 'fecha_inscripcion' => now(), 'progreso' => 0]
+        );
         // Enviar notificación/correo
         $usuario->notify(new \App\Notifications\NuevaInscripcion([
             'curso' => $curso->titulo,
@@ -503,11 +508,19 @@ class CursoController extends Controller
             return $this->errorResponse('Solo se pueden agregar estudiantes', 400);
         }
         $curso = Curso::findOrFail($idCurso);
-        // Validar si ya está inscrito
+        // Validar si ya está inscrito en la tabla pivote
         if ($curso->alumnos()->where('users.id', $usuario->id)->exists()) {
             return $this->errorResponse('El alumno ya está inscrito en el curso', 409);
         }
+        // Agregar a la tabla pivote
         $curso->alumnos()->attach($usuario->id, ['tipo_acceso' => 'manual']);
+
+        // NUEVO: Crear inscripción en la tabla inscripciones si no existe
+        \App\Models\Inscripcion::firstOrCreate(
+            ['user_id' => $usuario->id, 'curso_id' => $curso->id],
+            ['estado' => 'activo', 'fecha_inscripcion' => now(), 'progreso' => 0]
+        );
+
         return $this->successResponse(null, 'Alumno agregado manualmente');
     }
 
@@ -531,6 +544,11 @@ class CursoController extends Controller
             return $this->errorResponse('Ya estás inscrito en el curso', 409);
         }
         $curso->alumnos()->attach($usuario->id, ['tipo_acceso' => 'invitacion']);
+        // NUEVO: Crear inscripción en la tabla inscripciones si no existe
+        \App\Models\Inscripcion::firstOrCreate(
+            ['user_id' => $usuario->id, 'curso_id' => $curso->id],
+            ['estado' => 'activo', 'fecha_inscripcion' => now(), 'progreso' => 0]
+        );
         return $this->successResponse(null, 'Inscripción exitosa con código de invitación');
     }
 } 

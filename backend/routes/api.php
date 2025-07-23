@@ -206,3 +206,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 if (app()->environment(['local', 'testing'])) {
     Route::post('/pagos/simular', [\App\Http\Controllers\Api\PagoController::class, 'simularPago']);
 }
+
+Route::middleware(['auth:sanctum', 'role:profesor'])->group(function () {
+    Route::get('/profesor/cursos/{curso}/exportar-estudiantes', [ProfesorController::class, 'exportarEstudiantesCurso']);
+    Route::get('/profesor/cursos/{curso}/exportar-calificaciones', [ProfesorController::class, 'exportarCalificacionesCurso']);
+});

@@ -12,6 +12,8 @@ use App\Models\Tarea;
 use App\Models\EntregaTarea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\CalificacionesExport;
 
 class ProfesorController extends Controller
 {
@@ -88,6 +90,33 @@ class ProfesorController extends Controller
             });
         
         return response()->json(['data' => $estudiantes]);
+    }
+
+    /**
+     * Exportar estudiantes de un curso a Excel
+     */
+    public function exportarEstudiantesCurso(Request $request, $cursoId)
+    {
+        $profesorId = $request->user()->id;
+        // Verificar que el curso pertenece al profesor
+        $curso = Curso::where('id', $cursoId)
+            ->where('instructor_id', $profesorId)
+            ->firstOrFail();
+        $estudiantes = Inscripcion::where('curso_id', $cursoId)
+            ->with(['alumno'])
+            ->get()
+            ->map(function($inscripcion) {
+                return [
+                    'ID' => $inscripcion->alumno->id,
+                    'Nombre' => $inscripcion->alumno->name,
+                    'Email' => $inscripcion->alumno->email,
+                    'Progreso' => $inscripcion->progreso ?? 0,
+                    'Estado' => $inscripcion->estado,
+                    'Fecha de inscripción' => $inscripcion->fecha_inscripcion
+                ];
+            });
+        $filename = 'estudiantes_curso_' . $cursoId . '_' . now()->format('Ymd_His') . '.xlsx';
+        return Excel::download(new \App\Exports\EstudiantesExport($estudiantes), $filename);
     }
 
     /**
@@ -276,5 +305,38 @@ class ProfesorController extends Controller
         $entrega->load(['tarea.curso', 'estudiante']);
         
         return response()->json(['data' => $entrega]);
+    }
+
+    /**
+     * Exportar calificaciones de un curso a Excel
+     */
+    public function exportarCalificacionesCurso(Request $request, $cursoId)
+    {
+        $profesorId = $request->user()->id;
+        // Verificar que el curso pertenece al profesor
+        $curso = Curso::where('id', $cursoId)
+            ->where('instructor_id', $profesorId)
+            ->firstOrFail();
+        $calificaciones = \App\Models\Calificacion::with(['estudiante', 'leccion', 'evaluador'])
+            ->where('curso_id', $cursoId)
+            ->where('estado', 'publicada')
+            ->orderBy('fecha_evaluacion', 'desc')
+            ->get()
+            ->map(function($c) {
+                return [
+                    'ID Estudiante' => $c->estudiante->id,
+                    'Nombre' => $c->estudiante->name,
+                    'Email' => $c->estudiante->email,
+                    'Lección' => $c->leccion ? $c->leccion->titulo : '-',
+                    'Tipo Evaluación' => $c->tipo_evaluacion,
+                    'Calificación' => $c->calificacion,
+                    'Peso' => $c->peso,
+                    'Comentarios' => $c->comentarios,
+                    'Evaluador' => $c->evaluador ? $c->evaluador->name : '-',
+                    'Fecha Evaluación' => $c->fecha_evaluacion,
+                ];
+            });
+        $filename = 'calificaciones_curso_' . $cursoId . '_' . now()->format('Ymd_His') . '.xlsx';
+        return \Maatwebsite\Excel\Facades\Excel::download(new CalificacionesExport($calificaciones), $filename);
     }
 } 
