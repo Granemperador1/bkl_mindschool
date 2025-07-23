@@ -83,6 +83,39 @@ class PagoController extends Controller
         }
     }
 
+    // Simular pago para pruebas (solo entorno local/testing)
+    public function simularPago(Request $request)
+    {
+        if (!app()->environment(['local', 'testing'])) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'curso_id' => 'required|exists:cursos,id',
+            'monto' => 'nullable|numeric',
+        ]);
+        $userId = $request->user_id;
+        $cursoId = $request->curso_id;
+        $monto = $request->monto ?? 100;
+        $curso = Curso::findOrFail($cursoId);
+        // Verificar si ya pagó
+        if (Transaccion::where('user_id', $userId)->where('curso_id', $cursoId)->where('estado', 'completada')->exists()) {
+            return response()->json(['message' => 'Ya se simuló el pago para este curso y usuario.'], 409);
+        }
+        $transaccion = Transaccion::create([
+            'user_id' => $userId,
+            'curso_id' => $cursoId,
+            'monto' => $monto,
+            'metodo_pago' => 'simulado',
+            'estado' => 'completada',
+            'referencia' => 'SIMULADO-' . uniqid(),
+            'fecha_pago' => now(),
+        ]);
+        // Dar acceso al curso (relación en curso_usuario)
+        $curso->alumnos()->syncWithoutDetaching([$userId => ['tipo_acceso' => 'pago']]);
+        return response()->json(['message' => 'Pago simulado exitosamente', 'transaccion' => $transaccion], 200);
+    }
+
     // Obtener pagos/ingresos del profesor
     public function pagosProfesor()
     {

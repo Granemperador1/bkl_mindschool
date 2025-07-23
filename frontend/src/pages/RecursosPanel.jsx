@@ -43,10 +43,11 @@ const RecursosPanel = () => {
     try {
       setLoading(true);
       const response = await api.get("/recursos");
-      setRecursos(response.data.data || []);
+      setRecursos(Array.isArray(response.data.data) ? response.data.data : []);
     } catch (error) {
       console.error("Error fetching recursos:", error);
       setError("Error al cargar los recursos");
+      setRecursos([]);
     } finally {
       setLoading(false);
     }
@@ -55,9 +56,10 @@ const RecursosPanel = () => {
   const fetchCursos = async () => {
     try {
       const response = await api.get("/cursos");
-      setCursos(response.data.data || []);
+      setCursos(Array.isArray(response.data.data) ? response.data.data : []);
     } catch (error) {
       console.error("Error fetching cursos:", error);
+      setCursos([]);
     }
   };
 
@@ -312,7 +314,7 @@ const RecursosPanel = () => {
             }}
           >
             <option value="">Seleccionar curso</option>
-            {cursos.map((curso) => (
+            {Array.isArray(cursos) && cursos.map((curso) => (
               <option key={curso.id} value={curso.id}>
                 {curso.titulo}
               </option>
@@ -397,7 +399,7 @@ const RecursosPanel = () => {
               No hay recursos registrados
             </div>
           ) : (
-            recursos.map((recurso) => (
+            Array.isArray(recursos) && recursos.map((recurso) => (
               <div
                 key={recurso.id}
                 style={{

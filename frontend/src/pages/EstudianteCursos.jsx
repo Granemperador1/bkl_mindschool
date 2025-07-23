@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import useApi from "../hooks/useApi";
+import api from "../utils/axiosConfig";
 import {
   COLORS,
   FONTS,
@@ -27,7 +27,6 @@ const EstudianteCursos = () => {
 
   const navigate = useNavigate();
   const { usuario } = useAuth();
-  const api = useApi();
 
   useEffect(() => {
     fetchCursos();
@@ -44,8 +43,8 @@ const EstudianteCursos = () => {
       // Obtener cursos inscritos del estudiante
       const inscripcionesResponse = await api.get("/estudiante/materias");
       
-      setCursos(cursosResponse.data.data || []);
-      setCursosInscritos(inscripcionesResponse.data || []);
+      setCursos(Array.isArray(cursosResponse.data.data) ? cursosResponse.data.data : []);
+      setCursosInscritos(Array.isArray(inscripcionesResponse.data) ? inscripcionesResponse.data : []);
     } catch (error) {
       console.error("Error fetching cursos:", error);
       setError("Error al cargar los cursos");

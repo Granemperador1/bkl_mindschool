@@ -16,12 +16,73 @@ import Logo from "../theme/branding/Logo";
 import { FaBars, FaTimes, FaBell, FaUserCircle, FaCog, FaSignOutAlt, FaUserEdit, FaKey } from "react-icons/fa";
 import useNotificaciones from '../hooks/useNotificaciones';
 
+const CartaBienvenidaModal = ({ open, mensaje, onClose }) => {
+  if (!open) return null;
+  return (
+    <div style={{
+      position: "fixed",
+      top: 0, left: 0, right: 0, bottom: 0,
+      background: "rgba(0,0,0,0.55)",
+      zIndex: 3000,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      animation: "fadeInBg 0.4s"
+    }}>
+      <div style={{
+        background: "#23272f",
+        borderRadius: 18,
+        boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
+        padding: 40,
+        maxWidth: 480,
+        width: "90%",
+        position: "relative",
+        textAlign: "center",
+        animation: "cartaAnimada 0.7s cubic-bezier(.68,-0.55,.27,1.55)"
+      }}>
+        <div style={{ fontSize: 60, marginBottom: 12, color: "#007bff" }}>📬</div>
+        <h2 style={{ color: "#fff", marginBottom: 18, fontWeight: 700 }}>¡Bienvenido a MindSchool!</h2>
+        <div style={{ color: "#b0b8c1", whiteSpace: "pre-line", fontSize: 17, marginBottom: 24, lineHeight: 1.6 }}>
+          {mensaje}
+        </div>
+        <button onClick={onClose} style={{
+          background: "#007bff",
+          color: "#fff",
+          border: "none",
+          borderRadius: 8,
+          padding: "12px 32px",
+          fontWeight: 600,
+          fontSize: 17,
+          cursor: "pointer",
+          marginTop: 8,
+          transition: "background 0.2s"
+        }}
+        onMouseEnter={e => e.target.style.background = "#0056b3"}
+        onMouseLeave={e => e.target.style.background = "#007bff"}
+        >Cerrar</button>
+        <style>{`
+          @keyframes cartaAnimada {
+            0% { transform: scale(0.7) rotate(-8deg); opacity: 0; }
+            60% { transform: scale(1.05) rotate(2deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+          }
+          @keyframes fadeInBg {
+            from { opacity: 0; } to { opacity: 1; }
+          }
+        `}</style>
+      </div>
+    </div>
+  );
+};
+
 const Navbar = () => {
   const { usuario, logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showBienvenida, setShowBienvenida] = useState(false);
+  const [bienvenidaMensaje, setBienvenidaMensaje] = useState("");
 
   const {
     notificaciones,
@@ -42,6 +103,12 @@ const Navbar = () => {
   const handleLogout = async () => {
     await logout();
     navigate("/login");
+  };
+
+  const handleBienvenida = (notif) => {
+    setBienvenidaMensaje(notif.data?.mensaje || notif.data || notif.text);
+    setShowBienvenida(true);
+    if (!notif.read_at) marcarLeida(notif.id);
   };
 
   const getRoleDisplayName = (role) => {
@@ -197,14 +264,6 @@ const Navbar = () => {
                     Cursos
                   </Link>
                   <Link
-                    to="/examenes"
-                    style={navLinkStyle}
-                    onMouseEnter={navLinkHover}
-                    onMouseLeave={navLinkUnhover}
-                  >
-                    Exámenes
-                  </Link>
-                  <Link
                     to="/asistencias"
                     style={navLinkStyle}
                     onMouseEnter={navLinkHover}
@@ -241,6 +300,22 @@ const Navbar = () => {
                     Mis Cursos
                   </Link>
                   <Link
+                    to="/profesor/asesorias"
+                    style={navLinkStyle}
+                    onMouseEnter={navLinkHover}
+                    onMouseLeave={navLinkUnhover}
+                  >
+                    Mis Asesorías
+                  </Link>
+                  <Link
+                    to="/profesor/disponibilidad"
+                    style={navLinkStyle}
+                    onMouseEnter={navLinkHover}
+                    onMouseLeave={navLinkUnhover}
+                  >
+                    Disponibilidad
+                  </Link>
+                  <Link
                     to="/profesor/pagos"
                     style={navLinkStyle}
                     onMouseEnter={navLinkHover}
@@ -249,7 +324,7 @@ const Navbar = () => {
                     Pagos
                   </Link>
                   <Link
-                    to="/profesor/mensajes"
+                    to="/mensajes"
                     style={navLinkStyle}
                     onMouseEnter={navLinkHover}
                     onMouseLeave={navLinkUnhover}
@@ -261,7 +336,7 @@ const Navbar = () => {
               {usuario.roles?.[0] === "estudiante" && (
                 <>
                   <Link
-                    to="/cursos"
+                    to="/estudiante/cursos"
                     style={navLinkStyle}
                     onMouseEnter={navLinkHover}
                     onMouseLeave={navLinkUnhover}
@@ -269,7 +344,7 @@ const Navbar = () => {
                     Cursos Disponibles
                   </Link>
                   <Link
-                    to="/inscripciones"
+                    to="/estudiante/inscripciones"
                     style={navLinkStyle}
                     onMouseEnter={navLinkHover}
                     onMouseLeave={navLinkUnhover}
@@ -277,12 +352,20 @@ const Navbar = () => {
                     Mis Inscripciones
                   </Link>
                   <Link
-                    to="/recursos"
+                    to="/estudiante/solicitar-asesoria"
                     style={navLinkStyle}
                     onMouseEnter={navLinkHover}
                     onMouseLeave={navLinkUnhover}
                   >
-                    Recursos
+                    Solicitar Asesoría
+                  </Link>
+                  <Link
+                    to="/estudiante/asesorias"
+                    style={navLinkStyle}
+                    onMouseEnter={navLinkHover}
+                    onMouseLeave={navLinkUnhover}
+                  >
+                    Mis Asesorías
                   </Link>
                   <Link
                     to="/mensajes"
@@ -300,35 +383,37 @@ const Navbar = () => {
 
         {/* Usuario, Notificaciones y Perfil (solo desktop) */}
         {usuario && (
-          <div className="navbar-user-block" style={{ display: "flex", alignItems: "center", gap: 12, position: "relative" }}>
+          <div className="navbar-user-block" style={{ display: "flex", alignItems: "center", gap: 48, position: "relative", paddingRight: 18 }}>
             {/* Notificaciones */}
             <button
               onClick={handleOpenNotifications}
               style={{
                 background: "none",
                 border: "none",
-                fontSize: 26,
-                color: COLORS.primary,
+                fontSize: 36,
+                color: '#fff',
                 cursor: "pointer",
                 position: "relative",
+                borderRadius: 24,
+                padding: 6,
+                transition: "box-shadow 0.18s, transform 0.18s, border 0.18s",
+                outline: "none"
               }}
               aria-label="Ver notificaciones"
+              onMouseEnter={e => {
+                e.currentTarget.style.boxShadow = "0 0 0 4px #007bff44";
+                e.currentTarget.style.transform = "scale(1.13)";
+                e.currentTarget.style.border = "2.5px solid #007bff";
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.border = "none";
+              }}
+              onMouseDown={e => e.currentTarget.style.transform = "scale(0.97)"}
+              onMouseUp={e => e.currentTarget.style.transform = "scale(1.13)"}
             >
-              <FaBell />
-              {/* Indicador de notificaciones no leídas */}
-              {notificaciones.some((n) => !n.read_at) && (
-                <span style={{
-                  position: "absolute",
-                  top: 2,
-                  right: 2,
-                  width: 10,
-                  height: 10,
-                  background: COLORS.error,
-                  borderRadius: "50%",
-                  border: "2px solid #fff",
-                  display: "inline-block",
-                }} />
-              )}
+              <FaBell style={{ transition: 'opacity 0.2s', opacity: 0.85 }} />
             </button>
             {/* Panel de notificaciones */}
             {showNotifications && (
@@ -354,23 +439,34 @@ const Navbar = () => {
                 {notificaciones.length === 0 && !loadingNotificaciones && (
                   <div style={{ padding: "8px 16px", color: COLORS.textSecondary }}>Sin notificaciones</div>
                 )}
-                {notificaciones.map((n) => (
-                  <div key={n.id} style={{
-                    padding: "8px 16px",
-                    background: n.read_at ? "none" : COLORS.surfaceLight,
-                    color: n.read_at ? COLORS.textSecondary : COLORS.text,
-                    fontWeight: n.read_at ? 400 : 600,
-                    borderLeft: n.read_at ? "none" : `3px solid ${COLORS.primary}`,
-                    cursor: "pointer",
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: 8,
-                  }}>
-                    <span onClick={() => !n.read_at && marcarLeida(n.id)} style={{ flex: 1 }}>{n.data?.mensaje || n.data?.text || n.data || 'Notificación'}</span>
-                    <button onClick={() => eliminarNotificacion(n.id)} style={{ background: 'none', border: 'none', color: COLORS.error, fontSize: 16, cursor: 'pointer' }} title="Eliminar">✕</button>
-                  </div>
-                ))}
+                {notificaciones.map((n) => {
+                  const esBienvenida = n.data?.mensaje?.includes("Bienvenido a Casa, Futuro Líder") || (n.data && typeof n.data === 'string' && n.data.includes("Bienvenido a Casa, Futuro Líder"));
+                  return (
+                    <div key={n.id} style={{
+                      padding: "8px 16px",
+                      background: esBienvenida ? "#e3f2fd" : (n.read_at ? "none" : COLORS.surfaceLight),
+                      color: esBienvenida ? "#007bff" : (n.read_at ? COLORS.textSecondary : COLORS.text),
+                      fontWeight: n.read_at ? 400 : 600,
+                      borderLeft: esBienvenida ? "4px solid #007bff" : (n.read_at ? "none" : `3px solid ${COLORS.primary}`),
+                      cursor: "pointer",
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 8,
+                      borderRadius: esBienvenida ? 10 : 0,
+                      boxShadow: esBienvenida ? "0 2px 12px #007bff22" : undefined,
+                      transition: "background 0.2s, color 0.2s"
+                    }}
+                    onClick={() => esBienvenida ? handleBienvenida(n) : (!n.read_at && marcarLeida(n.id))}
+                    >
+                      <span style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8 }}>
+                        {esBienvenida && <span style={{ fontSize: 22, marginRight: 4 }}>📬</span>}
+                        {n.data?.mensaje || n.data?.text || n.data || 'Notificación'}
+                      </span>
+                      <button onClick={e => { e.stopPropagation(); eliminarNotificacion(n.id); }} style={{ background: 'none', border: 'none', color: COLORS.error, fontSize: 16, cursor: 'pointer' }} title="Eliminar">✕</button>
+                    </div>
+                  );
+                })}
               </div>
             )}
             {/* Menú de perfil/configuración */}
@@ -379,15 +475,30 @@ const Navbar = () => {
               style={{
                 background: "none",
                 border: "none",
-                fontSize: 28,
-                color: COLORS.primary,
+                fontSize: 36,
+                color: '#fff',
                 cursor: "pointer",
                 borderRadius: "50%",
                 marginLeft: 6,
+                padding: 6,
+                transition: "box-shadow 0.18s, transform 0.18s, background 0.18s",
+                outline: "none"
               }}
               aria-label="Abrir menú de perfil"
+              onMouseEnter={e => {
+                e.currentTarget.style.boxShadow = "0 0 0 4px #007bff44";
+                e.currentTarget.style.transform = "scale(1.13)";
+                e.currentTarget.style.background = "#007bff";
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.background = "none";
+              }}
+              onMouseDown={e => e.currentTarget.style.transform = "scale(0.97)"}
+              onMouseUp={e => e.currentTarget.style.transform = "scale(1.13)"}
             >
-              <FaUserCircle />
+              <FaUserCircle style={{ transition: 'opacity 0.2s', opacity: 0.85 }} />
             </button>
             {showProfileMenu && (
               <div style={{
@@ -464,9 +575,6 @@ const Navbar = () => {
                     <Link to="/admin/cursos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
                       Cursos
                     </Link>
-                    <Link to="/examenes" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Exámenes
-                    </Link>
                     <Link to="/asistencias" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
                       Asistencias
                     </Link>
@@ -483,24 +591,33 @@ const Navbar = () => {
                     <Link to="/profesor/cursos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
                       Mis Cursos
                     </Link>
+                    <Link to="/profesor/asesorias" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                      Mis Asesorías
+                    </Link>
+                    <Link to="/profesor/disponibilidad" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                      Disponibilidad
+                    </Link>
                     <Link to="/profesor/pagos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
                       Pagos
                     </Link>
-                    <Link to="/profesor/mensajes" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                    <Link to="/mensajes" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
                       Mensajes
                     </Link>
                   </>
                 )}
                 {usuario.roles?.[0] === "estudiante" && (
                   <>
-                    <Link to="/cursos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                    <Link to="/estudiante/cursos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
                       Cursos Disponibles
                     </Link>
-                    <Link to="/inscripciones" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                    <Link to="/estudiante/inscripciones" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
                       Mis Inscripciones
                     </Link>
-                    <Link to="/recursos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Recursos
+                    <Link to="/estudiante/solicitar-asesoria" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                      Solicitar Asesoría
+                    </Link>
+                    <Link to="/estudiante/asesorias" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                      Mis Asesorías
                     </Link>
                     <Link to="/mensajes" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
                       Mensajes
@@ -543,6 +660,7 @@ const Navbar = () => {
           </div>
         )}
       </div>
+      <CartaBienvenidaModal open={showBienvenida} mensaje={bienvenidaMensaje} onClose={() => setShowBienvenida(false)} />
       {/* Estilos responsivos */}
       <style>{`
         @media (max-width: 900px) {

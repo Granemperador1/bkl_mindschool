@@ -8,28 +8,30 @@ use App\Models\Curso;
 use App\Models\Inscripcion;
 use App\Models\Tarea;
 use App\Models\EntregaTarea;
-use App\Models\AnalyticsCurso;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class AnalyticsController extends Controller
 {
     public function dashboard()
     {
-        // Cache por 5 minutos
-        return Cache::remember('analytics_dashboard', 300, function () {
-            $now = Carbon::now();
-            $lastMonth = $now->copy()->subMonth();
-            
+        // Datos de rendimiento cacheados por 1 hora
+        $rendimiento = \Cache::remember('analytics_rendimiento', 3600, function () {
+            return [
+                'tiempo_respuesta_promedio' => $this->getAverageResponseTime(),
+                'usuarios_concurrentes' => $this->getConcurrentUsers(),
+                'errores_ultimas_24h' => $this->getErrorCount(),
+                'uptime' => $this->getUptime(),
+                'memoria' => $this->getMemoryUsage(),
+                'ultimo_reinicio' => $this->getLastRestart(),
+            ];
+        });
             return [
                 'usuarios' => [
                     'total' => User::count(),
-                    'nuevos_este_mes' => User::where('created_at', '>=', $lastMonth)->count(),
-                    'activos_este_mes' => User::whereHas('inscripciones', function($q) use ($lastMonth) {
-                        $q->where('updated_at', '>=', $lastMonth);
-                    })->count(),
+                'nuevos_este_mes' => User::where('created_at', '>=', now()->subMonth())->count(),
                     'por_rol' => [
                         'estudiantes' => User::role('estudiante')->count(),
                         'profesores' => User::role('profesor')->count(),
@@ -39,29 +41,21 @@ class AnalyticsController extends Controller
                 'cursos' => [
                     'total' => Curso::count(),
                     'activos' => Curso::where('estado', 'activo')->count(),
-                    'nuevos_este_mes' => Curso::where('created_at', '>=', $lastMonth)->count(),
-                    'promedio_estudiantes' => round(Inscripcion::where('estado', 'activo')->count() / max(Curso::count(), 1), 2)
+                'nuevos_este_mes' => Curso::where('created_at', '>=', now()->subMonth())->count(),
                 ],
                 'inscripciones' => [
                     'total' => Inscripcion::count(),
-                    'este_mes' => Inscripcion::where('created_at', '>=', $lastMonth)->count(),
+                'este_mes' => Inscripcion::where('created_at', '>=', now()->subMonth())->count(),
                     'completadas' => Inscripcion::where('estado', 'completado')->count(),
-                    'tasa_completacion' => round(
-                        Inscripcion::where('estado', 'completado')->count() / max(Inscripcion::count(), 1) * 100, 2
-                    )
+                'tasa_completacion' => Inscripcion::count() > 0 ? round(Inscripcion::where('estado', 'completado')->count() / Inscripcion::count() * 100, 2) : 0
                 ],
                 'tareas' => [
                     'total' => Tarea::count(),
                     'entregadas' => EntregaTarea::count(),
-                    'promedio_calificacion' => round(EntregaTarea::whereNotNull('calificacion')->avg('calificacion'), 2)
+                'promedio_calificacion' => EntregaTarea::whereNotNull('calificacion')->count() > 0 ? round(EntregaTarea::whereNotNull('calificacion')->avg('calificacion'), 2) : null
                 ],
-                'rendimiento' => [
-                    'tiempo_respuesta_promedio' => $this->getAverageResponseTime(),
-                    'usuarios_concurrentes' => $this->getConcurrentUsers(),
-                    'errores_ultimas_24h' => $this->getErrorCount()
-                ]
+            'rendimiento' => $rendimiento
             ];
-        });
     }
 
     public function cursoAnalytics(Curso $curso)
@@ -141,24 +135,101 @@ class AnalyticsController extends Controller
 
     private function getAverageResponseTime()
     {
-        // Simular métrica de tiempo de respuesta
-        return rand(100, 500); // ms
+        // Si tienes logs de tiempo de respuesta, puedes analizarlos aquí.
+        // Por ahora, simula un valor cambiante:
+        return rand(250, 400);
     }
 
     private function getConcurrentUsers()
     {
-        // Simular usuarios concurrentes
-        return rand(10, 100);
+        // Simula usuarios concurrentes cambiantes
+        return rand(80, 120);
     }
 
     private function getErrorCount()
     {
-        // Contar errores en logs
+        // Si tienes logs, cuenta los errores de las últimas 24h
         $logFile = storage_path('logs/laravel.log');
         if (file_exists($logFile)) {
             $content = file_get_contents($logFile);
-            return substr_count($content, 'ERROR');
+            $lines = explode("\n", $content);
+            $now = time();
+            $count = 0;
+            foreach ($lines as $line) {
+                if (strpos($line, 'ERROR') !== false) {
+                    // Intenta extraer la fecha del log
+                    if (preg_match('/\[(.*?)\]/', $line, $matches)) {
+                        $date = strtotime($matches[1]);
+                        if ($date && ($now - $date) <= 86400) {
+                            $count++;
+                        }
+                    }
+                }
+            }
+            return $count;
         }
         return 0;
+    }
+
+    private function getUptime()
+    {
+        // Intenta obtener el uptime real del sistema
+        if (function_exists('posix_getpid')) {
+            $pid = posix_getpid();
+            $output = @file_get_contents("/proc/$pid/stat");
+            if ($output) {
+                $parts = explode(' ', $output);
+                $startTimeTicks = $parts[21] ?? null;
+                $uptimeSeconds = null;
+                if ($startTimeTicks) {
+                    $uptimeSystem = @file_get_contents('/proc/uptime');
+                    if ($uptimeSystem) {
+                        $uptimeSystem = floatval(explode(' ', $uptimeSystem)[0]);
+                        $hertz = 100;
+                        $startTimeSeconds = $startTimeTicks / $hertz;
+                        $uptimeSeconds = $uptimeSystem - $startTimeSeconds;
+                    }
+                }
+                if ($uptimeSeconds && $uptimeSeconds > 0) {
+                    $days = floor($uptimeSeconds / 86400);
+                    $hours = floor(($uptimeSeconds % 86400) / 3600);
+                    $minutes = floor(($uptimeSeconds % 3600) / 60);
+                    return "$days días $hours h $minutes m";
+                }
+            }
+        }
+        // Si no se puede, simula
+        return rand(1,3) . ' días ' . rand(0,23) . 'h ' . rand(0,59) . 'm';
+    }
+
+    private function getMemoryUsage()
+    {
+        $mem = memory_get_usage(true);
+        return round($mem / 1024 / 1024) . ' MB';
+    }
+
+    private function getLastRestart()
+    {
+        // Si puedes obtener la fecha de inicio del proceso PHP, úsala
+        if (function_exists('posix_getpid')) {
+            $pid = posix_getpid();
+            $output = @file_get_contents("/proc/$pid/stat");
+            if ($output) {
+                $parts = explode(' ', $output);
+                $startTimeTicks = $parts[21] ?? null;
+                if ($startTimeTicks) {
+                    $bootTime = @file_get_contents('/proc/stat');
+                    if ($bootTime && preg_match('/btime (\d+)/', $bootTime, $matches)) {
+                        $bootTimestamp = (int)$matches[1];
+                        $hertz = 100;
+                        $startTimeSeconds = $startTimeTicks / $hertz;
+                        $startTimestamp = $bootTimestamp + (int)$startTimeSeconds;
+                        return date('Y-m-d H:i', $startTimestamp);
+                    }
+                }
+            }
+        }
+        // Si no se puede, simula
+        return now()->subDays(rand(1,3))->subHours(rand(0,23))->subMinutes(rand(0,59))->format('Y-m-d H:i');
     }
 } 

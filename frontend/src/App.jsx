@@ -28,6 +28,12 @@ import EstudianteCursos from "./pages/EstudianteCursos";
 import EstudianteInscripciones from "./pages/EstudianteInscripciones";
 import EstudianteProgreso from "./pages/EstudianteProgreso";
 import ProfesorCursos from "./pages/ProfesorCursos";
+import ProfesorDisponibilidad from "./componentes/Asesorias/ProfesorDisponibilidad";
+import ListaAsesorias from "./componentes/Asesorias/ListaAsesorias";
+import EstudianteReservaAsesoria from "./componentes/Asesorias/EstudianteReservaAsesoria";
+import PerfilUsuario from "./pages/PerfilUsuario";
+import ProfesorGestionCurso from "./pages/ProfesorGestionCurso";
+import ProfesorEstudiantes from "./pages/ProfesorEstudiantes";
 
 // Layout base para la aplicación
 function AppContent() {
@@ -92,14 +98,6 @@ function AppContent() {
           />
 
           {/* Rutas compartidas para admin y profesor */}
-          <Route
-            path="/examenes"
-            element={
-              <RutaConRol rolesPermitidos={["admin", "profesor"]}>
-                <ExamenesPanel />
-              </RutaConRol>
-            }
-          />
           <Route
             path="/asistencias"
             element={
@@ -168,14 +166,35 @@ function AppContent() {
             path="/profesor/estudiantes"
             element={
               <RutaConRol rolesPermitidos={["profesor"]}>
-                <div style={{ padding: "30px", textAlign: "center" }}>
-                  <h1>Mis Estudiantes</h1>
-                  <p>Página en desarrollo...</p>
-                </div>
+                <ProfesorEstudiantes />
               </RutaConRol>
             }
           />
           <Route path="/profesor/pagos" element={<ProfesorPagos />} />
+          <Route
+            path="/profesor/asesorias"
+            element={
+              <RutaConRol rolesPermitidos={["profesor"]}>
+                <ListaAsesorias />
+              </RutaConRol>
+            }
+          />
+          <Route
+            path="/profesor/disponibilidad"
+            element={
+              <RutaConRol rolesPermitidos={["profesor"]}>
+                <ProfesorDisponibilidad />
+              </RutaConRol>
+            }
+          />
+          <Route
+            path="/profesor/curso/:id/gestionar"
+            element={
+              <RutaConRol rolesPermitidos={["profesor"]}>
+                <ProfesorGestionCurso />
+              </RutaConRol>
+            }
+          />
 
           {/* Rutas de estudiante */}
           <Route
@@ -229,6 +248,48 @@ function AppContent() {
               </RutaConRol>
             }
           />
+          <Route
+            path="/estudiante/solicitar-asesoria"
+            element={
+              <RutaConRol rolesPermitidos={["estudiante"]}>
+                <EstudianteReservaAsesoria />
+              </RutaConRol>
+            }
+          />
+          <Route
+            path="/estudiante/asesorias"
+            element={
+              <RutaConRol rolesPermitidos={["estudiante"]}>
+                <ListaAsesorias />
+              </RutaConRol>
+            }
+          />
+
+          {/* Rutas de perfil, configuración y cambio de contraseña */}
+          <Route
+            path="/perfil"
+            element={
+              <RutaConRol rolesPermitidos={["admin", "profesor", "estudiante"]}>
+                <PerfilUsuario />
+              </RutaConRol>
+            }
+          />
+          <Route
+            path="/configuracion"
+            element={
+              <RutaConRol rolesPermitidos={["admin", "profesor", "estudiante"]}>
+                <PerfilUsuario />
+              </RutaConRol>
+            }
+          />
+          <Route
+            path="/cambiar-password"
+            element={
+              <RutaConRol rolesPermitidos={["admin", "profesor", "estudiante"]}>
+                <PerfilUsuario />
+              </RutaConRol>
+            }
+          />
 
           {/* Ruta por defecto */}
           <Route path="*" element={<RedireccionPorRol />} />
@@ -240,6 +301,7 @@ function AppContent() {
 
 function App() {
   return (
+    <>
     <ErrorBoundary>
       <AuthProvider>
         <Router>
@@ -247,6 +309,7 @@ function App() {
         </Router>
       </AuthProvider>
     </ErrorBoundary>
+    </>
   );
 }
 

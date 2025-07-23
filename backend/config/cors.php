@@ -20,11 +20,10 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'http://localhost:5173',  // Frontend desarrollo
-        'http://localhost:3000',  // Frontend alternativo
-        'http://127.0.0.1:5173',  // Frontend desarrollo IP
-        'http://127.0.0.1:3000',  // Frontend alternativo IP
-        env('FRONTEND_URL', 'http://localhost:5173'), // Variable de entorno
+        'http://localhost:5173',
+        'http://localhost:5174',
+        'http://127.0.0.1:5173',
+        'http://127.0.0.1:5174',
     ],
 
     'allowed_origins_patterns' => [],

@@ -23,9 +23,8 @@ export const useFormValidation = (initialValues = {}, validationRules = {}) => {
     maxLength: (max) => (value) => 
       value.length > max ? `Máximo ${max} caracteres` : null,
     password: (value) => {
-      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
-      return !passwordRegex.test(value) 
-        ? 'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número' 
+      return value.length < 8 
+        ? 'La contraseña debe tener al menos 8 caracteres' 
         : null;
     },
     confirmPassword: (password) => (value) => 

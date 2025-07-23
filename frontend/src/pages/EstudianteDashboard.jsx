@@ -391,72 +391,78 @@ const EstudianteDashboard = () => {
               <tr>
                 <th
                   style={{
-                    background: COLORS.surfaceLight,
-                    color: COLORS.primary,
+                    background: "#23272f",
+                    color: "#fff",
                     fontWeight: FONT_WEIGHTS.bold,
                     fontSize: FONT_SIZES.base,
                     padding: SPACING[4],
-                    borderBottom: `2px solid ${COLORS.primary}`,
+                    borderBottom: "3px solid #007bff",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
                   }}
                 >
                   Materia
                 </th>
                 <th
                   style={{
-                    background: COLORS.surfaceLight,
-                    color: COLORS.primary,
+                    background: "#23272f",
+                    color: "#fff",
                     fontWeight: FONT_WEIGHTS.bold,
                     fontSize: FONT_SIZES.base,
                     padding: SPACING[4],
-                    borderBottom: `2px solid ${COLORS.primary}`,
+                    borderBottom: "3px solid #007bff",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
                   }}
                 >
                   Tarea
                 </th>
                 <th
                   style={{
-                    background: COLORS.surfaceLight,
-                    color: COLORS.primary,
+                    background: "#23272f",
+                    color: "#fff",
                     fontWeight: FONT_WEIGHTS.bold,
                     fontSize: FONT_SIZES.base,
                     padding: SPACING[4],
-                    borderBottom: `2px solid ${COLORS.primary}`,
+                    borderBottom: "3px solid #007bff",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
                   }}
                 >
                   Fecha de Entrega
                 </th>
                 <th
                   style={{
-                    background: COLORS.surfaceLight,
-                    color: COLORS.primary,
+                    background: "#23272f",
+                    color: "#fff",
                     fontWeight: FONT_WEIGHTS.bold,
                     fontSize: FONT_SIZES.base,
                     padding: SPACING[4],
-                    borderBottom: `2px solid ${COLORS.primary}`,
+                    borderBottom: "3px solid #007bff",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
                   }}
                 >
                   Prioridad
                 </th>
                 <th
                   style={{
-                    background: COLORS.surfaceLight,
-                    color: COLORS.primary,
+                    background: "#23272f",
+                    color: "#fff",
                     fontWeight: FONT_WEIGHTS.bold,
                     fontSize: FONT_SIZES.base,
                     padding: SPACING[4],
-                    borderBottom: `2px solid ${COLORS.primary}`,
+                    borderBottom: "3px solid #007bff",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
                   }}
                 >
                   Estado
                 </th>
                 <th
                   style={{
-                    background: COLORS.surfaceLight,
-                    color: COLORS.primary,
+                    background: "#23272f",
+                    color: "#fff",
                     fontWeight: FONT_WEIGHTS.bold,
                     fontSize: FONT_SIZES.base,
                     padding: SPACING[4],
-                    borderBottom: `2px solid ${COLORS.primary}`,
+                    borderBottom: "3px solid #007bff",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
                   }}
                 >
                   Acciones

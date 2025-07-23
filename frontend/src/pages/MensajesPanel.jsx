@@ -27,6 +27,11 @@ const MensajesPanel = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // Log para depuración de usuario y roles
+  React.useEffect(() => {
+    console.log("[MensajesPanel] usuario:", usuario);
+  }, [usuario]);
+
   useEffect(() => {
     fetchMensajes();
     fetchUsuarios();
@@ -392,12 +397,25 @@ const MensajesPanel = () => {
             <div
               style={{
                 textAlign: "center",
-                color: COLORS.textSecondary,
+                color: COLORS.text,
                 padding: SPACING[8],
+                background: "#23272f",
+                borderRadius: 16,
+                border: "2.5px solid #007bff",
+                margin: "40px auto",
+                maxWidth: 500,
+                boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
               }}
             >
-              No hay mensajes{" "}
-              {activeTab === "recibidos" ? "recibidos" : "enviados"}
+              <div style={{ fontSize: "3.5rem", marginBottom: 16, color: "#007bff" }}>✉️</div>
+              <h3 style={{ color: "#fff", marginBottom: 12, fontSize: "1.3rem", fontWeight: 700 }}>
+                No hay mensajes {activeTab === "recibidos" ? "recibidos" : "enviados"}
+              </h3>
+              <p style={{ color: "#b0b8c1", fontSize: "1.08rem", marginBottom: 0 }}>
+                {activeTab === "recibidos"
+                  ? "Cuando recibas mensajes de otros usuarios, aparecerán aquí."
+                  : "Cuando envíes mensajes, aparecerán aquí para tu referencia."}
+              </p>
             </div>
           ) : (
             mensajes.map((mensaje) => (

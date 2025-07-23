@@ -96,12 +96,7 @@ const Login = () => {
     email: ['required', 'email'],
     password: [
       'required',
-      (value) => {
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-        return passwordRegex.test(value)
-          ? null
-          : 'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.';
-      }
+      (value) => value.length >= 8 ? null : 'La contraseña debe tener al menos 8 caracteres.'
     ]
   };
 
@@ -388,7 +383,7 @@ const Login = () => {
                 aria-describedby="password-ayuda"
               />
               <small id="password-ayuda" style={{ color: COLORS.textSecondary, fontSize: FONT_SIZES.xs, marginLeft: 2, display: "block", marginBottom: SPACING[2] }}>
-                La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.
+                La contraseña debe tener al menos 8 caracteres.
               </small>
               <EyeIcon
                 visible={showPassword}

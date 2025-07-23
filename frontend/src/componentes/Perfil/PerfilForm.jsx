@@ -37,41 +37,20 @@ const PerfilForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: 'auto' }}>
-      <h2>Editar Perfil</h2>
-      {loading && <p>Cargando...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {mensaje && <p style={{ color: mensaje.includes('correctamente') ? 'green' : 'red' }}>{mensaje}</p>}
-      <div>
-        <label>Nombre:</label>
-        <input
-          type="text"
-          name="name"
-          value={form.name}
-          onChange={handleChange}
-          required
-        />
+    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <label htmlFor="nombre" style={{ fontWeight: 600, marginBottom: 2 }}>Nombre:</label>
+        <input id="nombre" name="nombre" type="text" value={form.name} onChange={handleChange} autoComplete="off" />
       </div>
-      <div>
-        <label>Correo:</label>
-        <input
-          type="email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <label htmlFor="correo" style={{ fontWeight: 600, marginBottom: 2 }}>Correo:</label>
+        <input id="correo" name="correo" type="email" value={form.email} onChange={handleChange} autoComplete="off" />
       </div>
-      <div>
-        <label>Avatar (URL):</label>
-        <input
-          type="url"
-          name="avatar_url"
-          value={form.avatar_url}
-          onChange={handleChange}
-        />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <label htmlFor="avatar" style={{ fontWeight: 600, marginBottom: 2 }}>Avatar (URL):</label>
+        <input id="avatar" name="avatar" type="text" value={form.avatar_url} onChange={handleChange} autoComplete="off" />
       </div>
-      <button type="submit" disabled={loading}>Guardar cambios</button>
+      <button type="submit" style={{ marginTop: 18 }}>Guardar cambios</button>
     </form>
   );
 };

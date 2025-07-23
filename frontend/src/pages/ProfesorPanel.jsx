@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import {
   COLORS,
   FONTS,
@@ -27,6 +28,7 @@ import CursosServicio from "../servicios/CursosServicio";
 
 function ProfesorPanel() {
   const { usuario } = useAuth();
+  const navigate = useNavigate();
   const [cuatrimestreSeleccionado, setCuatrimestreSeleccionado] =
     useState(null);
   const [materiaSeleccionada, setMateriaSeleccionada] = useState(null);
@@ -726,28 +728,25 @@ function ProfesorPanel() {
                   </div>
                 ) : (
                   Object.keys(materiasPorCuatrimestre).map((cuatri) => (
-                    <div
-                      key={cuatri}
-                      style={{ ...styles.cuatrimestreCard }}
-                      onClick={() =>
-                        setCuatrimestreSeleccionado({
-                          key: cuatri,
-                          nombre: cuatri,
-                        })
-                      }
-                    >
-                      <img
-                        src={materiasPorCuatrimestre[cuatri][0]?.imagen}
-                        alt={cuatri}
-                        style={styles.cuatrimestreImage}
-                      />
-                      <div style={styles.cuatrimestreContent}>
-                        <h3 style={styles.cuatrimestreTitle}>{cuatri}</h3>
-                        <p style={styles.cuatrimestreDescription}>
-                          Administra las materias y grupos de este cuatrimestre
-                        </p>
+                    materiasPorCuatrimestre[cuatri].map((materia) => (
+                      <div
+                        key={materia.id}
+                        style={{ ...styles.cuatrimestreCard, marginBottom: 24 }}
+                        onClick={() => navigate(`/profesor/curso/${materia.id}/gestionar`)}
+                      >
+                        <img
+                          src={materia.imagen}
+                          alt={materia.nombre}
+                          style={styles.cuatrimestreImage}
+                        />
+                        <div style={styles.cuatrimestreContent}>
+                          <h3 style={styles.cuatrimestreTitle}>{materia.nombre}</h3>
+                          <p style={styles.cuatrimestreDescription}>
+                            Administra este curso
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    ))
                   ))
                 )}
               </div>

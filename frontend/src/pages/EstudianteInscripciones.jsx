@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import useApi from "../hooks/useApi";
+import api from "../utils/axiosConfig";
 import {
   COLORS,
   FONTS,
@@ -22,7 +22,6 @@ const EstudianteInscripciones = () => {
 
   const navigate = useNavigate();
   const { usuario } = useAuth();
-  const api = useApi();
 
   useEffect(() => {
     fetchInscripciones();
@@ -34,7 +33,7 @@ const EstudianteInscripciones = () => {
       setError(null);
 
       const response = await api.get("/estudiante/materias");
-      setInscripciones(response.data || []);
+      setInscripciones(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error("Error fetching inscripciones:", error);
       setError("Error al cargar las inscripciones");

@@ -1,0 +1,39 @@
+# Comandos de instalación de dependencias para MindSchool (Ubuntu/Debian)
+
+# Actualizar sistema
+sudo apt update && sudo apt upgrade -y
+
+# Instalar utilidades básicas
+git curl unzip build-essential software-properties-common
+sudo apt install -y git curl unzip build-essential software-properties-common
+
+# Instalar Node.js y npm
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Instalar PHP y extensiones
+sudo add-apt-repository ppa:ondrej/php -y
+sudo apt update
+sudo apt install -y php php-cli php-fpm php-mysql php-xml php-mbstring php-curl php-zip php-gd php-bcmath php-json php-redis php-mongodb
+
+# Instalar Composer
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+rm composer-setup.php
+
+# Instalar MySQL Server
+sudo apt install -y mysql-server
+
+# Instalar MongoDB
+wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+sudo apt update
+sudo apt install -y mongodb-org
+
+# Instalar dependencias del backend
+cd /home/saul/Espiritu_vengativo/miprojecto_mindschool_beta/backend
+composer install
+
+# Instalar dependencias del frontend
+cd /home/saul/Espiritu_vengativo/miprojecto_mindschool_beta/frontend
+npm install 

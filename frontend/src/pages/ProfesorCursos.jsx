@@ -13,6 +13,7 @@ import {
   TRANSITIONS,
 } from "../theme/branding/branding";
 import Mascota from "../theme/branding/Mascota";
+import ProfesorEstudiantes from "./ProfesorEstudiantes";
 
 const ProfesorCursos = () => {
   const [cursos, setCursos] = useState([]);
@@ -64,7 +65,7 @@ const ProfesorCursos = () => {
 
     try {
       setCreandoCurso(true);
-      await api.post("/cursos", formCurso);
+      await api.post("/cursos", { ...formCurso, instructor_id: usuario.id });
       
       alert("¡Curso creado exitosamente!");
       setMostrarModal(false);
@@ -527,7 +528,7 @@ const ProfesorCursos = () => {
                   }}
                 >
                   <button
-                    onClick={() => navigate(`/profesor/dashboard?curso=${curso.id}`)}
+                    onClick={() => navigate(`/profesor/curso/${curso.id}/gestionar`)}
                     style={{
                       flex: 1,
                       padding: SPACING[3],

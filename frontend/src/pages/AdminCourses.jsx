@@ -36,10 +36,18 @@ const AdminCourses = () => {
       });
 
       const response = await api.get(`/cursos?${params}`);
+      // Manejo de error de autenticación o respuesta inesperada
+      if (!response.data || !Array.isArray(response.data.data)) {
+        setCourses([]);
+        setTotalPages(1);
+        return;
+      }
       setCourses(response.data.data);
       setTotalPages(response.data.last_page);
     } catch (error) {
       console.error("Error fetching courses:", error);
+      setCourses([]);
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }
@@ -601,7 +609,7 @@ const AdminCourses = () => {
         </div>
 
         {/* Tarjetas de cursos como acciones rápidas */}
-        {!loading && courses.length > 0 && (
+        {!loading && Array.isArray(courses) && courses.length > 0 && (
           <div
             style={{
               display: "grid",
@@ -755,7 +763,7 @@ const AdminCourses = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {courses.map((course) => (
+                  {Array.isArray(courses) && courses.map((course) => (
                     <tr
                       key={course.id}
                       style={{

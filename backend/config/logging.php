@@ -279,19 +279,6 @@ return [
             ],
         ],
 
-        // Canal para logs de websockets
-        'websockets' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/websockets.log'),
-            'level' => 'info',
-            'days' => 30,
-            'formatter' => \Monolog\Formatter\JsonFormatter::class,
-            'formatter_with' => [
-                'format' => "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n",
-                'dateFormat' => 'Y-m-d H:i:s',
-            ],
-        ],
-
         // Canal para logs de analytics
         'analytics' => [
             'driver' => 'daily',

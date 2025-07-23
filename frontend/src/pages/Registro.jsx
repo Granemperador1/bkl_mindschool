@@ -100,7 +100,7 @@ const Registro = () => {
   const { register } = useAuth();
 
   // Validación avanzada de contraseña
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+  const passwordRegex = /^.{8,}$/;
 
   const handleChange = (e) => {
     setFormData({
@@ -116,7 +116,7 @@ const Registro = () => {
     setShowSorpresa(true);
 
     if (!passwordRegex.test(formData.password)) {
-      setError("La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.");
+      setError("La contraseña debe tener al menos 8 caracteres.");
       setLoading(false);
       setShowSorpresa(false);
       return;
@@ -145,7 +145,13 @@ const Registro = () => {
         setError(err.response.data.message);
       } else if (err.response?.data?.errors) {
         const errorMessages = Object.values(err.response.data.errors).flat();
-        setError(errorMessages.join(", "));
+        // Personalizar mensaje para 'validation.unique'
+        const customMessages = errorMessages.map(msg =>
+          msg.includes('validation.unique') || msg.toLowerCase().includes('unique')
+            ? 'El correo electrónico ya está registrado. Por favor, usa otro.'
+            : msg
+        );
+        setError(customMessages.join(", "));
       } else {
         setError("Error al registrar. Por favor, intenta de nuevo.");
       }
@@ -328,6 +334,46 @@ const Registro = () => {
           <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: SPACING[5] }}>
               <input
+                type="text"
+                name="name"
+                placeholder="Nombre completo"
+                aria-label="Nombre completo"
+                autoComplete="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                style={{
+                  width: "100%",
+                  padding: `${SPACING[3]} ${SPACING[4]}`,
+                  border: `1.5px solid ${COLORS.border}`,
+                  borderRadius: BORDER_RADIUS.lg,
+                  fontSize: FONT_SIZES.base,
+                  fontFamily: FONTS.main,
+                  background: COLORS.surfaceLight,
+                  color: COLORS.text,
+                  outline: "none",
+                  transition: TRANSITIONS.base,
+                  boxSizing: "border-box",
+                  fontWeight: FONT_WEIGHTS.medium,
+                  letterSpacing: 0.2,
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = COLORS.primary;
+                  e.target.style.boxShadow = `0 0 0 3px ${COLORS.primary}33`;
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = COLORS.border;
+                  e.target.style.boxShadow = "none";
+                }}
+                aria-required="true"
+                aria-describedby="name-ayuda"
+              />
+              <small id="name-ayuda" style={{ color: COLORS.textSecondary, fontSize: FONT_SIZES.xs, marginLeft: 2, display: "block", marginBottom: SPACING[2] }}>
+                Escribe tu nombre completo.
+              </small>
+            </div>
+            <div style={{ marginBottom: SPACING[5] }}>
+              <input
                 type="email"
                 name="email"
                 placeholder="Correo electrónico"
@@ -405,7 +451,7 @@ const Registro = () => {
                 aria-describedby="password-ayuda"
               />
               <small id="password-ayuda" style={{ color: COLORS.textSecondary, fontSize: FONT_SIZES.xs, marginLeft: 2, display: "block", marginBottom: SPACING[2] }}>
-                La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.
+                La contraseña debe tener al menos 8 caracteres.
               </small>
               <EyeIcon
                 visible={showPassword}

@@ -17,6 +17,7 @@ const AdminUsers = () => {
   const [roleFilter, setRoleFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [createMessage, setCreateMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -34,10 +35,18 @@ const AdminUsers = () => {
       });
 
       const response = await api.get(`/admin/users?${params}`);
+      // Manejo de error de autenticación o respuesta inesperada
+      if (!response.data || !Array.isArray(response.data.data)) {
+        setUsers([]);
+        setTotalPages(1);
+        return;
+      }
       setUsers(response.data.data);
       setTotalPages(response.data.last_page);
     } catch (error) {
       console.error("Error fetching users:", error);
+      setUsers([]);
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }
@@ -45,10 +54,25 @@ const AdminUsers = () => {
 
   const handleCreateUser = async (userData) => {
     try {
+      setCreateMessage("");
       await api.post("/admin/users", userData);
       setShowModal(false);
+      let extraMsg = "";
+      if (userData.role === 'profesor') {
+        extraMsg = "\n\nEl nuevo profesor debe ingresar a la plataforma y configurar su disponibilidad de asesorías desde el menú 'Disponibilidad'.";
+      }
+      setCreateMessage("Usuario creado exitosamente." + extraMsg);
       fetchUsers();
     } catch (error) {
+      let msg = "Error al crear usuario.";
+      if (error.response?.data?.message) {
+        if (error.response.data.message.toLowerCase().includes('unique')) {
+          msg = "El correo electrónico ya está registrado.";
+        } else {
+          msg = error.response.data.message;
+        }
+      }
+      setCreateMessage(msg);
       console.error("Error creating user:", error);
     }
   };
@@ -80,7 +104,7 @@ const AdminUsers = () => {
       name: user?.name || "",
       email: user?.email || "",
       password: "",
-      role: user?.roles?.[0] || "estudiante",
+      role: (user?.roles?.[0]?.toLowerCase?.() || "estudiante"),
       avatar_url: user?.avatar_url || "",
     });
 
@@ -91,10 +115,12 @@ const AdminUsers = () => {
         alert("La contraseña es requerida para nuevos usuarios");
         return;
       }
-      if (user && !dataToSend.password) {
-        delete dataToSend.password;
+      if (user) {
+        if (!dataToSend.password) delete dataToSend.password;
+        onSave(user.id, dataToSend);
+      } else {
+        onSave(dataToSend);
       }
-      onSave(user?.id, dataToSend);
     };
 
     return (
@@ -133,6 +159,18 @@ const AdminUsers = () => {
           >
             {user ? "Editar Usuario" : "Crear Nuevo Usuario"}
           </h2>
+          {createMessage && (
+            <div style={{
+              marginBottom: 16,
+              color: createMessage.includes('exitosamente') ? '#22c55e' : '#ef4444',
+              background: createMessage.includes('exitosamente') ? '#e7fbe9' : '#fee2e2',
+              borderRadius: 8,
+              padding: '10px 16px',
+              fontWeight: 600,
+              fontSize: 15,
+              textAlign: 'center',
+            }}>{createMessage}</div>
+          )}
 
           <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: "15px" }}>
@@ -244,8 +282,8 @@ const AdminUsers = () => {
                   fontSize: "14px",
                 }}
               >
-                <option value="estudiante">Estudiante</option>
                 <option value="profesor">Profesor</option>
+                <option value="estudiante">Estudiante</option>
               </select>
             </div>
 
@@ -545,7 +583,7 @@ const AdminUsers = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((user) => (
+                  {Array.isArray(users) && users.map((user) => (
                     <tr
                       key={user.id}
                       style={{

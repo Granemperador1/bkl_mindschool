@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\AsistenciaController;
 use App\Http\Controllers\Api\RecursoController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Api\ContactoPublicoController;
+use App\Http\Controllers\Api\AsesoriaController;
 
 // Rutas de autenticación
 Route::post('/register', [AuthController::class, 'register']);
@@ -28,6 +29,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::apiResource('cursos', CursoController::class)->only(['index', 'show']);
 Route::get('/cursos/{curso}/lecciones', [LeccionController::class, 'cursoLecciones']);
 Route::get('/cursos/{curso}/multimedia', [MultimediaController::class, 'cursoMultimedia']);
+
+// Ruta pública para listar profesores (para asesorías)
+use App\Models\User;
+Route::get('/profesores', function () {
+    return User::role('profesor')->select('id', 'name', 'email')->get();
+});
 
 // Ruta pública para contacto
 Route::post('/contacto', [ContactoPublicoController::class, 'store']);
@@ -88,7 +95,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     
     // Asistencias
-    Route::middleware('role:profesor|admin,web')->group(function () {
+    Route::middleware('role:admin')->group(function () {
         Route::apiResource('asistencias', AsistenciaController::class);
         Route::get('/cursos/{curso}/asistencias', [AsistenciaController::class, 'cursoAsistencias']);
         Route::get('/estudiantes/{estudiante}/asistencias', [AsistenciaController::class, 'estudianteAsistencias']);
@@ -172,9 +179,30 @@ Route::middleware('auth:sanctum')->group(function () {
     // Pagos/ingresos del profesor
     Route::get('/profesor/pagos', [\App\Http\Controllers\Api\PagoController::class, 'pagosProfesor']);
 
+    // Rutas para gestión de asesorías
+    Route::prefix('asesorias')->group(function () {
+        Route::get('/disponibilidad-profesor/{profesor_id}', [\App\Http\Controllers\Api\AsesoriaController::class, 'getDisponibilidadProfesor']);
+        Route::post('/definir-disponibilidad', [\App\Http\Controllers\Api\AsesoriaController::class, 'definirDisponibilidad']);
+        Route::post('/reservar', [\App\Http\Controllers\Api\AsesoriaController::class, 'reservarAsesoria']);
+        Route::get('/mis-asesorias', [\App\Http\Controllers\Api\AsesoriaController::class, 'misAsesorias']);
+        Route::post('/cancelar/{asesoria_id}', [\App\Http\Controllers\Api\AsesoriaController::class, 'cancelarAsesoria']);
+        Route::post('/reprogramar/{asesoria_id}', [\App\Http\Controllers\Api\AsesoriaController::class, 'reprogramarAsesoria']);
+    });
+    // Ruta para eliminar bloque de disponibilidad (fuera del prefijo 'asesorias' para evitar doble prefijo)
+    Route::delete('/asesorias/disponibilidad/{id}', [\App\Http\Controllers\Api\AsesoriaController::class, 'eliminarDisponibilidad']);
+
     // Perfil de usuario
     Route::get('/perfil', [\App\Http\Controllers\Api\UsuarioController::class, 'perfil']);
     Route::put('/perfil', [\App\Http\Controllers\Api\UsuarioController::class, 'actualizarPerfil']);
     Route::put('/perfil/password', [\App\Http\Controllers\Api\UsuarioController::class, 'cambiarPassword']);
     Route::put('/perfil/configuracion', [\App\Http\Controllers\Api\UsuarioController::class, 'actualizarConfiguracion']);
 });
+
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get('/analytics/dashboard', [\App\Http\Controllers\Api\AnalyticsController::class, 'dashboard']);
+});
+
+// Endpoint de simulación de pago solo en entorno local/testing
+if (app()->environment(['local', 'testing'])) {
+    Route::post('/pagos/simular', [\App\Http\Controllers\Api\PagoController::class, 'simularPago']);
+}

@@ -44,10 +44,11 @@ const AsistenciasPanel = () => {
     try {
       setLoading(true);
       const response = await api.get("/asistencias");
-      setAsistencias(response.data.data || []);
+      setAsistencias(Array.isArray(response.data.data) ? response.data.data : []);
     } catch (error) {
       console.error("Error fetching asistencias:", error);
       setError("Error al cargar las asistencias");
+      setAsistencias([]);
     } finally {
       setLoading(false);
     }
@@ -425,7 +426,7 @@ const AsistenciasPanel = () => {
                 </td>
               </tr>
             ) : (
-              asistencias.map((as) => (
+              Array.isArray(asistencias) && asistencias.map((as) => (
                 <tr key={as.id}>
                   <td style={{ padding: SPACING[4] }}>
                     {as.estudiante?.name || "-"}
