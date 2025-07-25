@@ -111,6 +111,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Inscripciones
     Route::apiResource('inscripciones', InscripcionController::class);
     Route::get('/cursos/{curso}/inscripciones', [InscripcionController::class, 'cursoInscripciones']);
+    Route::get('/inscripciones/pagadas', [\App\Http\Controllers\Api\InscripcionController::class, 'pagadas']);
     
     // Multimedia (todas las operaciones)
     Route::apiResource('multimedia', MultimediaController::class);
@@ -154,6 +155,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/cursos/{curso}/estadisticas', [ProfesorController::class, 'estadisticasCurso']);
         Route::get('/tareas/{tarea}/entregas', [ProfesorController::class, 'entregasTarea']);
         Route::put('/entregas/{entrega}/calificar', [ProfesorController::class, 'calificarEntrega']);
+        // NUEVO: Endpoint para racha de entregas de alumnos
+        Route::get('/cursos/{curso}/racha-alumnos', [ProfesorController::class, 'rachaAlumnosCurso']);
     });
 
     // Rutas específicas para estudiantes

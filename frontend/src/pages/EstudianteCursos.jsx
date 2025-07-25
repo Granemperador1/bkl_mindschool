@@ -43,7 +43,8 @@ const EstudianteCursos = () => {
       // Obtener cursos inscritos del estudiante
       const inscripcionesResponse = await api.get("/estudiante/materias");
       
-      setCursos(Array.isArray(cursosResponse.data.data) ? cursosResponse.data.data : []);
+      // CORRECCIÓN: Tomar el array de cursos desde cursosResponse.data.data.data
+      setCursos(Array.isArray(cursosResponse.data.data?.data) ? cursosResponse.data.data.data : []);
       setCursosInscritos(Array.isArray(inscripcionesResponse.data) ? inscripcionesResponse.data : []);
     } catch (error) {
       console.error("Error fetching cursos:", error);
@@ -52,6 +53,16 @@ const EstudianteCursos = () => {
       setLoading(false);
     }
   };
+
+  // Corrijo el mapeo de cursosInscritos para que tengan las mismas claves que los cursos generales
+  const cursosInscritosNormalizados = cursosInscritos.map(c => ({
+    ...c,
+    titulo: c.nombre || c.titulo,
+    imagen_url: c.imagen || c.imagen_url,
+    descripcion: c.descripcion,
+    id: c.id,
+    estado: c.estado || 'activo',
+  }));
 
   const handleInscribirse = async (curso) => {
     setCursoSeleccionado(curso);
@@ -108,7 +119,7 @@ const EstudianteCursos = () => {
     }
 
     // Filtrar por estado
-    const estaInscrito = cursosInscritos.some(inscripcion => inscripcion.id === curso.id);
+    const estaInscrito = cursosInscritosNormalizados.some(inscripcion => inscripcion.id === curso.id);
     
     switch (filtro) {
       case "disponibles":
@@ -290,7 +301,7 @@ const EstudianteCursos = () => {
           }}
         >
           {cursosFiltrados.map((curso) => {
-            const estaInscrito = cursosInscritos.some(
+            const estaInscrito = cursosInscritosNormalizados.some(
               (inscripcion) => inscripcion.id === curso.id
             );
 

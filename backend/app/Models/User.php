@@ -50,11 +50,6 @@ class User extends Authenticatable
         ];
     }
 
-    public function notify(NuevaInscripcion $notification)
-    {
-        // Implement the logic to send the notification to the user
-    }
-
     /**
      * Relación con las inscripciones del usuario
      */

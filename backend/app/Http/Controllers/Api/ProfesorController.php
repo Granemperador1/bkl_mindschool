@@ -339,4 +339,45 @@ class ProfesorController extends Controller
         $filename = 'calificaciones_curso_' . $cursoId . '_' . now()->format('Ymd_His') . '.xlsx';
         return \Maatwebsite\Excel\Facades\Excel::download(new CalificacionesExport($calificaciones), $filename);
     }
+
+    /**
+     * Obtener la racha de entregas a tiempo de cada alumno en un curso
+     */
+    public function rachaAlumnosCurso(Request $request, $cursoId)
+    {
+        $profesorId = $request->user()->id;
+        // Verificar que el curso pertenece al profesor
+        $curso = Curso::where('id', $cursoId)
+            ->where('instructor_id', $profesorId)
+            ->firstOrFail();
+        $tareas = Tarea::where('curso_id', $cursoId)->orderBy('fecha_entrega')->get();
+        $inscripciones = Inscripcion::where('curso_id', $cursoId)->with('alumno')->get();
+        $result = [];
+        foreach ($inscripciones as $inscripcion) {
+            $alumno = $inscripcion->alumno;
+            $racha = 0;
+            $rachaMax = 0;
+            foreach ($tareas as $tarea) {
+                $entrega = EntregaTarea::where('tarea_id', $tarea->id)
+                    ->where('estudiante_id', $alumno->id)
+                    ->first();
+                if ($entrega && $entrega->fecha_entrega <= $tarea->fecha_entrega) {
+                    $racha++;
+                    if ($racha > $rachaMax) $rachaMax = $racha;
+                } else {
+                    $racha = 0;
+                }
+            }
+            $result[] = [
+                'id' => $alumno->id,
+                'name' => $alumno->name,
+                'email' => $alumno->email,
+                'racha_entregas' => $rachaMax,
+                'progreso' => $inscripcion->progreso ?? 0,
+                'estado' => $inscripcion->estado,
+                'fecha_inscripcion' => $inscripcion->fecha_inscripcion
+            ];
+        }
+        return response()->json(['data' => $result]);
+    }
 } 

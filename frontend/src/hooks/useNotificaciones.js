@@ -23,7 +23,7 @@ export default function useNotificaciones() {
     cargar(); // Carga inicial
     const interval = setInterval(() => {
       cargar();
-    }, 30000); // 30 segundos
+    }, 10000); // 10 segundos (antes 30s)
     return () => clearInterval(interval);
   }, [cargar]);
 

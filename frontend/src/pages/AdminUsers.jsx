@@ -35,14 +35,15 @@ const AdminUsers = () => {
       });
 
       const response = await api.get(`/admin/users?${params}`);
-      // Manejo de error de autenticación o respuesta inesperada
-      if (!response.data || !Array.isArray(response.data.data)) {
+      // CORRECCIÓN: Tomar el array de usuarios desde response.data.data.data
+      const paginated = response.data.data;
+      if (!paginated || !Array.isArray(paginated.data)) {
         setUsers([]);
         setTotalPages(1);
         return;
       }
-      setUsers(response.data.data);
-      setTotalPages(response.data.last_page);
+      setUsers(paginated.data);
+      setTotalPages(paginated.last_page);
     } catch (error) {
       console.error("Error fetching users:", error);
       setUsers([]);
@@ -633,13 +634,19 @@ const AdminUsers = () => {
                             fontSize: "0.8rem",
                             fontWeight: "500",
                             background:
-                              user.roles?.[0] === "profesor"
+                              (typeof user.roles?.[0] === "string"
+                                ? user.roles[0]
+                                : user.roles?.[0]?.name) === "profesor"
                                 ? COLORS.accent
                                 : COLORS.success,
                             color: COLORS.surface,
                           }}
                         >
-                          {getRoleDisplayName(user.roles?.[0])}
+                          {getRoleDisplayName(
+                            typeof user.roles?.[0] === "string"
+                              ? user.roles[0]
+                              : user.roles?.[0]?.name || ""
+                          )}
                         </span>
                       </td>
                       <td

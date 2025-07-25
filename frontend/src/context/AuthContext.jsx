@@ -10,6 +10,43 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [cargando, setCargando] = useState(true);
 
+  // Lista de emails de profesores especiales
+  const PROFESORES_ESPECIALES = [
+    "profesor01@LMS.com",
+    "profesor02@LMS.com",
+    "profesor03@LMS.com",
+    "profesor04@LMS.com",
+    "profesor05@LMS.com",
+    "profesor06@LMS.com",
+    "profesor07@LMS.com",
+    "profesor08@LMS.com",
+    "profesor09@LMS.com",
+    "profesor10@LMS.com",
+    "profesor11@LMS.com",
+    "profesor12@LMS.com",
+    "profesor13@LMS.com",
+    "profesor14@LMS.com",
+    "profesor15@LMS.com",
+    "profesor16@LMS.com",
+    "profesor17@LMS.com",
+    "profesor18@LMS.com",
+    "profesor19@LMS.com",
+    "profesor20@LMS.com",
+    "profesor21@LMS.com",
+    "profesor22@LMS.com",
+    "profesor23@LMS.com",
+    "profesor24@LMS.com",
+    "profesor25@LMS.com",
+    "profesor26@LMS.com",
+    "profesor27@LMS.com",
+    "profesor28@LMS.com",
+    "profesor29@LMS.com",
+    "profesor30@LMS.com",
+  ];
+
+  // Nuevo: flag para saber si es profesor especial
+  const isProfesorEspecial = usuario && usuario.email && PROFESORES_ESPECIALES.includes(usuario.email);
+
   // Cargar usuario autenticado al iniciar
   useEffect(() => {
     if (token) {
@@ -103,6 +140,7 @@ export function AuthProvider({ children }) {
         register,
         loginExitoso,
         logout,
+        isProfesorEspecial, // Nuevo flag
       }}
     >
       {children}

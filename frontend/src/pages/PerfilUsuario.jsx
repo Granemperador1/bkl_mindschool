@@ -1,8 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PerfilForm from '../componentes/Perfil/PerfilForm';
 import CambiarPasswordForm from '../componentes/Perfil/CambiarPasswordForm';
+import api from '../utils/axiosConfig';
+import { COLORS } from "../theme/branding/branding";
 
 const PerfilUsuario = () => {
+  const [enviando, setEnviando] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleActualizarPerfil = async (e) => {
+    e.preventDefault();
+    setEnviando(true);
+    setError("");
+    setSuccess("");
+    try {
+      await api.put("/perfil", form);
+      setSuccess("Perfil actualizado exitosamente");
+    } catch (err) {
+      setError("Error al actualizar el perfil");
+    } finally {
+      setEnviando(false);
+    }
+  };
+
   return (
     <div style={{
       minHeight: '100vh',

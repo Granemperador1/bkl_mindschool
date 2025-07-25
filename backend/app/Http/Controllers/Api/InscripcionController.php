@@ -113,4 +113,19 @@ class InscripcionController extends Controller
         
         return response()->json(['data' => $inscripciones]);
     }
+
+    public function pagadas()
+    {
+        $inscripciones = \App\Models\Inscripcion::with(['alumno', 'curso'])
+            ->whereExists(function($query) {
+                $query->select(\DB::raw(1))
+                    ->from('transacciones')
+                    ->whereColumn('transacciones.user_id', 'inscripciones.user_id')
+                    ->whereColumn('transacciones.curso_id', 'inscripciones.curso_id')
+                    ->where('transacciones.estado', 'completada');
+            })
+            ->get();
+
+        return response()->json(['data' => $inscripciones]);
+    }
 } 

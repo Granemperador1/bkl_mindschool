@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { COLORS, FONT_SIZES, FONT_WEIGHTS, BORDER_RADIUS, SPACING } from "../../theme/branding/branding";
+import api from "../../utils/axiosConfig";
 
 const cardStyle = {
   background: COLORS.surface,
@@ -81,7 +82,25 @@ const GestionAlumnosCurso = ({
 }) => {
   const [emailInvitar, setEmailInvitar] = useState("");
   const [emailManual, setEmailManual] = useState("");
+  const [rachaAlumnos, setRachaAlumnos] = useState([]);
+  const [loadingRacha, setLoadingRacha] = useState(false);
   const isMobile = typeof window !== "undefined" && window.innerWidth < 600;
+
+  // Cargar racha de alumnos al montar el componente o cambiar cursoId
+  useEffect(() => {
+    if (cursoId) {
+      setLoadingRacha(true);
+      api.get(`/profesor/cursos/${cursoId}/racha-alumnos`).then(res => {
+        setRachaAlumnos(res.data.data || []);
+      }).finally(() => setLoadingRacha(false));
+    }
+  }, [cursoId]);
+
+  // Helper para obtener la racha de un alumno
+  const getRacha = (alumnoId) => {
+    const found = rachaAlumnos.find((a) => a.id === alumnoId);
+    return found ? found.racha_entregas : 0;
+  };
 
   // NUEVO: Exportar estudiantes
   const handleExportar = async () => {
@@ -125,6 +144,9 @@ const GestionAlumnosCurso = ({
               <div style={{ fontWeight: FONT_WEIGHTS.semibold, fontSize: FONT_SIZES.lg }}>{alumno.name}</div>
               <div style={emailStyle}>{alumno.email}</div>
               <div style={{ fontSize: FONT_SIZES.sm, color: COLORS.textSecondary, marginTop: 2 }}>{alumno.tipo_acceso}</div>
+              <div style={{ fontSize: FONT_SIZES.sm, color: COLORS.primary, marginTop: 6, fontWeight: 600 }}>
+                Racha de entregas: {loadingRacha ? "..." : getRacha(alumno.id)}
+              </div>
             </div>
             <div style={tipoAccesoStyle}>{alumno.tipo_acceso}</div>
           </div>

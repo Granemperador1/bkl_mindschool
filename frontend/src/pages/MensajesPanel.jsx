@@ -26,6 +26,7 @@ const MensajesPanel = () => {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [enviando, setEnviando] = useState(false);
 
   // Log para depuración de usuario y roles
   React.useEffect(() => {
@@ -77,9 +78,11 @@ const MensajesPanel = () => {
     e.preventDefault();
     setError("");
     setSuccess("");
+    setEnviando(true);
 
     if (!form.destinatario_id || !form.asunto || !form.contenido) {
       setError("Destinatario, asunto y contenido son obligatorios");
+      setEnviando(false);
       return;
     }
 
@@ -101,6 +104,8 @@ const MensajesPanel = () => {
     } catch (error) {
       console.error("Error creating mensaje:", error);
       setError(error.response?.data?.message || "Error al enviar el mensaje");
+    } finally {
+      setEnviando(false);
     }
   };
 
@@ -347,18 +352,28 @@ const MensajesPanel = () => {
 
           <button
             type="submit"
+            disabled={enviando}
             style={{
               padding: SPACING[3],
-              background: COLORS.success,
-              color: COLORS.surface,
-              border: "none",
+              background: enviando ? COLORS.textMuted : COLORS.primary,
+              color: '#fff',
+              border: 'none',
               borderRadius: BORDER_RADIUS.md,
               fontWeight: "600",
-              cursor: "pointer",
+              cursor: enviando ? 'not-allowed' : 'pointer',
+              opacity: enviando ? 0.7 : 1,
+              marginTop: 8
             }}
           >
-            Enviar Mensaje
+            {enviando ? 'Enviando...' : 'Enviar mensaje'}
           </button>
+
+          {enviando && (
+            <span style={{ color: COLORS.primary, fontWeight: 500, marginLeft: 12 }}>
+              <i className="fas fa-spinner fa-spin" style={{ marginRight: 6 }}></i>
+              Enviando mensaje, espera unos segundos...
+            </span>
+          )}
 
           <button
             type="button"

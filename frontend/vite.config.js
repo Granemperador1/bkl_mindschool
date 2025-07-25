@@ -8,6 +8,9 @@ export default defineConfig({
     port: 5173,
     host: true,
     open: true,
+    allowedHosts: [
+      "hunting-blah-humanities-wow.trycloudflare.com"
+    ],
   },
   build: {
     outDir: "dist",

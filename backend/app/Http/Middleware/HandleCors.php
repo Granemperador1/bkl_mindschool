@@ -13,17 +13,13 @@ class HandleCors
         $allowedOrigins = [
             'http://localhost:5173',
             'http://127.0.0.1:5173',
-            'http://192.168.100.4:5173',
             'http://localhost:8000',
-            'http://192.168.100.4:8000',
-            'http://localhost:3000',
-            'http://127.0.0.1:3000'
+            'http://127.0.0.1:8000',
         ];
-
         $origin = $request->header('Origin');
-        
-        // Si el origen está en la lista de permitidos, lo usamos, de lo contrario usamos '*'
-        $origin = in_array($origin, $allowedOrigins) ? $origin : '*';
+        // Permitir cualquier IP de la LAN 192.168.x.x
+        $isLan = preg_match('/^http:\/\/192\.168\.\d+\.\d+(?::\d+)?$/', $origin);
+        $origin = (in_array($origin, $allowedOrigins) || $isLan) ? $origin : '*';
 
         $headers = [
             'Access-Control-Allow-Origin'      => $origin,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/axiosConfig";
@@ -15,6 +15,8 @@ import {
 } from "../theme/branding/branding";
 import Mascota from "../theme/branding/Mascota";
 import alumnoVideo from "../assets/videos/alumno.mp4";
+import PerfilForm from '../componentes/Perfil/PerfilForm';
+import CambiarPasswordForm from '../componentes/Perfil/CambiarPasswordForm';
 
 const EstudianteDashboard = () => {
   const [tareas, setTareas] = useState([]);
@@ -31,6 +33,24 @@ const EstudianteDashboard = () => {
   const [comentarios, setComentarios] = useState("");
   const [filterMateria, setFilterMateria] = useState("");
   const [filterEstado, setFilterEstado] = useState("");
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [paying, setPaying] = useState(false);
+  const [pagoExitoso, setPagoExitoso] = useState(false);
+  const [errorPago, setErrorPago] = useState("");
+  const [showFormPago, setShowFormPago] = useState(false);
+  const [formPago, setFormPago] = useState({
+    nombre: "",
+    tarjeta: "",
+    expiracion: "",
+    cvv: ""
+  });
+  const [payStep, setPayStep] = useState(0); // 0: área, 1: doc/profesor (si prof), 2: datos bancarios, 3: resumen/pago
+  const [area, setArea] = useState(localStorage.getItem("area_usuario") || "");
+  const [docProfesor, setDocProfesor] = useState(null);
+  const [docTexto, setDocTexto] = useState("");
+  const [docSubido, setDocSubido] = useState(false);
+  const [aprobadoProfesor, setAprobadoProfesor] = useState(localStorage.getItem("aprobado_profesor") === "si");
+  const fileInputRef = useRef();
 
   const navigate = useNavigate();
   const { usuario, logout } = useAuth();
@@ -38,6 +58,85 @@ const EstudianteDashboard = () => {
   useEffect(() => {
     fetchDashboardData();
   }, []);
+
+  // Cambia la clave de localStorage para incluir el mes y año actual
+  const getPagoKey = () => {
+    const now = new Date();
+    return `pago_mensualidad_${now.getFullYear()}_${now.getMonth() + 1}`;
+  };
+
+  useEffect(() => {
+    const pago = localStorage.getItem(getPagoKey());
+    const areaSaved = localStorage.getItem("area_usuario");
+    if (!pago || !areaSaved) setShowPaywall(true);
+  }, []);
+
+  const handleSelectArea = (a) => {
+    setArea(a);
+    localStorage.setItem("area_usuario", a);
+    setPayStep(a === "profesor" ? 1 : 2);
+  };
+
+  const handleInputPago = (e) => {
+    setFormPago({ ...formPago, [e.target.name]: e.target.value });
+  };
+
+  const handleUploadDoc = (e) => {
+    const file = e.target.files[0];
+    setDocProfesor(file);
+    setDocSubido(!!file);
+  };
+
+  const handleEnviarEvidencia = (e) => {
+    e.preventDefault();
+    if (!docProfesor || !docTexto) {
+      setErrorPago("Sube tu documentación y escribe una referencia");
+      return;
+    }
+    // Simula notificación al admin
+    alert("¡Documentación enviada al admin! Se te notificará cuando seas aprobado como profesor.");
+    localStorage.setItem("doc_profesor", "enviado");
+    setPayStep(2);
+    setErrorPago("");
+    // Simula aprobación admin tras 5s (en real, esperar backend)
+    setTimeout(() => {
+      setAprobadoProfesor(true);
+      localStorage.setItem("aprobado_profesor", "si");
+      alert("¡Has sido aprobado como profesor! Ahora puedes realizar el pago y acceder a todas las funciones.");
+    }, 5000);
+  };
+
+  const handlePagarMensualidad = async (e) => {
+    e?.preventDefault?.();
+    setPaying(true);
+    setErrorPago("");
+    if (!formPago.nombre || !formPago.tarjeta || !formPago.expiracion || !formPago.cvv) {
+      setErrorPago("Completa todos los campos bancarios");
+      setPaying(false);
+      return;
+    }
+    if (area === "profesor" && !aprobadoProfesor) {
+      setErrorPago("Debes esperar la aprobación del admin antes de pagar.");
+      setPaying(false);
+      return;
+    }
+    try {
+      await new Promise((res) => setTimeout(res, 1200));
+      localStorage.setItem(getPagoKey(), "ok");
+      setPagoExitoso(true);
+      setTimeout(() => {
+        setShowPaywall(false);
+        setPagoExitoso(false);
+        setShowFormPago(false);
+        setFormPago({ nombre: "", tarjeta: "", expiracion: "", cvv: "" });
+        setPayStep(0);
+      }, 1200);
+    } catch (e) {
+      setErrorPago("Error al procesar el pago. Intenta de nuevo.");
+    } finally {
+      setPaying(false);
+    }
+  };
 
   const fetchDashboardData = async () => {
     try {
@@ -1012,6 +1111,163 @@ const EstudianteDashboard = () => {
             </button>
             {/* Previsualización del archivo subido */}
             <PreviewArchivosDirect archivos={entregaArchivos} />
+          </div>
+        </div>
+      )}
+
+      {/* Modal de configuración de perfil y contraseña */}
+      {showConfigModal && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          background: "rgba(0,0,0,0.6)",
+          zIndex: 2000,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        onClick={() => setShowConfigModal(false)}
+        >
+          <div
+            style={{
+              background: COLORS.surface,
+              borderRadius: BORDER_RADIUS.xl,
+              padding: 36,
+              maxWidth: 480,
+              width: "90vw",
+              boxShadow: SHADOWS["2xl"],
+              position: "relative",
+            }}
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowConfigModal(false)}
+              style={{
+                position: "absolute",
+                top: 12,
+                right: 16,
+                background: COLORS.error,
+                color: COLORS.white,
+                border: "none",
+                borderRadius: 6,
+                padding: "4px 12px",
+                fontWeight: 700,
+                fontSize: 18,
+                cursor: "pointer",
+                zIndex: 2
+              }}
+            >✕</button>
+            <h2 style={{ color: COLORS.primary, fontWeight: 700, marginBottom: 18 }}>Editar mis datos</h2>
+            <PerfilForm />
+            <hr style={{ margin: '32px 0', border: `1px solid ${COLORS.border}` }} />
+            <CambiarPasswordForm />
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE WIZARD DE REGISTRO Y PAGO */}
+      {showPaywall && (
+        <div style={{
+          position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+          background: "rgba(0,0,0,0.7)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center"
+        }}>
+          <div style={{ background: "#fff", borderRadius: 16, padding: 40, minWidth: 320, maxWidth: 420, boxShadow: "0 8px 32px #0002", textAlign: "center", position: "relative" }}>
+            {/* Flechita de regreso */}
+            {payStep > 0 && (
+              <button
+                onClick={() => {
+                  setPayStep(0);
+                  setErrorPago("");
+                }}
+                style={{
+                  position: "absolute", left: 16, top: 16, background: "none", border: "none", cursor: "pointer", fontSize: 22, color: "#6366f1"
+                }}
+                aria-label="Regresar"
+              >
+                ←
+              </button>
+            )}
+            <h2 style={{ color: "#1e293b", marginBottom: 16 }}>Bienvenido a MindSchool</h2>
+            {payStep === 0 && (
+              <>
+                <p style={{ color: "#475569", marginBottom: 24 }}>
+                  El primer mes es <b>gratis</b>.<br/>
+                  El segundo mes se pagará <b>$100</b> (alumno) o <b>$50</b> (profesor) con acceso a todo el contenido.<br/>
+                  Selecciona tu área para continuar:
+                </p>
+                <div style={{ display: "flex", gap: 20, justifyContent: "center", marginBottom: 24 }}>
+                  <button onClick={() => handleSelectArea("alumno")} style={{ padding: "12px 32px", background: area === "alumno" ? "#6366f1" : "#e0e7ef", color: area === "alumno" ? "#fff" : "#334155", border: "none", borderRadius: 8, fontWeight: 600, fontSize: 18, cursor: "pointer" }}>Alumno</button>
+                  <button onClick={() => handleSelectArea("profesor")} style={{ padding: "12px 32px", background: area === "profesor" ? "#6366f1" : "#e0e7ef", color: area === "profesor" ? "#fff" : "#334155", border: "none", borderRadius: 8, fontWeight: 600, fontSize: 18, cursor: "pointer" }}>Profesor</button>
+                </div>
+              </>
+            )}
+            {payStep === 1 && area === "profesor" && (
+              <form onSubmit={handleEnviarEvidencia} style={{ textAlign: "left" }}>
+                <div style={{ marginBottom: 14 }}>
+                  <label style={{ fontWeight: 500, color: "#334155" }}>Sube tu documentación (PDF/JPG)</label>
+                  <input type="file" accept=".pdf,.jpg,.jpeg,.png" ref={fileInputRef} onChange={handleUploadDoc} style={{ width: "100%", marginTop: 4 }} />
+                  {docSubido && <span style={{ color: "#22c55e", fontSize: 13 }}>Archivo subido</span>}
+                </div>
+                <div style={{ marginBottom: 14 }}>
+                  <label style={{ fontWeight: 500, color: "#334155" }}>Referencia o texto de aval</label>
+                  <textarea value={docTexto} onChange={e => setDocTexto(e.target.value)} rows={3} style={{ width: "100%", padding: 8, borderRadius: 6, border: "1px solid #cbd5e1", marginTop: 4 }} />
+                </div>
+                <button type="submit" style={{ background: "#6366f1", color: "#fff", border: "none", borderRadius: 8, padding: "12px 32px", fontWeight: 600, fontSize: 18, cursor: "pointer", width: "100%" }}>
+                  Enviar evidencia y notificar admin
+                </button>
+              </form>
+            )}
+            {((payStep === 2 && area === "profesor") || (payStep === 2 && area === "alumno")) && (
+              <form onSubmit={(e) => { e.preventDefault(); setPayStep(3); }} style={{ textAlign: "left" }}>
+                <div style={{ marginBottom: 14 }}>
+                  <label style={{ fontWeight: 500, color: "#334155" }}>Nombre en la tarjeta</label>
+                  <input name="nombre" value={formPago.nombre} onChange={handleInputPago} style={{ width: "100%", padding: 8, borderRadius: 6, border: "1px solid #cbd5e1", marginTop: 4 }} />
+                </div>
+                <div style={{ marginBottom: 14 }}>
+                  <label style={{ fontWeight: 500, color: "#334155" }}>Número de tarjeta</label>
+                  <input name="tarjeta" value={formPago.tarjeta} onChange={handleInputPago} maxLength={16} style={{ width: "100%", padding: 8, borderRadius: 6, border: "1px solid #cbd5e1", marginTop: 4 }} />
+                </div>
+                <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ fontWeight: 500, color: "#334155" }}>Expiración</label>
+                    <input name="expiracion" value={formPago.expiracion} onChange={handleInputPago} placeholder="MM/AA" maxLength={5} style={{ width: "100%", padding: 8, borderRadius: 6, border: "1px solid #cbd5e1", marginTop: 4 }} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ fontWeight: 500, color: "#334155" }}>CVV</label>
+                    <input name="cvv" value={formPago.cvv} onChange={handleInputPago} maxLength={4} style={{ width: "100%", padding: 8, borderRadius: 6, border: "1px solid #cbd5e1", marginTop: 4 }} />
+                  </div>
+                </div>
+                <button type="submit" style={{ background: "#6366f1", color: "#fff", border: "none", borderRadius: 8, padding: "12px 32px", fontWeight: 600, fontSize: 18, cursor: "pointer", width: "100%" }}>
+                  Continuar
+                </button>
+              </form>
+            )}
+            {payStep === 3 && (
+              <form onSubmit={handlePagarMensualidad} style={{ textAlign: "center" }}>
+                <div style={{ marginBottom: 18, color: "#475569" }}>
+                  {area === "alumno" ? (
+                    <>
+                      <b>¡Primer mes gratis!</b><br/>
+                      A partir del segundo mes pagarás <b>$100 MXN/mes</b> y tendrás acceso a todos los cursos.
+                    </>
+                  ) : (
+                    <>
+                      <b>¡Primer mes gratis!</b><br/>
+                      A partir del segundo mes pagarás <b>$50 MXN/mes</b> y tendrás acceso a todas las funciones de profesor.<br/>
+                      Tu documentación fue revisada y aprobada por el admin.
+                    </>
+                  )}
+                </div>
+                <button type="submit" disabled={paying || (area === "profesor" && !aprobadoProfesor)} style={{ background: "#6366f1", color: "#fff", border: "none", borderRadius: 8, padding: "12px 32px", fontWeight: 600, fontSize: 18, cursor: paying ? "not-allowed" : "pointer", width: "100%" }}>
+                  {paying ? "Procesando..." : area === "alumno" ? "Finalizar y acceder" : !aprobadoProfesor ? "Esperando aprobación..." : "Pagar y acceder"}
+                </button>
+              </form>
+            )}
+            {errorPago && <div style={{ color: "#ef4444", marginTop: 12 }}>{errorPago}</div>}
+            {pagoExitoso && <div style={{ color: "#22c55e", fontWeight: 600, marginTop: 16 }}>¡Registro y pago exitoso!</div>}
           </div>
         </div>
       )}

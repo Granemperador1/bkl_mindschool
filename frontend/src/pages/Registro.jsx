@@ -14,6 +14,7 @@ import {
 } from "../theme/branding/branding";
 import videoSorpresa from "../assets/videos/sorpresa.mp4";
 import { GoogleLogin } from '@react-oauth/google';
+import EstudianteDashboard from './EstudianteDashboard';
 
 const EyeIcon = ({ visible, onClick }) => (
   <span
@@ -96,8 +97,10 @@ const Registro = () => {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [googleError, setGoogleError] = useState("");
   const [googleSuccess, setGoogleSuccess] = useState("");
+  const [enviando, setEnviando] = useState(false);
   const navigate = useNavigate();
   const { register } = useAuth();
+  const [showPaywall, setShowPaywall] = useState(false);
 
   // Validación avanzada de contraseña
   const passwordRegex = /^.{8,}$/;
@@ -111,6 +114,7 @@ const Registro = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setEnviando(true);
     setLoading(true);
     setError("");
     setShowSorpresa(true);
@@ -119,12 +123,14 @@ const Registro = () => {
       setError("La contraseña debe tener al menos 8 caracteres.");
       setLoading(false);
       setShowSorpresa(false);
+      setEnviando(false);
       return;
     }
     if (formData.password !== formData.password_confirmation) {
       setError("Las contraseñas no coinciden");
       setLoading(false);
       setShowSorpresa(false);
+      setEnviando(false);
       return;
     }
     // Forzar el rol a 'estudiante' antes de enviar
@@ -135,7 +141,7 @@ const Registro = () => {
       if (success) {
         setTimeout(() => {
           setShowSorpresa(false);
-          navigate("/dashboard");
+          setShowPaywall(true); // Mostrar modal de pago tras registro exitoso
         }, 2000);
         return;
       }
@@ -158,6 +164,7 @@ const Registro = () => {
     } finally {
       setLoading(false);
       setShowSorpresa(false);
+      setEnviando(false);
     }
   };
 
@@ -209,6 +216,8 @@ const Registro = () => {
           />
         </div>
       )}
+      {/* MODAL DE WIZARD DE REGISTRO Y PAGO */}
+      {showPaywall && <EstudianteDashboard showPaywallProp={true} />}
       <div
         className="registro-form-container"
         style={{
@@ -509,9 +518,9 @@ const Registro = () => {
 
             <button
   type="submit"
-  disabled={loading}
-  aria-busy={loading}
-  aria-label={loading ? "Creando cuenta" : "Crear cuenta"}
+  disabled={loading || enviando}
+  aria-busy={loading || enviando}
+  aria-label={loading || enviando ? "Creando cuenta" : "Crear cuenta"}
   style={{
     width: "100%",
     background: COLORS.gradientPrimary,
@@ -521,12 +530,12 @@ const Registro = () => {
     padding: `${SPACING[3]} ${SPACING[6]}`,
     fontSize: FONT_SIZES.base,
     fontWeight: FONT_WEIGHTS.semibold,
-    cursor: loading ? "not-allowed" : "pointer",
+    cursor: loading || enviando ? "not-allowed" : "pointer",
     transition: TRANSITIONS.base,
     boxShadow: SHADOWS.md,
     fontFamily: FONTS.main,
-    outline: loading ? `2px solid ${COLORS.primary}` : undefined,
-    opacity: loading ? 0.8 : 1,
+    outline: loading || enviando ? `2px solid ${COLORS.primary}` : undefined,
+    opacity: loading || enviando ? 0.8 : 1,
   }}
   onFocus={e => {
     e.target.style.boxShadow = `0 0 0 3px ${COLORS.primary}33`;
@@ -535,8 +544,14 @@ const Registro = () => {
     e.target.style.boxShadow = SHADOWS.md;
   }}
 >
-  {loading ? "Creando cuenta..." : "Crear Cuenta"}
+  {loading || enviando ? "Creando cuenta..." : "Crear Cuenta"}
 </button>
+      {enviando && (
+        <span style={{ color: COLORS.primary, fontWeight: 500, marginLeft: 8 }}>
+          <i className="fas fa-spinner fa-spin" style={{ marginRight: 6 }}></i>
+          Registrando, espera unos segundos...
+        </span>
+      )}
 
           {/* Botón de Google Login */}
           <div style={{ margin: `${SPACING[5]} 0`, textAlign: 'center' }}>

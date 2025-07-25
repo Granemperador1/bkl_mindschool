@@ -26,10 +26,20 @@ const AdminDashboard = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [extraStats, setExtraStats] = useState(null);
+  const [inscripcionesPagadas, setInscripcionesPagadas] = useState([]);
 
   useEffect(() => {
     fetchDashboardData();
     fetchExtraStats();
+    const fetchPagadas = async () => {
+      try {
+        const response = await api.get("/inscripciones/pagadas");
+        setInscripcionesPagadas(Array.isArray(response.data.data) ? response.data.data : []);
+      } catch (e) {
+        setInscripcionesPagadas([]);
+      }
+    };
+    fetchPagadas();
   }, []);
 
   const fetchDashboardData = async () => {
@@ -482,6 +492,33 @@ const AdminDashboard = () => {
             </div>
           </div>
         )}
+
+        {/* NUEVO: Tabla de inscripciones pagadas */}
+        <div style={{ marginTop: 40, background: COLORS.surface, borderRadius: BORDER_RADIUS.lg, boxShadow: SHADOWS.md, padding: 24 }}>
+          <h2 style={{ color: COLORS.text, fontSize: 22, fontWeight: 600, marginBottom: 16 }}>Inscripciones Pagadas</h2>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr style={{ background: COLORS.background }}>
+                <th style={{ padding: 12, textAlign: "left" }}>Alumno</th>
+                <th style={{ padding: 12, textAlign: "left" }}>Curso</th>
+                <th style={{ padding: 12, textAlign: "left" }}>Fecha de inscripción</th>
+              </tr>
+            </thead>
+            <tbody>
+              {inscripcionesPagadas.length === 0 ? (
+                <tr><td colSpan={3} style={{ textAlign: "center", color: COLORS.textSecondary, padding: 24 }}>No hay inscripciones pagadas</td></tr>
+              ) : (
+                inscripcionesPagadas.map((i) => (
+                  <tr key={i.id} style={{ borderBottom: `1px solid ${COLORS.border}` }}>
+                    <td style={{ padding: 12 }}>{i.alumno?.name || "-"}</td>
+                    <td style={{ padding: 12 }}>{i.curso?.titulo || "-"}</td>
+                    <td style={{ padding: 12 }}>{i.fecha_inscripcion ? new Date(i.fecha_inscripcion).toLocaleDateString() : "-"}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
 
         {/* Stats Cards */}
         <div

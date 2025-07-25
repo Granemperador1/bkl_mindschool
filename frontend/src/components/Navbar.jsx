@@ -527,137 +527,153 @@ const Navbar = () => {
 
         {/* Menú lateral para móvil */}
         {isMenuOpen && (
-          <div
-            className="navbar-side-menu"
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "78vw",
-              maxWidth: 320,
-              height: "100vh",
-              background: COLORS.surface,
-              boxShadow: "2px 0 16px #0005",
-              zIndex: 1200,
-              display: "flex",
-              flexDirection: "column",
-              padding: "32px 18px 18px 18px",
-              transition: "transform 0.3s cubic-bezier(.4,2,.6,1)",
-              transform: isMenuOpen ? "translateX(0)" : "translateX(-100%)",
-            }}
-          >
-            <button
+          <>
+            {/* Overlay opaco */}
+            <div
               onClick={() => setIsMenuOpen(false)}
               style={{
-                background: "none",
-                border: "none",
-                fontSize: 32,
-                color: COLORS.primary,
-                alignSelf: "flex-end",
-                marginBottom: 18,
-                cursor: "pointer",
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+                background: "rgba(0,0,0,0.45)",
+                zIndex: 1999,
+                transition: "background 0.3s cubic-bezier(.4,2,.6,1)",
               }}
-              aria-label="Cerrar menú"
+            />
+            <div
+              className="navbar-side-menu"
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "78vw",
+                maxWidth: 320,
+                height: "100vh",
+                background: COLORS.surface,
+                boxShadow: "2px 0 16px #0005",
+                zIndex: 2000,
+                display: "flex",
+                flexDirection: "column",
+                padding: "32px 18px 18px 18px",
+                transition: "transform 0.3s cubic-bezier(.4,2,.6,1)",
+                transform: isMenuOpen ? "translateX(0)" : "translateX(-100%)",
+              }}
             >
-              <FaTimes />
-            </button>
-            {/* Enlaces de navegación (igual que en desktop) */}
-            {usuario && (
-              <>
-                <Link to={getDashboardPath()} style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                  Dashboard
-                </Link>
-                {usuario.roles?.[0] === "admin" && (
-                  <>
-                    <Link to="/admin/usuarios" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Usuarios
-                    </Link>
-                    <Link to="/admin/cursos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Cursos
-                    </Link>
-                    <Link to="/asistencias" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Asistencias
-                    </Link>
-                    <Link to="/recursos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Recursos
-                    </Link>
-                    <Link to="/mensajes" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Mensajes
-                    </Link>
-                  </>
-                )}
-                {usuario.roles?.[0] === "profesor" && (
-                  <>
-                    <Link to="/profesor/cursos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Mis Cursos
-                    </Link>
-                    <Link to="/profesor/asesorias" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Mis Asesorías
-                    </Link>
-                    <Link to="/profesor/disponibilidad" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Disponibilidad
-                    </Link>
-                    <Link to="/profesor/pagos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Pagos
-                    </Link>
-                    <Link to="/mensajes" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Mensajes
-                    </Link>
-                  </>
-                )}
-                {usuario.roles?.[0] === "estudiante" && (
-                  <>
-                    <Link to="/estudiante/cursos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Cursos Disponibles
-                    </Link>
-                    <Link to="/estudiante/inscripciones" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Mis Inscripciones
-                    </Link>
-                    <Link to="/estudiante/solicitar-asesoria" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Solicitar Asesoría
-                    </Link>
-                    <Link to="/estudiante/asesorias" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Mis Asesorías
-                    </Link>
-                    <Link to="/mensajes" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                      Mensajes
-                    </Link>
-                  </>
-                )}
-                {/* Bloque de usuario, notificaciones y perfil en móvil */}
-                <div style={{ marginTop: 32, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 10 }}>
-                  {/* Notificaciones */}
-                  <div style={{ width: "100%" }}>
-                    <div style={{ fontWeight: 700, color: COLORS.primary, marginBottom: 6 }}><FaBell style={{ marginRight: 6 }} /> Notificaciones</div>
-                    {notifications.length === 0 && (
-                      <div style={{ color: COLORS.textSecondary, fontSize: 15 }}>Sin notificaciones</div>
-                    )}
-                    {notifications.map((n) => (
-                      <div key={n.id} style={{
-                        padding: "6px 0",
-                        background: n.read ? "none" : COLORS.surfaceLight,
-                        color: n.read ? COLORS.textSecondary : COLORS.text,
-                        fontWeight: n.read ? 400 : 600,
-                        borderLeft: n.read ? "none" : `3px solid ${COLORS.primary}`,
-                        cursor: "pointer",
-                        fontSize: 15,
-                      }}>
-                        {n.text}
-                      </div>
-                    ))}
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  fontSize: 32,
+                  color: COLORS.primary,
+                  alignSelf: "flex-end",
+                  marginBottom: 18,
+                  cursor: "pointer",
+                }}
+                aria-label="Cerrar menú"
+              >
+                <FaTimes />
+              </button>
+              {/* Enlaces de navegación (igual que en desktop) */}
+              {usuario && (
+                <>
+                  <Link to={getDashboardPath()} style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                    Dashboard
+                  </Link>
+                  {usuario.roles?.[0] === "admin" && (
+                    <>
+                      <Link to="/admin/usuarios" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Usuarios
+                      </Link>
+                      <Link to="/admin/cursos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Cursos
+                      </Link>
+                      <Link to="/asistencias" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Asistencias
+                      </Link>
+                      <Link to="/recursos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Recursos
+                      </Link>
+                      <Link to="/mensajes" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Mensajes
+                      </Link>
+                    </>
+                  )}
+                  {usuario.roles?.[0] === "profesor" && (
+                    <>
+                      <Link to="/profesor/cursos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Mis Cursos
+                      </Link>
+                      <Link to="/profesor/asesorias" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Mis Asesorías
+                      </Link>
+                      <Link to="/profesor/disponibilidad" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Disponibilidad
+                      </Link>
+                      <Link to="/profesor/pagos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Pagos
+                      </Link>
+                      <Link to="/mensajes" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Mensajes
+                      </Link>
+                    </>
+                  )}
+                  {usuario.roles?.[0] === "estudiante" && (
+                    <>
+                      <Link to="/estudiante/cursos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Cursos Disponibles
+                      </Link>
+                      <Link to="/estudiante/inscripciones" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Mis Inscripciones
+                      </Link>
+                      <Link to="/estudiante/solicitar-asesoria" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Solicitar Asesoría
+                      </Link>
+                      <Link to="/estudiante/asesorias" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Mis Asesorías
+                      </Link>
+                      <Link to="/mensajes" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
+                        Mensajes
+                      </Link>
+                    </>
+                  )}
+                  {/* Bloque de usuario, notificaciones y perfil en móvil */}
+                  <div style={{ marginTop: 32, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 10 }}>
+                    {/* Notificaciones */}
+                    <div style={{ width: "100%" }}>
+                      <div style={{ fontWeight: 700, color: COLORS.primary, marginBottom: 6 }}><FaBell style={{ marginRight: 6 }} /> Notificaciones</div>
+                      {notifications.length === 0 && (
+                        <div style={{ color: COLORS.textSecondary, fontSize: 15 }}>Sin notificaciones</div>
+                      )}
+                      {notifications.map((n) => (
+                        <div key={n.id} style={{
+                          padding: "6px 0",
+                          background: n.read ? "none" : COLORS.surfaceLight,
+                          color: n.read ? COLORS.textSecondary : COLORS.text,
+                          fontWeight: n.read ? 400 : 600,
+                          borderLeft: n.read ? "none" : `3px solid ${COLORS.primary}`,
+                          cursor: "pointer",
+                          fontSize: 15,
+                        }}>
+                          {n.text}
+                        </div>
+                      ))}
+                    </div>
+                    {/* Menú de perfil/configuración */}
+                    <div style={{ width: "100%", marginTop: 12 }}>
+                      <div style={{ fontWeight: 700, color: COLORS.primary, marginBottom: 6 }}><FaUserCircle style={{ marginRight: 6 }} /> Perfil</div>
+                      <Link to="/perfil" style={{ ...navLinkStyle, display: "flex", alignItems: "center", gap: 8 }} onClick={() => setIsMenuOpen(false)}><FaUserEdit /> Editar perfil</Link>
+                      <Link to="/configuracion" style={{ ...navLinkStyle, display: "flex", alignItems: "center", gap: 8 }} onClick={() => setIsMenuOpen(false)}><FaCog /> Configuración</Link>
+                      <Link to="/cambiar-password" style={{ ...navLinkStyle, display: "flex", alignItems: "center", gap: 8 }} onClick={() => setIsMenuOpen(false)}><FaKey /> Cambiar contraseña</Link>
+                      <button onClick={handleLogout} style={{ ...navLinkStyle, color: COLORS.error, display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", fontWeight: 700, marginTop: 8 }}><FaSignOutAlt /> Cerrar sesión</button>
+                    </div>
                   </div>
-                  {/* Menú de perfil/configuración */}
-                  <div style={{ width: "100%", marginTop: 12 }}>
-                    <div style={{ fontWeight: 700, color: COLORS.primary, marginBottom: 6 }}><FaUserCircle style={{ marginRight: 6 }} /> Perfil</div>
-                    <Link to="/perfil" style={{ ...navLinkStyle, display: "flex", alignItems: "center", gap: 8 }} onClick={() => setIsMenuOpen(false)}><FaUserEdit /> Editar perfil</Link>
-                    <Link to="/configuracion" style={{ ...navLinkStyle, display: "flex", alignItems: "center", gap: 8 }} onClick={() => setIsMenuOpen(false)}><FaCog /> Configuración</Link>
-                    <Link to="/cambiar-password" style={{ ...navLinkStyle, display: "flex", alignItems: "center", gap: 8 }} onClick={() => setIsMenuOpen(false)}><FaKey /> Cambiar contraseña</Link>
-                    <button onClick={handleLogout} style={{ ...navLinkStyle, color: COLORS.error, display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", fontWeight: 700, marginTop: 8 }}><FaSignOutAlt /> Cerrar sesión</button>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
+                </>
+              )}
+            </div>
+          </>
         )}
       </div>
       <CartaBienvenidaModal open={showBienvenida} mensaje={bienvenidaMensaje} onClose={() => setShowBienvenida(false)} />

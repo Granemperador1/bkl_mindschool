@@ -27,7 +27,7 @@ import CursosServicio from "../servicios/CursosServicio";
 // Eliminar los datos mock de cuatrimestres y materias
 
 function ProfesorPanel() {
-  const { usuario } = useAuth();
+  const { usuario, isProfesorEspecial } = useAuth();
   const navigate = useNavigate();
   const [cuatrimestreSeleccionado, setCuatrimestreSeleccionado] =
     useState(null);
@@ -57,6 +57,64 @@ function ProfesorPanel() {
   const [mensajeCurso, setMensajeCurso] = useState("");
   const [errorCurso, setErrorCurso] = useState("");
   const formRef = useRef(null);
+
+  // --- PROFESORES ESPECIALES ---
+  const SEMESTRES_ESPECIALES = [
+    {
+      key: "1",
+      nombre: "Primer semestre de bachillerato",
+      imagen: "https://cdn-icons-png.flaticon.com/512/3135/3135755.png",
+      materias: [
+        "HISTORIA DE MEXICO 1",
+        "INGLES",
+        "MANTENIMIENTO Y REDES DE COMPUTO",
+        "GEOGRAFIA",
+        "DERECHO",
+        "PROBABILIDAD Y ESTADISTICA",
+        "VIDA SALUDABLE",
+        "FILOSOFIA",
+        "ECOLOGIA Y MEDIO AMBIENTE",
+        "DISEÑO DIGITAL",
+      ],
+    },
+    {
+      key: "2",
+      nombre: "Segundo semestre de bachillerato",
+      imagen: "https://cdn-icons-png.flaticon.com/512/3135/3135755.png",
+      materias: [
+        "BIOLOGIA 2",
+        "LITERATURA 2",
+        "MANTENIMIENTO Y REDES DE COMPUTO",
+        "GEOGRAFIA",
+        "ESTRUCTURA SOCIOECONOMICA DE MEXICO",
+        "DERECHO 1",
+        "VIDA SALUDABLE",
+        "FILOSOFIA",
+        "ECOLOGIA Y MEDIO AMBIENTE",
+        "MUNDO DE EMOCIONES",
+      ],
+    },
+    {
+      key: "3",
+      nombre: "Tercer semestre de bachillerato",
+      imagen: "https://cdn-icons-png.flaticon.com/512/3135/3135755.png",
+      materias: [
+        "QUIMICA 2",
+        "MATEMATICAS 1V",
+        "BIOLOGIA 2",
+        "FISICA 2",
+        "HISTORIA DE MEXICO 2",
+        "INGLES 1V",
+        "GEOGRAFIA",
+        "VIDA SALUDABLE",
+        "FILOSOFIA",
+        "ECOLOGIA Y MEDIO AMBIENTE",
+      ],
+    },
+  ];
+  const [semestreEspecialSeleccionado, setSemestreEspecialSeleccionado] = useState(null);
+  // Estado para materia especial seleccionada
+  const [materiaEspecialSeleccionada, setMateriaEspecialSeleccionada] = useState(null);
 
   // 1. Agregar función para validar formato de imagen
   const esUrlImagenValida = (url) => {
@@ -513,6 +571,110 @@ function ProfesorPanel() {
     setCreandoCurso(false);
   };
 
+  // Render especial para profesores especiales
+  if (isProfesorEspecial) {
+    return (
+      <div style={{ ...styles.container, paddingTop: 8 }}>
+        <div style={{ height: "8px" }} />
+        {/* Bienvenida */}
+        <div
+          className="bienvenida-animada"
+          style={{
+            background: COLORS.surface,
+            borderRadius: BORDER_RADIUS.xl,
+            padding: `${SPACING[6]} ${SPACING[8]}`,
+            margin: `${SPACING[3]} auto`,
+            boxShadow: SHADOWS.lg,
+            border: `1px solid ${COLORS.border}`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: SPACING[6],
+            flexWrap: "wrap",
+            maxWidth: 900,
+            animation: "fadeSlideIn 1s cubic-bezier(0.4,0,0.2,1)",
+          }}
+        >
+          <div style={{ textAlign: "center", flex: 1 }}>
+            <h1 style={{ fontSize: FONT_SIZES["3xl"], fontWeight: FONT_WEIGHTS.bold, color: COLORS.text }}>
+              Bienvenido, {usuario?.name || "Profesor"}
+            </h1>
+            <p style={{ fontSize: FONT_SIZES.md, color: COLORS.textSecondary, maxWidth: 400, lineHeight: 1.5, margin: "0 auto" }}>
+              Accede a los semestres y tira de materias especial.
+            </p>
+          </div>
+        </div>
+        {/* Selección de semestre */}
+        {!semestreEspecialSeleccionado && (
+          <>
+            <h2 style={{ fontSize: FONT_SIZES["2xl"], textAlign: "center", fontWeight: FONT_WEIGHTS.bold, color: COLORS.text, margin: "32px 0 24px 0" }}>
+              Selecciona un semestre
+            </h2>
+            <div style={{ display: "flex", justifyContent: "center", gap: 32, flexWrap: "wrap", marginBottom: 48 }}>
+              {SEMESTRES_ESPECIALES.map((sem) => (
+                <div
+                  key={sem.key}
+                  style={{ ...styles.cuatrimestreCard, width: 280, cursor: "pointer" }}
+                  onClick={() => setSemestreEspecialSeleccionado(sem)}
+                >
+                  <img src={sem.imagen} alt={sem.nombre} style={{ width: "100%", height: 180, objectFit: "contain", background: "#f4f4f4" }} />
+                  <div style={{ padding: 24 }}>
+                    <h3 style={{ ...styles.cuatrimestreTitle, textAlign: "center" }}>{sem.nombre}</h3>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+        {/* Tira de materias especial */}
+        {semestreEspecialSeleccionado && (
+          <div style={{ maxWidth: 600, margin: "0 auto", background: COLORS.surface, borderRadius: BORDER_RADIUS.xl, boxShadow: SHADOWS.lg, padding: 32 }}>
+            <button
+              onClick={() => setSemestreEspecialSeleccionado(null)}
+              style={{ background: "none", border: "none", color: COLORS.primary, fontSize: 22, cursor: "pointer", marginBottom: 18 }}
+            >
+              ← Volver a semestres
+            </button>
+            <h2 style={{ textAlign: "center", color: COLORS.primary, fontWeight: 700, marginBottom: 24 }}>{semestreEspecialSeleccionado.nombre}</h2>
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {semestreEspecialSeleccionado.materias.map((mat, idx) => (
+                <li key={mat} style={{ background: COLORS.surfaceLight, marginBottom: 12, borderRadius: 8, padding: "14px 18px", fontSize: 18, fontWeight: 500, color: COLORS.text, boxShadow: SHADOWS.sm, cursor: "pointer" }}
+                  onClick={() => setMateriaEspecialSeleccionada({ nombre: mat, semestre: semestreEspecialSeleccionado.nombre })}
+                >
+                  {idx + 1}. {mat}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {/* Panel de gestión de materia especial */}
+        {materiaEspecialSeleccionada && (
+          <div style={{ ...styles.container, paddingTop: 8 }}>
+            <div style={{ maxWidth: 900, margin: "0 auto", background: COLORS.surface, borderRadius: BORDER_RADIUS.xl, boxShadow: SHADOWS.lg, padding: 32 }}>
+              <button
+                onClick={() => setMateriaEspecialSeleccionada(null)}
+                style={{ background: "none", border: "none", color: COLORS.primary, fontSize: 22, cursor: "pointer", marginBottom: 18 }}
+              >
+                ← Volver a materias
+              </button>
+              <h2 style={{ textAlign: "center", color: COLORS.primary, fontWeight: 700, marginBottom: 24 }}>{materiaEspecialSeleccionada.nombre} <span style={{ color: COLORS.textSecondary, fontSize: 18 }}>({materiaEspecialSeleccionada.semestre})</span></h2>
+              {/* Aquí se puede renderizar el mismo componente de gestión de materia/curso normal */}
+              <div style={{ marginTop: 32 }}>
+                <p style={{ color: COLORS.textSecondary, fontSize: 18, textAlign: "center" }}>
+                  Aquí puedes asignar contenido, tareas, ver entregas y gestionar exámenes para esta materia especial, igual que en un curso normal.
+                </p>
+                {/* Aquí puedes reutilizar componentes existentes, por ejemplo: */}
+                {/* <GestionMateriaPanel materia={materiaEspecialSeleccionada} usuario={usuario} /> */}
+                {/* O simplemente mostrar un mensaje de placeholder si no tienes un componente reutilizable aún */}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Vista principal - Selección de cuatrimestre
   return (
     <>
       {/* Eliminada la barra de navegación personalizada para evitar duplicidad */}

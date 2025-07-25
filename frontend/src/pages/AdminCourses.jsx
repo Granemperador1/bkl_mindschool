@@ -36,14 +36,15 @@ const AdminCourses = () => {
       });
 
       const response = await api.get(`/cursos?${params}`);
-      // Manejo de error de autenticación o respuesta inesperada
-      if (!response.data || !Array.isArray(response.data.data)) {
+      // CORRECCIÓN: Tomar el array de cursos desde response.data.data.data
+      const paginated = response.data.data;
+      if (!paginated || !Array.isArray(paginated.data)) {
         setCourses([]);
         setTotalPages(1);
         return;
       }
-      setCourses(response.data.data);
-      setTotalPages(response.data.last_page);
+      setCourses(paginated.data);
+      setTotalPages(paginated.last_page);
     } catch (error) {
       console.error("Error fetching courses:", error);
       setCourses([]);

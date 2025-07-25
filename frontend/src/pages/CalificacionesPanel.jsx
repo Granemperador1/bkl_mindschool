@@ -21,6 +21,7 @@ const CalificacionesPanel = () => {
   const [filterEstado, setFilterEstado] = useState("");
   const [cursos, setCursos] = useState([]);
   const [promedioGeneral, setPromedioGeneral] = useState(0);
+  const [descargando, setDescargando] = useState(false);
 
   useEffect(() => {
     fetchCalificaciones();
@@ -99,6 +100,7 @@ const CalificacionesPanel = () => {
         alert("Selecciona un curso para exportar sus calificaciones");
         return;
       }
+      setDescargando(true);
       const token = localStorage.getItem("token");
       const response = await fetch(
         `/api/profesor/cursos/${filterCurso}/exportar-calificaciones`,
@@ -117,7 +119,9 @@ const CalificacionesPanel = () => {
       a.remove();
       window.URL.revokeObjectURL(url);
     } catch (e) {
-      alert("No se pudo exportar calificaciones");
+      alert("Error al exportar calificaciones");
+    } finally {
+      setDescargando(false);
     }
   };
 
@@ -286,23 +290,28 @@ const CalificacionesPanel = () => {
           <option value="publicada">Publicada</option>
           <option value="revisada">Revisada</option>
         </select>
-        <button
-          onClick={handleExportar}
-          style={{
-            background: COLORS.success,
+        <div style={{ margin: '18px 0' }}>
+          <button onClick={handleExportar} disabled={descargando} style={{
+            background: COLORS.primary,
             color: COLORS.white,
-            border: "none",
+            border: 'none',
             borderRadius: BORDER_RADIUS.md,
-            padding: "10px 22px",
+            padding: '10px 24px',
             fontWeight: FONT_WEIGHTS.semibold,
             fontSize: FONT_SIZES.base,
-            cursor: "pointer",
-            transition: "background 0.2s",
-            marginLeft: 12,
-          }}
-        >
-          <i className="fas fa-file-excel" style={{ marginRight: 8 }}></i> Exportar Excel
-        </button>
+            cursor: descargando ? 'not-allowed' : 'pointer',
+            opacity: descargando ? 0.7 : 1,
+            marginRight: 12
+          }}>
+            {descargando ? 'Descargando...' : 'Exportar calificaciones a Excel'}
+          </button>
+          {descargando && (
+            <span style={{ color: COLORS.primary, fontWeight: 500, marginLeft: 8 }}>
+              <i className="fas fa-spinner fa-spin" style={{ marginRight: 6 }}></i>
+              Generando archivo, espera unos segundos...
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Lista de Calificaciones */}

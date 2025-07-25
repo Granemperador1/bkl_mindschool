@@ -525,30 +525,26 @@ class CursoController extends Controller
     }
 
     /**
-     * Inscribir alumno usando código de invitación
+     * Inscribir alumno sin requerir código de invitación
      */
     public function inscribirConCodigo(Request $request, $idCurso)
     {
-        $request->validate(['codigo_invitacion' => 'required|string']);
         $curso = Curso::findOrFail($idCurso);
-        if ($curso->codigo_invitacion !== $request->codigo_invitacion) {
-            return $this->errorResponse('Código de invitación incorrecto', 400);
-        }
         $usuario = $request->user();
         // Validar que sea estudiante
         if (!$usuario->hasRole('estudiante')) {
-            return $this->errorResponse('Solo los estudiantes pueden inscribirse con código', 400);
+            return $this->errorResponse('Solo los estudiantes pueden inscribirse', 400);
         }
         // Validar si ya está inscrito
         if ($curso->alumnos()->where('users.id', $usuario->id)->exists()) {
             return $this->errorResponse('Ya estás inscrito en el curso', 409);
         }
         $curso->alumnos()->attach($usuario->id, ['tipo_acceso' => 'invitacion']);
-        // NUEVO: Crear inscripción en la tabla inscripciones si no existe
+        // Crear inscripción en la tabla inscripciones si no existe
         \App\Models\Inscripcion::firstOrCreate(
             ['user_id' => $usuario->id, 'curso_id' => $curso->id],
             ['estado' => 'activo', 'fecha_inscripcion' => now(), 'progreso' => 0]
         );
-        return $this->successResponse(null, 'Inscripción exitosa con código de invitación');
+        return $this->successResponse(null, 'Inscripción exitosa');
     }
 } 
