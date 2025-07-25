@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\AsesoriaController;
 // Rutas de autenticación
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('auth/google-login', [AuthController::class, 'googleLogin']);
 
 // Rutas públicas de consulta
 Route::apiResource('cursos', CursoController::class)->only(['index', 'show']);
