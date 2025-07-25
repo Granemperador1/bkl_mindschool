@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Mail;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -130,5 +131,27 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Sesión cerrada exitosamente'
         ]);
+    }
+
+    public function googleLogin(Request $request)
+    {
+        try {
+            $token = $request->input('credential') ?? $request->input('token');
+            if (!$token) {
+                return response()->json(['error' => 'No token provided'], 400);
+            }
+
+            $googleUser = Socialite::driver('google')->stateless()->userFromToken($token);
+
+            // Aquí puedes buscar o crear el usuario en tu base de datos
+            // $user = User::firstOrCreate([...]);
+
+            return response()->json([
+                'message' => 'Google login successful',
+                'user' => $googleUser,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 } 
