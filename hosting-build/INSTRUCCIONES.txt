@@ -1,0 +1,20 @@
+🚀 INSTRUCCIONES PARA SUBIR A HOSTINGER
+
+1. Sube TODOS los archivos de esta carpeta a public_html/
+2. Asegúrate de que index.html esté en la raíz de public_html/
+3. Verifica que el archivo .htaccess esté presente
+4. Actualiza config.js con tu dominio real
+
+📁 Estructura esperada en Hostinger:
+public_html/
+├── index.html
+├── assets/
+├── .htaccess
+└── config.js
+
+🔧 Si tienes problemas:
+- Verifica permisos de archivos (644 para archivos, 755 para carpetas)
+- Revisa logs de error en el panel de Hostinger
+- Asegúrate de que mod_rewrite esté habilitado
+
+📞 Soporte: https://github.com/Granemperador1/bkl_mindschool.git
