@@ -1,22 +1,23 @@
 // Sistema de diseño estandarizado para MindSchool
-// Tema oscuro moderno con acentos azules
+// Tema minimalista con blanco, azul y naranja
 
 export const COLORS = {
   // Colores principales
   primary: "#2563EB", // Azul principal
-  secondary: "#3B82F6", // Azul secundario
-  accent: "#60A5FA", // Azul claro para acentos
+  secondary: "#F97316", // Naranja principal
+  accent: "#3B82F6", // Azul secundario
 
   // Colores de fondo
-  background: "#0F172A", // Fondo principal muy oscuro
-  surface: "#1E293B", // Superficies de tarjetas
-  surfaceLight: "#334155", // Superficies más claras
-  surfaceHover: "#475569", // Hover states
+  background: "#FFFFFF", // Fondo principal blanco
+  surface: "#FFFFFF", // Superficies de tarjetas
+  surfaceLight: "#F8FAFC", // Superficies más claras
+  surfaceHover: "#F1F5F9", // Hover states
 
   // Colores de texto
-  text: "#F8FAFC", // Texto principal
-  textSecondary: "#CBD5E1", // Texto secundario
+  text: "#1E293B", // Texto principal oscuro
+  textSecondary: "#64748B", // Texto secundario
   textMuted: "#94A3B8", // Texto atenuado
+  textLight: "#FFFFFF", // Texto claro para fondos oscuros
 
   // Colores de estado
   success: "#10B981", // Verde para éxito
@@ -25,17 +26,17 @@ export const COLORS = {
   info: "#3B82F6", // Azul para información
 
   // Colores de borde
-  border: "#334155",
-  borderLight: "#475569",
+  border: "#E2E8F0",
+  borderLight: "#F1F5F9",
 
   // Gradientes
   gradientPrimary: "linear-gradient(135deg, #2563EB 0%, #3B82F6 100%)",
-  gradientSurface: "linear-gradient(135deg, #1E293B 0%, #334155 100%)",
-  gradientBackground: "linear-gradient(135deg, #0F172A 0%, #1E293B 100%)",
+  gradientSecondary: "linear-gradient(135deg, #F97316 0%, #FB923C 100%)",
+  gradientBackground: "linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%)",
 
   // Overlays
-  overlay: "rgba(15, 23, 42, 0.8)",
-  overlayLight: "rgba(15, 23, 42, 0.6)",
+  overlay: "rgba(0, 0, 0, 0.5)",
+  overlayLight: "rgba(0, 0, 0, 0.3)",
 };
 
 export const FONTS = {

@@ -34,12 +34,15 @@ import EstudianteReservaAsesoria from "./componentes/Asesorias/EstudianteReserva
 import PerfilUsuario from "./pages/PerfilUsuario";
 import ProfesorGestionCurso from "./pages/ProfesorGestionCurso";
 import ProfesorEstudiantes from "./pages/ProfesorEstudiantes";
+import SeleccionTipoUsuario from "./pages/SeleccionTipoUsuario";
+import PagoProfesor from "./pages/PagoProfesor";
+import PagoEstudiante from "./pages/PagoEstudiante";
 
 // Layout base para la aplicación
 function AppContent() {
   const location = useLocation();
-  // Ocultar Navbar en login, registro y bienvenida
-  const hideNavbar = ["/login", "/registro", "/"].includes(location.pathname);
+  // Ocultar Navbar en login, registro, bienvenida y páginas de pago
+  const hideNavbar = ["/login", "/registro", "/", "/pago-estudiante", "/pago-profesor"].includes(location.pathname);
 
   return (
     <div
@@ -55,6 +58,11 @@ function AppContent() {
           {/* Rutas públicas */}
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
+
+          {/* Rutas de selección de tipo de usuario y pagos */}
+          <Route path="/seleccion-tipo" element={<SeleccionTipoUsuario />} />
+          <Route path="/pago-profesor" element={<PagoProfesor />} />
+          <Route path="/pago-estudiante" element={<PagoEstudiante />} />
 
           {/* Redirección automática según rol */}
           <Route path="/" element={<Bienvenida />} />

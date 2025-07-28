@@ -39,20 +39,6 @@ class AuthController extends Controller
             ], 422);
         }
 
-        // Ignorar cualquier valor de 'role' recibido y asignar siempre 'estudiante'
-        // (ya está implementado: no se usa $request->role en ningún momento)
-        // Solo para mayor claridad, eliminamos cualquier referencia a 'role' en la validación
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => [
-                'required',
-                'string',
-                'min:8',
-            ],
-            // 'role' => 'prohibido', // No se valida ni se usa
-        ]);
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,

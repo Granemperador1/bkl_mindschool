@@ -65,10 +65,7 @@ const animatedBg = {
   width: "100vw",
   height: "100vh",
   zIndex: 0,
-  background:
-    "linear-gradient(270deg, #2563EB, #64748B, #F59E0B, #10B981, #2563EB)",
-  backgroundSize: "1200% 1200%",
-  animation: "gradientBG 18s ease-in-out infinite",
+  background: "#FFFFFF",
 };
 
 const keyframes = `
@@ -186,9 +183,9 @@ const Login = () => {
           className="login-form-card"
           style={{
             background: COLORS.surface,
-            borderRadius: BORDER_RADIUS["2xl"],
-            boxShadow: SHADOWS["2xl"],
-            padding: `${SPACING[10]} ${SPACING[8]}`,
+            borderRadius: "16px",
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+            padding: "48px 40px",
             width: "100%",
             maxWidth: "480px",
             textAlign: "center",
@@ -197,8 +194,7 @@ const Login = () => {
             alignItems: "center",
             justifyContent: "center",
             zIndex: 2,
-            border: `1px solid ${COLORS.border}`,
-            backdropFilter: "blur(10px)",
+            border: "1px solid #E2E8F0",
             animation: "fadeIn 0.5s ease-out",
           }}
         >
@@ -231,13 +227,13 @@ const Login = () => {
           <h1
             style={{
               color: COLORS.primary,
-              fontWeight: FONT_WEIGHTS.extrabold,
-              fontSize: FONT_SIZES["4xl"],
-              margin: `0 0 ${SPACING[3]} 0`,
+              fontWeight: "700",
+              fontSize: "32px",
+              margin: "0 0 16px 0",
               fontFamily: FONTS.heading,
-              letterSpacing: "1px",
-              textShadow: `0 2px 8px ${COLORS.primary}22`,
+              letterSpacing: "0.5px",
               lineHeight: 1.2,
+              textTransform: "uppercase"
             }}
           >
             {SCHOOL_NAME}
@@ -303,18 +299,18 @@ const Login = () => {
                 onChange={handleInputChange}
                 style={{
                   width: "100%",
-                  padding: `${SPACING[3]} ${SPACING[4]}`,
-                  border: `1.5px solid ${errors.email && touched.email ? COLORS.error : COLORS.border}`,
-                  borderRadius: BORDER_RADIUS.lg,
-                  fontSize: FONT_SIZES.base,
+                  padding: "16px 20px",
+                  border: `2px solid ${errors.email && touched.email ? COLORS.error : "#E2E8F0"}`,
+                  borderRadius: "8px",
+                  fontSize: "16px",
                   fontFamily: FONTS.main,
-                  background: COLORS.surfaceLight,
+                  background: "#FFFFFF",
                   color: COLORS.text,
                   outline: "none",
-                  transition: TRANSITIONS.base,
+                  transition: "all 0.3s ease",
                   boxSizing: "border-box",
-                  fontWeight: FONT_WEIGHTS.medium,
-                  letterSpacing: 0.2,
+                  fontWeight: "500",
+                  letterSpacing: "0.3px",
                 }}
                 onFocus={(e) => {
                   e.target.style.borderColor = COLORS.primary;
@@ -356,19 +352,19 @@ const Login = () => {
                 onChange={handleInputChange}
                 style={{
                   width: "100%",
-                  padding: `${SPACING[3]} ${SPACING[4]}`,
+                  padding: "16px 20px",
                   paddingRight: "48px",
-                  border: `1.5px solid ${errors.password && touched.password ? COLORS.error : COLORS.border}`,
-                  borderRadius: BORDER_RADIUS.lg,
-                  fontSize: FONT_SIZES.base,
+                  border: `2px solid ${errors.password && touched.password ? COLORS.error : "#E2E8F0"}`,
+                  borderRadius: "8px",
+                  fontSize: "16px",
                   fontFamily: FONTS.main,
-                  background: COLORS.surfaceLight,
+                  background: "#FFFFFF",
                   color: COLORS.text,
                   outline: "none",
-                  transition: TRANSITIONS.base,
+                  transition: "all 0.3s ease",
                   boxSizing: "border-box",
-                  fontWeight: FONT_WEIGHTS.medium,
-                  letterSpacing: 0.2,
+                  fontWeight: "500",
+                  letterSpacing: "0.3px",
                 }}
                 onFocus={(e) => {
                   e.target.style.borderColor = COLORS.primary;
@@ -410,25 +406,31 @@ const Login = () => {
   aria-label={loading ? "Iniciando sesión" : "Iniciar sesión"}
   style={{
     width: "100%",
-    background: COLORS.gradientPrimary,
-    color: COLORS.text,
+    background: COLORS.primary,
+    color: "#FFFFFF",
     border: "none",
-    borderRadius: BORDER_RADIUS.lg,
-    padding: `${SPACING[3]} ${SPACING[6]}`,
-    fontSize: FONT_SIZES.base,
-    fontWeight: FONT_WEIGHTS.semibold,
+    borderRadius: "8px",
+    padding: "16px 32px",
+    fontSize: "16px",
+    fontWeight: "600",
     cursor: loading ? "not-allowed" : "pointer",
-    transition: TRANSITIONS.base,
-    boxShadow: SHADOWS.md,
+    transition: "all 0.3s ease",
     fontFamily: FONTS.main,
-    outline: loading ? `2px solid ${COLORS.primary}` : undefined,
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
     opacity: loading ? 0.8 : 1,
   }}
-  onFocus={e => {
-    e.target.style.boxShadow = `0 0 0 3px ${COLORS.primary}33`;
+  onMouseEnter={e => {
+    if (!loading) {
+      e.target.style.transform = "translateY(-2px)";
+      e.target.style.boxShadow = "0 8px 24px rgba(37, 99, 235, 0.3)";
+    }
   }}
-  onBlur={e => {
-    e.target.style.boxShadow = SHADOWS.md;
+  onMouseLeave={e => {
+    if (!loading) {
+      e.target.style.transform = "translateY(0)";
+      e.target.style.boxShadow = "none";
+    }
   }}
 >
   {loading ? "Iniciando sesión..." : "Iniciar Sesión"}

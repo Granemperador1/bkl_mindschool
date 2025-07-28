@@ -30,9 +30,9 @@ const CartaBienvenidaModal = ({ open, mensaje, onClose }) => {
       animation: "fadeInBg 0.4s"
     }}>
       <div style={{
-        background: "#23272f",
-        borderRadius: 18,
-        boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
+        background: COLORS.surface,
+        borderRadius: BORDER_RADIUS.xl,
+        boxShadow: SHADOWS["2xl"],
         padding: 40,
         maxWidth: 480,
         width: "90%",
@@ -40,25 +40,25 @@ const CartaBienvenidaModal = ({ open, mensaje, onClose }) => {
         textAlign: "center",
         animation: "cartaAnimada 0.7s cubic-bezier(.68,-0.55,.27,1.55)"
       }}>
-        <div style={{ fontSize: 60, marginBottom: 12, color: "#007bff" }}>📬</div>
-        <h2 style={{ color: "#fff", marginBottom: 18, fontWeight: 700 }}>¡Bienvenido a MindSchool!</h2>
-        <div style={{ color: "#b0b8c1", whiteSpace: "pre-line", fontSize: 17, marginBottom: 24, lineHeight: 1.6 }}>
+        <div style={{ fontSize: 60, marginBottom: 12, color: COLORS.primary }}>📬</div>
+        <h2 style={{ color: COLORS.text, marginBottom: 18, fontWeight: 700 }}>¡Bienvenido a MindSchool!</h2>
+        <div style={{ color: COLORS.textSecondary, whiteSpace: "pre-line", fontSize: 17, marginBottom: 24, lineHeight: 1.6 }}>
           {mensaje}
         </div>
         <button onClick={onClose} style={{
-          background: "#007bff",
-          color: "#fff",
+          background: COLORS.gradientPrimary,
+          color: COLORS.textLight,
           border: "none",
-          borderRadius: 8,
+          borderRadius: BORDER_RADIUS.lg,
           padding: "12px 32px",
           fontWeight: 600,
           fontSize: 17,
           cursor: "pointer",
           marginTop: 8,
-          transition: "background 0.2s"
+          transition: "all 0.2s"
         }}
-        onMouseEnter={e => e.target.style.background = "#0056b3"}
-        onMouseLeave={e => e.target.style.background = "#007bff"}
+        onMouseEnter={e => e.target.style.transform = "translateY(-1px)"}
+        onMouseLeave={e => e.target.style.transform = "translateY(0)"}
         >Cerrar</button>
         <style>{`
           @keyframes cartaAnimada {

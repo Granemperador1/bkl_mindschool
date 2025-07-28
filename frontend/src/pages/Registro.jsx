@@ -15,6 +15,7 @@ import {
 import videoSorpresa from "../assets/videos/sorpresa.mp4";
 import { GoogleLogin } from '@react-oauth/google';
 import EstudianteDashboard from './EstudianteDashboard';
+import SeleccionTipoUsuario from './SeleccionTipoUsuario';
 
 const EyeIcon = ({ visible, onClick }) => (
   <span
@@ -66,7 +67,7 @@ const animatedBg = {
   height: "100vh",
   zIndex: 0,
   background:
-    "linear-gradient(270deg, #2563EB, #64748B, #F59E0B, #10B981, #2563EB)",
+    "linear-gradient(270deg, #2563EB, #F97316, #3B82F6, #FB923C, #2563EB)",
   backgroundSize: "1200% 1200%",
   animation: "gradientBG 18s ease-in-out infinite",
 };
@@ -141,7 +142,8 @@ const Registro = () => {
       if (success) {
         setTimeout(() => {
           setShowSorpresa(false);
-          setShowPaywall(true); // Mostrar modal de pago tras registro exitoso
+          // Redirigir a la página de pago después del registro exitoso
+          navigate('/pago-estudiante');
         }, 2000);
         return;
       }
@@ -217,7 +219,7 @@ const Registro = () => {
         </div>
       )}
       {/* MODAL DE WIZARD DE REGISTRO Y PAGO */}
-      {showPaywall && <EstudianteDashboard showPaywallProp={true} />}
+      {showPaywall && <SeleccionTipoUsuario />}
       <div
         className="registro-form-container"
         style={{
@@ -571,7 +573,10 @@ const Registro = () => {
                     });
                     if (!res.ok) throw new Error("No se pudo registrar con Google");
                     setGoogleSuccess("¡Registro con Google exitoso!");
-                    // Redirige o actualiza el estado según tu flujo
+                    // Redirigir a la página de pago después del registro con Google
+                    setTimeout(() => {
+                      navigate('/pago-estudiante');
+                    }, 1500);
                   } catch (err) {
                     setGoogleError("Error al registrarse con Google. Intenta de nuevo.");
                   } finally {
