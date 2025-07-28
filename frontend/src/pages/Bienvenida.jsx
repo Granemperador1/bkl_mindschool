@@ -361,287 +361,628 @@ const Bienvenida = () => {
     }}>
       
 
-      {/* Animación global para fade-in */}
+      {/* Estilos optimizados para móvil */}
       <style>{keyframes}
       {`
-        .mascota-landing {
-          position: absolute;
-          top: 10px;
-          left: 24px;
-          z-index: 10;
+        /* Estilos base */
+        .mobile-optimized {
+          box-sizing: border-box;
         }
-        @media (max-width: 900px) {
-          .mascota-landing {
-            left: 10px;
-            top: 6px;
-            width: 60px !important;
-            height: 60px !important;
+        
+        /* Hero section responsive */
+        .hero-section {
+          min-height: 100vh;
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+        }
+        
+        .hero-title {
+          font-size: clamp(2rem, 8vw, 4.5rem);
+          font-weight: 900;
+          line-height: 1.1;
+          margin-bottom: 20px;
+        }
+        
+        .hero-subtitle {
+          font-size: clamp(1rem, 4vw, 1.5rem);
+          margin-bottom: 40px;
+          max-width: 600px;
+        }
+        
+        .hero-buttons {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          width: 100%;
+          max-width: 400px;
+        }
+        
+        .hero-button {
+          padding: 16px 32px;
+          font-size: clamp(1rem, 4vw, 1.2rem);
+          font-weight: 700;
+          border-radius: 12px;
+          border: none;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+        
+        .hero-button-primary {
+          background: #FF6B35;
+          color: #FFFFFF;
+        }
+        
+        .hero-button-secondary {
+          background: transparent;
+          color: #FF6B35;
+          border: 2px solid #FF6B35;
+        }
+        
+        /* Cursos section responsive */
+        .cursos-section {
+          padding: 60px 20px;
+        }
+        
+        .cursos-title {
+          font-size: clamp(1.5rem, 6vw, 2.25rem);
+          text-align: center;
+          margin-bottom: 40px;
+        }
+        
+        .cursos-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 24px;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+        
+        .curso-card {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 16px;
+          padding: 24px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+        
+        .curso-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 24px rgba(255, 107, 53, 0.2);
+        }
+        
+        .curso-image {
+          width: 100%;
+          height: 160px;
+          object-fit: cover;
+          border-radius: 8px;
+          margin-bottom: 16px;
+        }
+        
+        .curso-title {
+          font-size: clamp(1rem, 4vw, 1.125rem);
+          font-weight: 600;
+          margin-bottom: 8px;
+          color: #FFFFFF;
+        }
+        
+        .curso-description {
+          font-size: clamp(0.875rem, 3vw, 1rem);
+          color: rgba(255, 255, 255, 0.8);
+          line-height: 1.5;
+          margin-bottom: 12px;
+        }
+        
+        .curso-instructor {
+          font-size: clamp(0.75rem, 3vw, 0.875rem);
+          color: rgba(255, 255, 255, 0.6);
+          font-style: italic;
+        }
+        
+        .curso-precio {
+          font-size: clamp(0.875rem, 3vw, 1rem);
+          color: #FF6B35;
+          font-weight: 600;
+          margin-top: 8px;
+        }
+        
+        /* Beneficios section responsive */
+        .beneficios-section {
+          padding: 60px 20px;
+          background: #FFFFFF;
+        }
+        
+        .beneficios-title {
+          font-size: clamp(1.5rem, 6vw, 2.25rem);
+          text-align: center;
+          margin-bottom: 40px;
+          color: #1E293B;
+        }
+        
+        .beneficios-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 20px;
+          max-width: 1000px;
+          margin: 0 auto;
+        }
+        
+        .beneficio-item {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding: 20px;
+          background: rgba(30, 41, 59, 0.05);
+          border-radius: 12px;
+          border: 1px solid rgba(30, 41, 59, 0.1);
+          transition: all 0.3s ease;
+        }
+        
+        .beneficio-icon {
+          font-size: clamp(1.5rem, 5vw, 2rem);
+          min-width: 40px;
+        }
+        
+        .beneficio-text {
+          font-size: clamp(0.875rem, 3vw, 1rem);
+          color: #1E293B;
+          font-weight: 500;
+          line-height: 1.4;
+        }
+        
+        /* Sobre nosotros section responsive */
+        .sobre-section {
+          padding: 60px 20px;
+          background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+        }
+        
+        .sobre-container {
+          display: flex;
+          flex-direction: column;
+          gap: 40px;
+          max-width: 1000px;
+          margin: 0 auto;
+          align-items: center;
+        }
+        
+        .sobre-image {
+          width: 200px;
+          height: 200px;
+          background: #FF6B35;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #FFFFFF;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        .sobre-content {
+          text-align: center;
+          color: #FFFFFF;
+        }
+        
+        .sobre-title {
+          font-size: clamp(1.5rem, 6vw, 2.25rem);
+          color: #FF6B35;
+          margin-bottom: 20px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        .sobre-text {
+          font-size: clamp(0.875rem, 3vw, 1rem);
+          line-height: 1.6;
+          margin-bottom: 16px;
+        }
+        
+        /* Contacto section responsive */
+        .contacto-section {
+          padding: 40px 20px;
+          max-width: 800px;
+          margin: 0 auto;
+        }
+        
+        .contacto-container {
+          background: #FFFFFF;
+          border-radius: 16px;
+          box-shadow: 0 2px 12px rgba(255, 107, 53, 0.2);
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .contacto-video {
+          width: 100%;
+          height: 200px;
+          object-fit: cover;
+          background: #222e3a;
+        }
+        
+        .contacto-form {
+          padding: 24px;
+        }
+        
+        .contacto-title {
+          font-size: clamp(1.25rem, 5vw, 1.5rem);
+          color: #000000;
+          margin-bottom: 20px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          text-align: center;
+        }
+        
+        .contacto-input {
+          width: 100%;
+          padding: 12px;
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+          margin-bottom: 12px;
+          font-size: clamp(0.875rem, 3vw, 1rem);
+        }
+        
+        .contacto-textarea {
+          width: 100%;
+          padding: 12px;
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+          margin-bottom: 12px;
+          font-size: clamp(0.875rem, 3vw, 1rem);
+          resize: vertical;
+          min-height: 80px;
+        }
+        
+        .contacto-button {
+          width: 100%;
+          background: #FF6B35;
+          color: #FFFFFF;
+          border: none;
+          border-radius: 8px;
+          padding: 12px;
+          font-weight: 600;
+          font-size: clamp(0.875rem, 3vw, 1rem);
+          cursor: pointer;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        /* Footer responsive */
+        .footer {
+          background: #000000;
+          color: #FFFFFF;
+          padding: 32px 20px 18px;
+          text-align: center;
+          border-top: 2px solid #333333;
+        }
+        
+        .footer-heart {
+          color: #FF6B35;
+          font-size: 22px;
+          vertical-align: middle;
+        }
+        
+        .footer-text {
+          font-size: clamp(0.875rem, 3vw, 1rem);
+          margin-bottom: 12px;
+        }
+        
+        .footer-links {
+          display: flex;
+          justify-content: center;
+          gap: 16px;
+          flex-wrap: wrap;
+          font-size: clamp(0.75rem, 3vw, 0.875rem);
+        }
+        
+        .footer-link {
+          color: #FF6B35;
+          text-decoration: none;
+        }
+        
+        /* Easter egg responsive */
+        .easter-egg-button {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          z-index: 10000;
+          background: linear-gradient(90deg, #FF6B35 0%, #E55A2B 100%);
+          border: none;
+          border-radius: 50%;
+          width: 56px;
+          height: 56px;
+          box-shadow: 0 4px 18px rgba(255, 107, 53, 0.4);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          animation: eggPulse 1.2s infinite alternate;
+        }
+        
+        .easter-egg-modal {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.75);
+          z-index: 10001;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+        }
+        
+        .easter-egg-content {
+          background: #FFFFFF;
+          border-radius: 20px;
+          padding: 32px 24px;
+          max-width: 320px;
+          width: 100%;
+          text-align: center;
+          animation: eggPop 0.7s cubic-bezier(.4,2,.6,1);
+        }
+        
+        .easter-egg-message {
+          color: #FF6B35;
+          font-weight: 900;
+          font-size: clamp(1.125rem, 4vw, 1.5rem);
+          margin: 18px 0 8px 0;
+        }
+        
+        .easter-egg-close {
+          margin-top: 18px;
+          background: #FF6B35;
+          color: #FFFFFF;
+          border: none;
+          border-radius: 12px;
+          padding: 10px 24px;
+          font-weight: 700;
+          font-size: clamp(0.875rem, 3vw, 1rem);
+          cursor: pointer;
+          box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+        }
+        
+        /* Animaciones */
+        @keyframes eggPulse { 
+          0% { box-shadow: 0 0 0 rgba(255, 107, 53, 0); } 
+          100% { box-shadow: 0 0 24px rgba(255, 107, 53, 0.6); } 
+        }
+        
+        @keyframes fadeInEgg { 
+          0% { opacity: 0; } 
+          100% { opacity: 1; } 
+        }
+        
+        @keyframes eggPop { 
+          0% { transform: scale(0.7); opacity: 0; } 
+          100% { transform: scale(1); opacity: 1; } 
+        }
+        
+        /* Media queries específicos para móvil */
+        @media (max-width: 768px) {
+          .hero-section {
+            padding: 16px;
+            min-height: 90vh;
+          }
+          
+          .hero-buttons {
+            gap: 12px;
+          }
+          
+          .hero-button {
+            padding: 14px 24px;
+          }
+          
+          .cursos-section,
+          .beneficios-section,
+          .sobre-section {
+            padding: 40px 16px;
+          }
+          
+          .cursos-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+          
+          .beneficios-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+          
+          .sobre-container {
+            gap: 24px;
+          }
+          
+          .sobre-image {
+            width: 150px;
+            height: 150px;
+            font-size: 14px;
+          }
+          
+          .contacto-section {
+            padding: 20px 16px;
+          }
+          
+          .contacto-container {
+            border-radius: 12px;
+          }
+          
+          .contacto-video {
+            height: 150px;
+          }
+          
+          .contacto-form {
+            padding: 20px;
+          }
+          
+          .footer {
+            padding: 24px 16px 16px;
+          }
+          
+          .footer-links {
+            gap: 12px;
+          }
+          
+          .easter-egg-button {
+            width: 48px;
+            height: 48px;
+            bottom: 16px;
+            right: 16px;
           }
         }
-        @media (max-width: 900px) {
-  .landing-header {
-    max-width: 98vw !important;
-    border-radius: 1.2rem !important;
-    padding: 6px 2vw 0 2vw !important;
-  }
-  .landing-title {
-    font-size: 1.2rem !important;
-    max-width: 90vw !important;
-    margin-bottom: 2px !important;
-  }
-  .frase-motivacional {
-    font-size: 1.01rem !important;
-    min-height: 22px !important;
-    max-width: 92vw !important;
-  }
-  .landing-main, .landing-hero, .landing-cards {
-    max-width: 98vw !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-  .landing-hero {
-    flex-direction: column !important;
-    gap: 18px !important;
-    align-items: stretch !important;
-    padding: 0 0 12px 0 !important;
-  }
-  .landing-hero-video {
-    min-width: 0 !important;
-    max-width: 100vw !important;
-    height: 160px !important;
-    border-radius: 14px !important;
-  }
-  .landing-hero-content {
-    min-width: 0 !important;
-    max-width: 100vw !important;
-    padding: 0 2vw !important;
-  }
-  .landing-hero-content h1 {
-    font-size: 1.45rem !important;
-    line-height: 1.12 !important;
-  }
-  .landing-hero-content p {
-    font-size: 1.01rem !important;
-    margin-bottom: 10px !important;
-  }
-  .landing-buttons {
-    flex-direction: column !important;
-    gap: 14px !important;
-    width: 100% !important;
-    align-items: center !important;
-    margin-top: 20px !important;
-  }
-  .landing-buttons button {
-    width: 96vw !important;
-    min-width: 0 !important;
-    font-size: 1.07rem !important;
-    padding: 14px 0 !important;
-  }
-  .landing-card {
-    min-width: 0 !important;
-    max-width: 98vw !important;
-    margin: 0 auto 10px auto !important;
-    padding: 12px 8px !important;
-    border-radius: 12px !important;
-  }
-  .landing-form {
-    max-width: 98vw !important;
-    padding: 10px 2vw !important;
-    border-radius: 14px !important;
-  }
-}
-@media (max-width: 600px) {
-          .landing-header {
-            padding: 4px 1vw 0 1vw !important;
+        
+        @media (max-width: 480px) {
+          .hero-section {
+            padding: 12px;
+            min-height: 85vh;
           }
-          .landing-title {
-            font-size: 1rem !important;
+          
+          .hero-title {
+            margin-bottom: 16px;
           }
-          .landing-hero {
-            gap: 10px !important;
+          
+          .hero-subtitle {
+            margin-bottom: 32px;
           }
-          .card-curso {
-            min-width: 0 !important;
-            max-width: 98vw !important;
-            padding: 10px 2vw !important;
+          
+          .cursos-section,
+          .beneficios-section,
+          .sobre-section {
+            padding: 32px 12px;
+          }
+          
+          .curso-card {
+            padding: 16px;
+          }
+          
+          .beneficio-item {
+            padding: 16px;
+          }
+          
+          .sobre-image {
+            width: 120px;
+            height: 120px;
+            font-size: 12px;
+          }
+          
+          .contacto-form {
+            padding: 16px;
+          }
+          
+          .easter-egg-button {
+            width: 44px;
+            height: 44px;
+            bottom: 12px;
+            right: 12px;
           }
         }
       `}</style>
       
-      {/* PÁGINA COMPLETA FLUIDA */}
-      <div style={{
+      {/* PÁGINA COMPLETA OPTIMIZADA PARA MÓVIL */}
+      <div className="mobile-optimized" style={{
         width: "100%",
         background: "linear-gradient(180deg, #0F172A 0%, #1E293B 25%, #334155 50%, #64748B 75%, #F8FAFC 100%)",
         minHeight: "100vh"
       }}>
         
         {/* HERO SECTION */}
-        <section style={{
-          width: "100%",
-          height: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "relative",
-          overflow: "hidden"
-        }}>
-        {/* Background Brand */}
-        <div style={{
-          position: "absolute",
-          top: "40px",
-          left: "40px",
-          fontSize: "48px",
-          fontWeight: "900",
-          color: "rgba(255, 255, 255, 0.1)",
-          fontFamily: "Inter, sans-serif",
-          letterSpacing: "2px"
-        }}>
-          MIND SCHOOL
-        </div>
-        
-        {/* Main Content */}
-        <div style={{
-          textAlign: "center",
-          maxWidth: "800px",
-          padding: "0 40px"
-        }}>
-          {/* Main Slogan */}
+        <section className="hero-section">
+          {/* Background Brand */}
           <div style={{
-            marginBottom: "60px"
+            position: "absolute",
+            top: "40px",
+            left: "40px",
+            fontSize: "clamp(24px, 6vw, 48px)",
+            fontWeight: "900",
+            color: "rgba(255, 255, 255, 0.1)",
+            fontFamily: "Inter, sans-serif",
+            letterSpacing: "2px"
           }}>
-            <h1 style={{
-              fontSize: "72px",
-              fontWeight: "900",
-              color: "#FFFFFF",
-              margin: "0 0 8px 0",
-              lineHeight: "1.1",
-              letterSpacing: "-2px"
-            }}>
-              ¡TRANSFORMA
-            </h1>
-            <h1 style={{
-              fontSize: "72px",
-              fontWeight: "900",
-              color: "#FF6B35",
-              margin: "0 0 8px 0",
-              lineHeight: "1.1",
-              letterSpacing: "-2px"
-            }}>
-              TU FUTURO
-            </h1>
-            <h1 style={{
-              fontSize: "72px",
-              fontWeight: "900",
-              color: "#FFFFFF",
-              margin: "0",
-              lineHeight: "1.1",
-              letterSpacing: "-2px"
-            }}>
-              HOY!
-            </h1>
+            MIND SCHOOL
           </div>
           
-          {/* Changing Phrases */}
+          {/* Main Content */}
           <div style={{
-            marginBottom: "60px",
-            minHeight: "80px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
+            textAlign: "center",
+            maxWidth: "800px",
+            padding: "0 20px",
+            zIndex: 1,
+            position: "relative"
           }}>
-            <p style={{
-              fontSize: "24px",
-              fontWeight: "600",
-              color: "#FFFFFF",
-              margin: "0",
-              opacity: desaparecer ? 0 : 1,
-              transition: "opacity 0.8s ease",
-              textAlign: "center",
-              maxWidth: "600px",
-              lineHeight: "1.4"
+            {/* Main Slogan */}
+            <div style={{ marginBottom: "40px" }}>
+              <h1 className="hero-title" style={{ color: "#FFFFFF", margin: "0 0 8px 0" }}>
+                ¡TRANSFORMA
+              </h1>
+              <h1 className="hero-title" style={{ color: "#FF6B35", margin: "0 0 8px 0" }}>
+                TU FUTURO
+              </h1>
+              <h1 className="hero-title" style={{ color: "#FFFFFF", margin: "0" }}>
+                HOY!
+              </h1>
+            </div>
+            
+            {/* Changing Phrases */}
+            <div style={{
+              marginBottom: "40px",
+              minHeight: "60px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
             }}>
-              {frasesExito[fraseActual]}
-            </p>
-          </div>
-          
-          {/* Call to Action Buttons */}
-          <div style={{
-            display: "flex",
-            gap: "24px",
-            justifyContent: "center",
-            flexWrap: "wrap"
-          }}>
-            <button 
-              onClick={() => navigate('/registro')}
-              style={{
-                background: "#FF6B35",
+              <p className="hero-subtitle" style={{
                 color: "#FFFFFF",
-                border: "none",
-                padding: "18px 48px",
-                fontSize: "22px",
-                fontWeight: "700",
-                cursor: "pointer",
-                textTransform: "uppercase",
-                letterSpacing: "1px",
-                transition: "all 0.3s ease",
-                borderRadius: "16px"
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = "#E55A2B";
-                e.target.style.transform = "scale(1.05)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = "#FF6B35";
-                e.target.style.transform = "scale(1)";
+                margin: "0",
+                opacity: desaparecer ? 0 : 1,
+                transition: "opacity 0.8s ease",
+                textAlign: "center",
+                maxWidth: "600px",
+                lineHeight: "1.4"
               }}>
-              Regístrate Gratis
-            </button>
-            <button 
-              onClick={() => navigate('/login')}
-              style={{
-                background: "none",
-                color: "#FF6B35",
-                border: "2px solid #FF6B35",
-                padding: "18px 40px",
-                fontSize: "20px",
-                fontWeight: "700",
-                cursor: "pointer",
-                textTransform: "uppercase",
-                letterSpacing: "1px",
-                transition: "all 0.3s ease",
-                borderRadius: "16px"
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = "scale(1.05)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = "scale(1)";
-              }}>
-              Inicia Sesión
-            </button>
+                {frasesExito[fraseActual]}
+              </p>
+            </div>
+            
+            {/* Call to Action Buttons */}
+            <div className="hero-buttons">
+              <button 
+                className="hero-button hero-button-primary"
+                onClick={() => navigate('/registro')}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "#E55A2B";
+                  e.target.style.transform = "scale(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "#FF6B35";
+                  e.target.style.transform = "scale(1)";
+                }}>
+                Regístrate Gratis
+              </button>
+              <button 
+                className="hero-button hero-button-secondary"
+                onClick={() => navigate('/login')}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = "scale(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = "scale(1)";
+                }}>
+                Inicia Sesión
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CURSOS DESTACADOS - Slider con BD */}
-      <section style={{ 
-        width: '100vw', 
-        padding: '80px 0', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center', 
-        gap: '40px' 
-      }}>
-        <h2 style={{ 
-          color: '#1E293B', 
-          fontWeight: '800', 
-          fontSize: '36px', 
-          marginBottom: '20px', 
-          letterSpacing: '1px',
-          textTransform: 'uppercase',
-          textAlign: 'center'
-        }}>
+      {/* CURSOS DESTACADOS - Optimizado para móvil */}
+      <section className="cursos-section">
+        <h2 className="cursos-title" style={{ color: '#FFFFFF' }}>
           Nuestros Cursos
         </h2>
         
@@ -651,123 +992,44 @@ const Bienvenida = () => {
             justifyContent: 'center',
             alignItems: 'center',
             minHeight: '200px',
-            color: '#64748B',
+            color: '#FFFFFF',
             fontSize: '18px'
           }}>
             Cargando cursos...
           </div>
         ) : cursosDB.length > 0 ? (
-          <div style={{
-            width: '100vw',
-            position: 'relative',
-            overflow: 'hidden'
-          }}>
-            {/* Contenedor del slider */}
-            <div style={{
-              display: 'flex',
-              transition: 'transform 0.8s ease-in-out',
-              transform: `translateX(-${currentSlide * 100}%)`,
-              gap: '40px',
-              padding: '0 40px'
-            }}>
-              {cursosDB.map((curso, idx) => (
-                <div 
-                  key={curso.id || idx} 
-                  className="card-curso" 
-                  style={{ 
-                    background: 'rgba(30, 41, 59, 0.05)', 
-                    borderRadius: '16px', 
-                    border: '1px solid rgba(30, 41, 59, 0.1)',
-                    padding: '32px', 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'center', 
-                    gap: '20px', 
-                    minHeight: 320, 
-                    width: 'calc(33.333% - 26.67px)', 
-                    minWidth: '320px',
-                    flexShrink: 0,
-                    transition: 'all 0.3s ease', 
-                    cursor: 'pointer',
-                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.1)',
-                    backdropFilter: 'blur(10px)'
+          <div className="cursos-grid">
+            {cursosDB.map((curso, idx) => (
+              <div 
+                key={curso.id || idx} 
+                className="curso-card"
+                onClick={() => navigate(`/curso/${curso.id}`)}
+              >
+                <img 
+                  src={curso.imagen_url || "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80"} 
+                  alt={curso.nombre} 
+                  className="curso-image"
+                  loading="lazy" 
+                  onError={(e) => {
+                    e.target.src = "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80";
                   }}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = 'translateY(-4px)';
-                    e.target.style.boxShadow = '0 8px 24px rgba(255, 107, 53, 0.2)';
-                    e.target.style.borderColor = '#FF6B35';
-                    e.target.style.background = 'rgba(30, 41, 59, 0.08)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = 'translateY(0)';
-                    e.target.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.1)';
-                    e.target.style.borderColor = 'rgba(30, 41, 59, 0.1)';
-                    e.target.style.background = 'rgba(30, 41, 59, 0.05)';
-                  }}
-                  onClick={() => navigate(`/curso/${curso.id}`)}
-                >
-                  <img 
-                    src={curso.imagen_url || "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80"} 
-                    alt={curso.nombre} 
-                    style={{ 
-                      width: '100%', 
-                      height: 120, 
-                      objectFit: 'cover', 
-                      borderRadius: '8px', 
-                      marginBottom: '8px' 
-                    }} 
-                    loading="lazy" 
-                    onError={(e) => {
-                      e.target.src = "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80";
-                    }}
-                  />
-                  <div style={{
-                    color: '#1E293B', 
-                    fontWeight: '600', 
-                    fontSize: '18px', 
-                    textAlign: 'center', 
-                    marginBottom: '8px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px'
-                  }}>
-                    {curso.nombre}
-                  </div>
-                  <div style={{ 
-                    color: '#64748B', 
-                    fontSize: '14px', 
-                    textAlign: 'center',
-                    lineHeight: '1.5',
-                    flex: 1
-                  }}>
-                    {curso.descripcion || 'Descripción no disponible'}
-                  </div>
-                  {curso.instructor && (
-                    <div style={{
-                      color: '#1E293B',
-                      fontWeight: '500',
-                      fontSize: '13px',
-                      textAlign: 'center',
-                      marginTop: '8px',
-                      fontStyle: 'italic'
-                    }}>
-                      {curso.instructor}
-                    </div>
-                  )}
-                  <div style={{
-                    color: '#FF6B35',
-                    fontWeight: '600',
-                    fontSize: '16px',
-                    marginTop: '8px'
-                  }}>
-                    {curso.precio === 'Gratis' ? 'Gratis' : (curso.precio ? `$${curso.precio}` : 'Gratis')}
-                  </div>
+                />
+                <div className="curso-title">
+                  {curso.nombre}
                 </div>
-              ))}
-            </div>
-
-
-
-
+                <div className="curso-description">
+                  {curso.descripcion || 'Descripción no disponible'}
+                </div>
+                {curso.instructor && (
+                  <div className="curso-instructor">
+                    {curso.instructor}
+                  </div>
+                )}
+                <div className="curso-precio">
+                  {curso.precio === 'Gratis' ? 'Gratis' : (curso.precio ? `$${curso.precio}` : 'Gratis')}
+                </div>
+              </div>
+            ))}
           </div>
         ) : (
           <div style={{
@@ -775,7 +1037,7 @@ const Bienvenida = () => {
             justifyContent: 'center',
             alignItems: 'center',
             minHeight: '200px',
-            color: '#64748B',
+            color: '#FFFFFF',
             fontSize: '18px'
           }}>
             Disfruta de nuestras materias especiales con maestros expertos.
@@ -783,457 +1045,172 @@ const Bienvenida = () => {
         )}
       </section>
 
-      {/* BENEFICIOS - Integrado */}
-      <section style={{ 
-        width: '100%', 
-        padding: '80px 24px', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center', 
-        gap: '40px' 
-      }}>
-        <h2 style={{ 
-          color: '#1E293B', 
-          fontWeight: '800', 
-          fontSize: '28px', 
-          marginBottom: '30px', 
-          letterSpacing: '1px',
-          textTransform: 'uppercase',
-          textAlign: 'center'
-        }}>
+      {/* BENEFICIOS - Optimizado para móvil */}
+      <section className="beneficios-section">
+        <h2 className="beneficios-title">
           ¿Por qué MindSchool?
         </h2>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
-          gap: '20px',
-          maxWidth: '1000px',
-          margin: '0 auto',
-          width: '100%'
-        }}>
+        <div className="beneficios-grid">
           {beneficios.map((b, i) => (
-            <div key={i} style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '16px',
-              padding: '20px',
-              background: 'rgba(30, 41, 59, 0.05)',
-              borderRadius: '12px',
-              border: '1px solid rgba(30, 41, 59, 0.1)',
-              transition: 'all 0.3s ease',
-              backdropFilter: 'blur(8px)',
-              minHeight: '70px'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 6px 20px rgba(255, 107, 53, 0.15)';
-              e.target.style.borderColor = '#FF6B35';
-              e.target.style.background = 'rgba(30, 41, 59, 0.08)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = 'none';
-              e.target.style.borderColor = 'rgba(30, 41, 59, 0.1)';
-              e.target.style.background = 'rgba(30, 41, 59, 0.05)';
-            }}
-            >
-              <div style={{
-                fontSize: '28px',
-                filter: 'none',
-                minWidth: '36px',
-                textAlign: 'center'
-              }}>
+            <div key={i} className="beneficio-item">
+              <div className="beneficio-icon">
                 {b.icon}
               </div>
-                              <span style={{ 
-                  color: '#1E293B', 
-                  fontSize: '15px', 
-                  fontWeight: '500',
-                  lineHeight: '1.4'
-                }}>
-                  {b.texto}
-                </span>
+              <span className="beneficio-text">
+                {b.texto}
+              </span>
             </div>
           ))}
         </div>
       </section>
 
 
-      {/* SOBRE NOSOTROS - Integrado */}
-      <section
-        style={{
-          width: "100%",
-          padding: "80px 24px",
-          display: "flex",
-          flexDirection: "row",
-          gap: "60px",
-          alignItems: "center",
-          justifyContent: "center",
-          flexWrap: "wrap"
-        }}
-     >
-       <div
-         style={{
-           flex: 1,
-           minWidth: 220,
-           maxWidth: 320,
-           display: "flex",
-           alignItems: "center",
-           justifyContent: "center",
-         }}
-       >
-         {/* Foto del equipo/historia */}
-         <div
-           style={{
-             width: 220,
-             height: 220,
-             background: "#FF6B35",
-             borderRadius: "12px",
-             border: "1px solid #333333",
-             display: "flex",
-             alignItems: "center",
-             justifyContent: "center",
-             overflow: "hidden",
-             flexShrink: 0,
-           }}
-         >
-           <span
-             style={{
-               color: "#FFFFFF",
-               fontSize: "18px",
-               fontWeight: "600",
-               textAlign: "center",
-               textTransform: "uppercase",
-               letterSpacing: "0.5px"
-             }}
-           >
-             Foto del equipo
-           </span>
-         </div>
-       </div>
-       <div
-         style={{
-           flex: 2,
-           color: "#FFFFFF",
-           fontSize: "16px",
-           fontWeight: "500",
-           lineHeight: 1.6,
-         }}
-       >
-         <h2
-           style={{
-             color: "#FF6B35",
-             fontWeight: "700",
-             fontSize: "28px",
-             marginBottom: "20px",
-             textTransform: "uppercase",
-             letterSpacing: "0.5px"
-           }}
-         >
-           Sobre MindSchool
-         </h2>
-         <p>
-           Somos un equipo multidisciplinario apasionado por la educación, la
-           tecnología y la creatividad. En MindSchool, creemos en el poder de
-           la comunidad y la innovación para transformar vidas y abrir nuevas
-           oportunidades de aprendizaje para todos.
-         </p>
-         <p>
-           MindSchool nació del sueño de transformar la educación en una
-           experiencia divertida, inclusiva y efectiva para todos. Nuestro
-           equipo, apasionado por la innovación y el aprendizaje, ha trabajado
-           incansablemente para crear una plataforma donde estudiantes y
-           profesores puedan crecer juntos, compartir conocimientos y alcanzar
-           sus metas.
-         </p>
-         <p>
-           Creemos que cada persona tiene un potencial único, y nuestra misión
-           es ayudar a descubrirlo y potenciarlo a través de la tecnología, la
-           creatividad y la comunidad.
-         </p>
-       </div>
-     </section>
+      {/* SOBRE NOSOTROS - Optimizado para móvil */}
+      <section className="sobre-section">
+        <div className="sobre-container">
+          <div className="sobre-image">
+            Foto del equipo
+          </div>
+          <div className="sobre-content">
+            <h2 className="sobre-title">
+              Sobre MindSchool
+            </h2>
+            <p className="sobre-text">
+              Somos un equipo multidisciplinario apasionado por la educación, la
+              tecnología y la creatividad. En MindSchool, creemos en el poder de
+              la comunidad y la innovación para transformar vidas y abrir nuevas
+              oportunidades de aprendizaje para todos.
+            </p>
+            <p className="sobre-text">
+              MindSchool nació del sueño de transformar la educación en una
+              experiencia divertida, inclusiva y efectiva para todos. Nuestro
+              equipo, apasionado por la innovación y el aprendizaje, ha trabajado
+              incansablemente para crear una plataforma donde estudiantes y
+              profesores puedan crecer juntos, compartir conocimientos y alcanzar
+              sus metas.
+            </p>
+            <p className="sobre-text">
+              Creemos que cada persona tiene un potencial único, y nuestra misión
+              es ayudar a descubrirlo y potenciarlo a través de la tecnología, la
+              creatividad y la comunidad.
+            </p>
+          </div>
+        </div>
+      </section>
        
-     {/* CONTACTO VISUAL Y DESTACADO */}
-     <section
-       id="contacto"
-       style={{
-         width: "100%",
-         maxWidth: 800,
-         margin: "40px auto",
-         background: "#fff",
-         borderRadius: 16,
-         boxShadow: "0 2px 12px #FF6B3522",
-         padding: 0,
-         display: "flex",
-         flexDirection: "row",
-         alignItems: "stretch",
-         overflow: "hidden",
-       }}
-     >
-       {/* Video del gato que estudia */}
-       <div
-         style={{
-           flex: 1,
-           minWidth: 0,
-           background: "#222e3a",
-           display: "flex",
-           alignItems: "center",
-           justifyContent: "center",
-           padding: 24,
-           boxSizing: "border-box",
-         }}
-       >
+     {/* CONTACTO - Optimizado para móvil */}
+     <section id="contacto" className="contacto-section">
+       <div className="contacto-container">
+         {/* Video del gato que estudia */}
          <video
            src={gatoEstudio}
            autoPlay
            loop
            muted
            playsInline
-           style={{
-             width: "100%",
-             height: "100%",
-             maxWidth: 380,
-             maxHeight: 380,
-             minHeight: 220,
-             objectFit: "cover",
-             borderRadius: 18,
-             display: "block",
-             background: "#222e3a",
-             boxShadow: "0 4px 24px #FF6B3533",
-           }}
+           className="contacto-video"
          />
-       </div>
-       {/* Formulario de contacto */}
-       <div
-         style={{
-           flex: 1,
-           minWidth: 0,
-           display: "flex",
-           flexDirection: "column",
-           alignItems: "center",
-           justifyContent: "center",
-           padding: 24,
-         }}
-       >
-         <h2 style={{ color: "#000000", fontWeight: 700, fontSize: 24, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.5px" }}>
-           Contáctanos
-         </h2>
-         <form
-           onSubmit={handleSubmitContacto}
-           style={{ width: "100%", maxWidth: 340, display: "flex", flexDirection: "column", gap: 14 }}
-           autoComplete="off"
-         >
-           <input
-             name="nombre"
-             type="text"
-             placeholder="Nombre"
-             value={form.nombre}
-             onChange={handleChange}
-             required
-             style={{ padding: 10, borderRadius: 6, border: "1px solid #cbd5e1" }}
-           />
-           <input
-             name="email"
-             type="email"
-             placeholder="Email"
-             value={form.email}
-             onChange={handleChange}
-             required
-             style={{ padding: 10, borderRadius: 6, border: "1px solid #cbd5e1" }}
-           />
-           <input
-             name="telefono"
-             type="text"
-             placeholder="Teléfono"
-             value={form.telefono}
-             onChange={handleChange}
-             style={{ padding: 10, borderRadius: 6, border: "1px solid #cbd5e1" }}
-           />
-           <input
-             name="asunto"
-             type="text"
-             placeholder="Asunto"
-             value={form.asunto}
-             onChange={handleChange}
-             style={{ padding: 10, borderRadius: 6, border: "1px solid #cbd5e1" }}
-           />
-           <textarea
-             name="mensaje"
-             placeholder="Mensaje"
-             value={form.mensaje}
-             onChange={handleChange}
-             required
-             rows={3}
-             style={{ padding: 10, borderRadius: 6, border: "1px solid #cbd5e1", resize: "vertical" }}
-           />
-           <button
-             type="submit"
-             disabled={enviando}
-             style={{
-               background: "#FF6B35",
-               color: "#fff",
-               border: "none",
-               borderRadius: 8,
-               padding: "12px 0",
-               fontWeight: 600,
-               fontSize: 16,
-               cursor: enviando ? "not-allowed" : "pointer",
-               marginTop: 6,
-               textTransform: "uppercase",
-               letterSpacing: "0.5px",
-             }}
+         {/* Formulario de contacto */}
+         <div className="contacto-form">
+           <h2 className="contacto-title">
+             Contáctanos
+           </h2>
+           <form
+             onSubmit={handleSubmitContacto}
+             style={{ display: "flex", flexDirection: "column", gap: 14 }}
+             autoComplete="off"
            >
-             {enviando ? "Enviando..." : "Enviar"}
-           </button>
-           {exito && <div style={{ color: "#16a34a", fontWeight: 700 }}>{exito}</div>}
-           {error && <div style={{ color: "#dc2626", fontWeight: 700 }}>{error}</div>}
-         </form>
+             <input
+               name="nombre"
+               type="text"
+               placeholder="Nombre"
+               value={form.nombre}
+               onChange={handleChange}
+               required
+               className="contacto-input"
+             />
+             <input
+               name="email"
+               type="email"
+               placeholder="Email"
+               value={form.email}
+               onChange={handleChange}
+               required
+               className="contacto-input"
+             />
+             <input
+               name="telefono"
+               type="text"
+               placeholder="Teléfono"
+               value={form.telefono}
+               onChange={handleChange}
+               className="contacto-input"
+             />
+             <input
+               name="asunto"
+               type="text"
+               placeholder="Asunto"
+               value={form.asunto}
+               onChange={handleChange}
+               className="contacto-input"
+             />
+             <textarea
+               name="mensaje"
+               placeholder="Mensaje"
+               value={form.mensaje}
+               onChange={handleChange}
+               required
+               rows={3}
+               className="contacto-textarea"
+             />
+             <button
+               type="submit"
+               disabled={enviando}
+               className="contacto-button"
+             >
+               {enviando ? "Enviando..." : "Enviar"}
+             </button>
+             {exito && <div style={{ color: "#16a34a", fontWeight: 700 }}>{exito}</div>}
+             {error && <div style={{ color: "#dc2626", fontWeight: 700 }}>{error}</div>}
+           </form>
+         </div>
        </div>
-       {/* Estilos responsivos */}
-       <style>{`
-         @media (max-width: 700px) {
-           #contacto {
-             flex-direction: column !important;
-             max-width: 98vw !important;
-             border-radius: 10px !important;
-           }
-           #contacto > div {
-             max-width: 100vw !important;
-             padding: 0 !important;
-           }
-           #contacto video {
-             max-width: 100vw !important;
-             min-height: 180px !important;
-             max-height: 260px !important;
-             border-radius: 0 !important;
-             margin-top: 12px !important;
-             margin-bottom: 12px !important;
-           }
-           #contacto form {
-             max-width: 98vw !important;
-           }
-         }
-       `}</style>
      </section>
-     {/* Easter Egg: Botón flotante e interacción */}
-     <div style={{ position: "fixed", bottom: 32, right: 32, zIndex: 10000 }}>
-       <button
-         onClick={handleShowEgg}
-         style={{
-           background: "linear-gradient(90deg, #FF6B35 0%, #E55A2B 100%)",
-           border: "none",
-           borderRadius: "50%",
-           width: 64,
-           height: 64,
-           boxShadow: "0 4px 18px #FF6B3544",
-           display: "flex",
-           alignItems: "center",
-           justifyContent: "center",
-           cursor: "pointer",
-           animation: "eggPulse 1.2s infinite alternate",
-           transition: "box-shadow 0.2s",
-         }}
-         title="¡Haz clic para una sorpresa!"
-       >
-         <Mascota width={38} height={38} />
-       </button>
-       <style>{`@keyframes eggPulse { 0%{box-shadow:0 0 0 #FF6B3500;} 100%{box-shadow:0 0 24px #FF6B35aa;} }`}</style>
+     {/* Easter Egg - Optimizado para móvil */}
+     <div className="easter-egg-button" onClick={handleShowEgg} title="¡Haz clic para una sorpresa!">
+       <Mascota width={38} height={38} />
      </div>
+     
      {showEgg && (
-       <div
-         style={{
-           position: "fixed",
-           inset: 0,
-           background: "rgba(0,0,0,0.75)",
-           zIndex: 10001,
-           display: "flex",
-           alignItems: "center",
-           justifyContent: "center",
-           animation: "fadeInEgg 0.5s",
-         }}
-         onClick={() => setShowEgg(false)}
-       >
-         <Confetti />
-         <div
-           style={{
-             background: "#fff",
-             borderRadius: 28,
-             boxShadow: "0 8px 32px #FF6B3555",
-             padding: "48px 38px",
-             minWidth: 320,
-             maxWidth: 420,
-             display: "flex",
-             flexDirection: "column",
-             alignItems: "center",
-             justifyContent: "center",
-             position: "relative",
-             animation: "eggPop 0.7s cubic-bezier(.4,2,.6,1)",
-           }}
-           onClick={(e) => e.stopPropagation()}
-         >
+       <div className="easter-egg-modal" onClick={() => setShowEgg(false)}>
+         <div className="easter-egg-content" onClick={(e) => e.stopPropagation()}>
            <Mascota width={80} height={80} showVideo={true} />
-           <div
-             style={{
-               color: "#FF6B35",
-               fontWeight: 900,
-               fontSize: 26,
-               margin: "18px 0 8px 0",
-               textAlign: "center",
-             }}
-           >
+           <div className="easter-egg-message">
              {mensajeEgg}
            </div>
-           <button
-             onClick={() => setShowEgg(false)}
-             style={{
-               marginTop: 18,
-               background: "#FF6B35",
-               color: "#fff",
-               border: "none",
-               borderRadius: 12,
-               padding: "10px 24px",
-               fontWeight: 700,
-               fontSize: 16,
-               cursor: "pointer",
-               boxShadow: "0 2px 8px #FF6B3533",
-             }}
-           >
+           <button className="easter-egg-close" onClick={() => setShowEgg(false)}>
              Cerrar
            </button>
          </div>
-         <style>{`
-           @keyframes fadeInEgg { 0%{opacity:0;} 100%{opacity:1;} }
-           @keyframes eggPop { 0%{transform:scale(0.7);opacity:0;} 100%{transform:scale(1);opacity:1;} }
-         `}</style>
        </div>
      )}
      </div>
-     {/* Footer profesional */}
-     <footer
-       style={{
-         width: "100%",
-         background: "#000000",
-         color: "#FFFFFF",
-         padding: "32px 0 18px 0",
-         marginTop: 48,
-         textAlign: "center",
-         borderTop: "2px solid #333333",
-       }}
-     >
-       <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 8 }}>
-         Hecho con <span style={{ color: "#FF6B35", fontSize: 22, verticalAlign: "middle" }}>♥</span> para la educación
+     
+     {/* Footer - Optimizado para móvil */}
+     <footer className="footer">
+       <div className="footer-text" style={{ fontWeight: 600, marginBottom: 8 }}>
+         Hecho con <span className="footer-heart">♥</span> para la educación
        </div>
-       <div style={{ fontSize: 15, marginBottom: 12 }}>
+       <div className="footer-text">
          &copy; {new Date().getFullYear()} MindSchool. Todos los derechos reservados.
        </div>
-       <div style={{ display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap", fontSize: 15 }}>
-         <a href="/aviso-legal" style={{ color: "#FF6B35", textDecoration: "none" }}>Aviso legal</a>
-         <a href="/privacidad" style={{ color: "#FF6B35", textDecoration: "none" }}>Política de privacidad</a>
-         <a href="#contacto" style={{ color: "#FF6B35", textDecoration: "none" }}>Contacto</a>
-         <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" style={{ color: "#FF6B35", textDecoration: "none" }}>Facebook</a>
-         <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={{ color: "#FF6B35", textDecoration: "none" }}>Twitter</a>
-         <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={{ color: "#FF6B35", textDecoration: "none" }}>Instagram</a>
+       <div className="footer-links">
+         <a href="/aviso-legal" className="footer-link">Aviso legal</a>
+         <a href="/privacidad" className="footer-link">Política de privacidad</a>
+         <a href="#contacto" className="footer-link">Contacto</a>
+         <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="footer-link">Facebook</a>
+         <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="footer-link">Twitter</a>
+         <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="footer-link">Instagram</a>
        </div>
      </footer>
     </div>

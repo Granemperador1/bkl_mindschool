@@ -31,8 +31,8 @@ function RutaConRol({ children, rolesPermitidos, rutaRedireccion = "/" }) {
     );
   }
 
-  // Si no hay usuario, redirigir al login
-  if (!usuario) return <Navigate to="/login" replace />;
+  // Si no hay usuario, redirigir a la página de bienvenida
+  if (!usuario) return <Navigate to="/" replace />;
 
   // Si se especifican roles permitidos, verificar que el usuario tenga uno de esos roles
   if (rolesPermitidos && rolesPermitidos.length > 0) {

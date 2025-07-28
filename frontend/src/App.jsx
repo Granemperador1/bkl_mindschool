@@ -64,8 +64,10 @@ function AppContent() {
           <Route path="/pago-profesor" element={<PagoProfesor />} />
           <Route path="/pago-estudiante" element={<PagoEstudiante />} />
 
-          {/* Redirección automática según rol */}
+          {/* Página de bienvenida pública */}
           <Route path="/" element={<Bienvenida />} />
+          
+          {/* Redirección automática según rol */}
           <Route path="/dashboard" element={<RedireccionPorRol />} />
 
           {/* Rutas de administrador */}

@@ -37,7 +37,7 @@ const RedireccionPorRol = () => {
   }
 
   if (!usuario) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   // Redirigir según el rol del usuario
