@@ -1,7 +1,7 @@
 const https = require('https');
 const http = require('http');
 
-const domain = 'green-monkey-737947.hostingersite.com';
+const domain = 'mindschoo.store';
 
 console.log('🔍 Verificando configuración de hosting...\n');
 
