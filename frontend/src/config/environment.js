@@ -1,19 +1,16 @@
 // Configuración de entorno para el frontend
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-
-// Debug: Imprimir la URL que se está usando
-console.log("🔧 Configuración de API:", {
-  VITE_API_URL: import.meta.env.VITE_API_URL,
-  API_URL: API_URL,
-  NODE_ENV: import.meta.env.NODE_ENV
-});
-
-export const config = {
-  API_URL: API_URL,
-  APP_NAME: import.meta.env.VITE_APP_NAME || "MindSchool",
-  APP_VERSION: import.meta.env.VITE_APP_VERSION || "1.0.0",
-  TIMEOUT: 10000,
-  RETRY_ATTEMPTS: 3,
+const environment = {
+  development: {
+    API_URL: 'http://localhost:8000/api',
+    BASE_URL: 'http://localhost:5173'
+  },
+  production: {
+    API_URL: 'https://tu-dominio.com/api', // Cambiar por tu dominio real
+    BASE_URL: 'https://tu-dominio.com'
+  }
 };
+
+const currentEnv = import.meta.env.MODE || 'development';
+const config = environment[currentEnv];
 
 export default config;
