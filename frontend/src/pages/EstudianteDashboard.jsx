@@ -772,8 +772,8 @@ const EstudianteDashboard = () => {
                     justifyContent: "flex-end",
                   }}
                   onClick={() => {
-                    setSelectedMateria(materia);
-                    setShowMateriaModal(true);
+                    console.log("🎯 Click en materia:", materia);
+                    navigate(`/estudiante/materia/${materia.id}`);
                   }}
                 >
                   <img

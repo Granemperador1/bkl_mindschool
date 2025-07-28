@@ -28,6 +28,9 @@ Route::post('auth/google-login', [AuthController::class, 'googleLogin']);
 
 // Rutas públicas de consulta
 Route::apiResource('cursos', CursoController::class)->only(['index', 'show']);
+Route::get('/cursos/{curso}/grupos', [CursoController::class, 'grupos']);
+Route::get('/cursos/{curso}/alumnos', [CursoController::class, 'alumnos']);
+Route::post('/cursos/{curso}/grupos', [CursoController::class, 'crearGrupo']);
 Route::get('/cursos/{curso}/lecciones', [LeccionController::class, 'cursoLecciones']);
 Route::get('/cursos/{curso}/multimedia', [MultimediaController::class, 'cursoMultimedia']);
 

@@ -1,12 +1,14 @@
 // Configuración de entorno para el frontend
 const environment = {
   development: {
-    API_URL: 'http://localhost:8000/api',
-    BASE_URL: 'http://localhost:5173'
+    API_URL: 'http://localhost:8001/api',
+    BASE_URL: 'http://localhost:5175',
+    TIMEOUT: 10000
   },
   production: {
-    API_URL: 'https://tu-dominio.com/api', // Cambiar por tu dominio real
-    BASE_URL: 'https://tu-dominio.com'
+    API_URL: 'https://green-monkey-737947.hostingersite.com/backend/public/api',
+    BASE_URL: 'https://green-monkey-737947.hostingersite.com',
+    TIMEOUT: 10000
   }
 };
 

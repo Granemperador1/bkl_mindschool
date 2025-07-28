@@ -115,11 +115,62 @@ function ProfesorPanel() {
   const [semestreEspecialSeleccionado, setSemestreEspecialSeleccionado] = useState(null);
   // Estado para materia especial seleccionada
   const [materiaEspecialSeleccionada, setMateriaEspecialSeleccionada] = useState(null);
+  const [activeTab, setActiveTab] = useState("calendario");
+  const [grupos, setGrupos] = useState([]);
+  const [alumnos, setAlumnos] = useState([]);
+  const [tareas, setTareas] = useState([]);
+  const [showCrearGrupoModal, setShowCrearGrupoModal] = useState(false);
 
   // 1. Agregar función para validar formato de imagen
   const esUrlImagenValida = (url) => {
     if (!url) return false;
     return /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(url);
+  };
+
+  // Función para cargar datos de la materia especial
+  const cargarDatosMateriaEspecial = async (materia) => {
+    try {
+      // Simular carga de datos para materias especiales
+      // En un caso real, aquí harías llamadas a la API
+      setGrupos([
+        {
+          id: 1,
+          nombre: "Grupo A",
+          descripcion: "Grupo principal de la materia",
+          codigo: "GRP001",
+          capacidad_maxima: 25,
+          miembros: []
+        }
+      ]);
+      
+      setAlumnos([
+        {
+          id: 1,
+          name: "Juan Pérez",
+          email: "juan@ejemplo.com",
+          racha_entregas: 5
+        },
+        {
+          id: 2,
+          name: "María García",
+          email: "maria@ejemplo.com",
+          racha_entregas: 8
+        }
+      ]);
+      
+      setTareas([
+        {
+          id: 1,
+          titulo: "Tarea 1: Introducción",
+          descripcion: "Primera tarea de la materia",
+          fecha_entrega: "2025-08-15",
+          tipo: "archivo",
+          estado: "Activa"
+        }
+      ]);
+    } catch (error) {
+      console.error("Error cargando datos de materia especial:", error);
+    }
   };
 
   // Cargar cursos/materias del profesor
@@ -639,7 +690,11 @@ function ProfesorPanel() {
             <ul style={{ listStyle: "none", padding: 0 }}>
               {semestreEspecialSeleccionado.materias.map((mat, idx) => (
                 <li key={mat} style={{ background: COLORS.surfaceLight, marginBottom: 12, borderRadius: 8, padding: "14px 18px", fontSize: 18, fontWeight: 500, color: COLORS.text, boxShadow: SHADOWS.sm, cursor: "pointer" }}
-                  onClick={() => setMateriaEspecialSeleccionada({ nombre: mat, semestre: semestreEspecialSeleccionado.nombre })}
+                  onClick={() => {
+                  console.log("🎯 Navegando a materia especial:", mat);
+                  // Navegar a la página de gestión de materia especial
+                  navigate(`/profesor/materia-especial/${encodeURIComponent(mat)}/gestionar`);
+                }}
                 >
                   {idx + 1}. {mat}
                 </li>
@@ -650,7 +705,7 @@ function ProfesorPanel() {
         {/* Panel de gestión de materia especial */}
         {materiaEspecialSeleccionada && (
           <div style={{ ...styles.container, paddingTop: 8 }}>
-            <div style={{ maxWidth: 900, margin: "0 auto", background: COLORS.surface, borderRadius: BORDER_RADIUS.xl, boxShadow: SHADOWS.lg, padding: 32 }}>
+            <div style={{ maxWidth: 1200, margin: "0 auto", background: COLORS.surface, borderRadius: BORDER_RADIUS.xl, boxShadow: SHADOWS.lg, padding: 32 }}>
               <button
                 onClick={() => setMateriaEspecialSeleccionada(null)}
                 style={{ background: "none", border: "none", color: COLORS.primary, fontSize: 22, cursor: "pointer", marginBottom: 18 }}
@@ -658,14 +713,180 @@ function ProfesorPanel() {
                 ← Volver a materias
               </button>
               <h2 style={{ textAlign: "center", color: COLORS.primary, fontWeight: 700, marginBottom: 24 }}>{materiaEspecialSeleccionada.nombre} <span style={{ color: COLORS.textSecondary, fontSize: 18 }}>({materiaEspecialSeleccionada.semestre})</span></h2>
-              {/* Aquí se puede renderizar el mismo componente de gestión de materia/curso normal */}
+              
+              {/* Pestañas de gestión */}
               <div style={{ marginTop: 32 }}>
-                <p style={{ color: COLORS.textSecondary, fontSize: 18, textAlign: "center" }}>
-                  Aquí puedes asignar contenido, tareas, ver entregas y gestionar exámenes para esta materia especial, igual que en un curso normal.
-                </p>
-                {/* Aquí puedes reutilizar componentes existentes, por ejemplo: */}
-                {/* <GestionMateriaPanel materia={materiaEspecialSeleccionada} usuario={usuario} /> */}
-                {/* O simplemente mostrar un mensaje de placeholder si no tienes un componente reutilizable aún */}
+                <div style={{ display: "flex", gap: 2, marginBottom: 24, borderBottom: `1px solid ${COLORS.border}` }}>
+                  {["calendario", "grupos", "alumnos", "tareas"].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      style={{
+                        background: activeTab === tab ? COLORS.primary : "transparent",
+                        color: activeTab === tab ? COLORS.white : COLORS.text,
+                        border: "none",
+                        padding: "12px 24px",
+                        borderRadius: "8px 8px 0 0",
+                        cursor: "pointer",
+                        fontSize: FONT_SIZES.base,
+                        fontWeight: FONT_WEIGHTS.medium,
+                        transition: TRANSITIONS.base,
+                      }}
+                    >
+                      {tab === "calendario" && "📅 Calendario"}
+                      {tab === "grupos" && "👥 Grupos"}
+                      {tab === "alumnos" && "👨‍🎓 Alumnos"}
+                      {tab === "tareas" && "📝 Tareas"}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Contenido de las pestañas */}
+                {activeTab === "calendario" && (
+                  <div style={{ background: COLORS.surfaceLight, borderRadius: BORDER_RADIUS.lg, padding: 24 }}>
+                    <h3 style={{ fontSize: FONT_SIZES.xl, marginBottom: 16, color: COLORS.primary }}>📅 Calendario de Actividades</h3>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 8 }}>
+                      {generateCalendar(currentDate)}
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 16 }}>
+                      <button onClick={prevMonth} style={{ background: COLORS.primary, color: COLORS.white, border: "none", padding: "8px 16px", borderRadius: 6, cursor: "pointer" }}>
+                        ← Mes anterior
+                      </button>
+                      <span style={{ fontSize: FONT_SIZES.lg, fontWeight: FONT_WEIGHTS.medium }}>{getMonthYear(currentDate)}</span>
+                      <button onClick={nextMonth} style={{ background: COLORS.primary, color: COLORS.white, border: "none", padding: "8px 16px", borderRadius: 6, cursor: "pointer" }}>
+                        Mes siguiente →
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === "grupos" && (
+                  <div style={{ background: COLORS.surfaceLight, borderRadius: BORDER_RADIUS.lg, padding: 24 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                      <h3 style={{ fontSize: FONT_SIZES.xl, color: COLORS.primary }}>👥 Grupos de Trabajo</h3>
+                      <button 
+                        onClick={() => setShowCrearGrupoModal(true)}
+                        style={{ background: COLORS.primary, color: COLORS.white, border: "none", padding: "10px 20px", borderRadius: 6, cursor: "pointer", fontSize: FONT_SIZES.sm }}
+                      >
+                        ➕ Crear Grupo
+                      </button>
+                    </div>
+                    <div style={{ display: "grid", gap: 16 }}>
+                      {grupos.map((grupo) => (
+                        <div key={grupo.id} style={{ background: COLORS.surface, padding: 16, borderRadius: 8, border: `1px solid ${COLORS.border}` }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <div>
+                              <h4 style={{ fontSize: FONT_SIZES.lg, marginBottom: 4 }}>{grupo.nombre}</h4>
+                              <p style={{ fontSize: FONT_SIZES.sm, color: COLORS.textSecondary }}>{grupo.descripcion}</p>
+                              <div style={{ display: "flex", gap: 16, marginTop: 8 }}>
+                                <span style={{ fontSize: FONT_SIZES.sm, color: COLORS.primary }}>Código: {grupo.codigo}</span>
+                                <span style={{ fontSize: FONT_SIZES.sm, color: COLORS.textSecondary }}>Alumnos: {grupo.miembros?.length || 0}/{grupo.capacidad_maxima}</span>
+                              </div>
+                            </div>
+                            <button style={{ background: COLORS.secondary, color: COLORS.white, border: "none", padding: "8px 16px", borderRadius: 6, cursor: "pointer", fontSize: FONT_SIZES.sm }}>
+                              Gestionar
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                      {grupos.length === 0 && (
+                        <div style={{ textAlign: "center", padding: 40, color: COLORS.textSecondary }}>
+                          <div style={{ fontSize: 48, marginBottom: 16 }}>👥</div>
+                          <p>No hay grupos creados para esta materia</p>
+                          <button 
+                            onClick={() => setShowCrearGrupoModal(true)}
+                            style={{ background: COLORS.primary, color: COLORS.white, border: "none", padding: "12px 24px", borderRadius: 6, cursor: "pointer", marginTop: 16 }}
+                          >
+                            Crear primer grupo
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === "alumnos" && (
+                  <div style={{ background: COLORS.surfaceLight, borderRadius: BORDER_RADIUS.lg, padding: 24 }}>
+                    <h3 style={{ fontSize: FONT_SIZES.xl, marginBottom: 16, color: COLORS.primary }}>👨‍🎓 Alumnos Inscritos</h3>
+                    <div style={{ display: "grid", gap: 16 }}>
+                      {alumnos.map((alumno) => (
+                        <div key={alumno.id} style={{ background: COLORS.surface, padding: 16, borderRadius: 8, border: `1px solid ${COLORS.border}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                            <div style={{ width: 40, height: 40, borderRadius: "50%", background: COLORS.primary, display: "flex", alignItems: "center", justifyContent: "center", color: COLORS.white, fontWeight: FONT_WEIGHTS.bold }}>
+                              {alumno.name?.charAt(0) || "A"}
+                            </div>
+                            <div>
+                              <h4 style={{ fontSize: FONT_SIZES.lg, marginBottom: 2 }}>{alumno.name}</h4>
+                              <p style={{ fontSize: FONT_SIZES.sm, color: COLORS.textSecondary }}>{alumno.email}</p>
+                            </div>
+                          </div>
+                          <div style={{ textAlign: "right" }}>
+                            <div style={{ fontSize: FONT_SIZES.sm, color: COLORS.primary, fontWeight: FONT_WEIGHTS.medium }}>
+                              Racha: {alumno.racha_entregas || 0}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      {alumnos.length === 0 && (
+                        <div style={{ textAlign: "center", padding: 40, color: COLORS.textSecondary }}>
+                          <div style={{ fontSize: 48, marginBottom: 16 }}>👨‍🎓</div>
+                          <p>No hay alumnos inscritos en esta materia</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === "tareas" && (
+                  <div style={{ background: COLORS.surfaceLight, borderRadius: BORDER_RADIUS.lg, padding: 24 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                      <h3 style={{ fontSize: FONT_SIZES.xl, color: COLORS.primary }}>📝 Tareas Asignadas</h3>
+                      <button 
+                        onClick={() => setShowTaskModal(true)}
+                        style={{ background: COLORS.primary, color: COLORS.white, border: "none", padding: "10px 20px", borderRadius: 6, cursor: "pointer", fontSize: FONT_SIZES.sm }}
+                      >
+                        ➕ Crear Tarea
+                      </button>
+                    </div>
+                    <div style={{ display: "grid", gap: 16 }}>
+                      {tareas.map((tarea) => (
+                        <div key={tarea.id} style={{ background: COLORS.surface, padding: 16, borderRadius: 8, border: `1px solid ${COLORS.border}` }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                            <div style={{ flex: 1 }}>
+                              <h4 style={{ fontSize: FONT_SIZES.lg, marginBottom: 4 }}>{tarea.titulo}</h4>
+                              <p style={{ fontSize: FONT_SIZES.sm, color: COLORS.textSecondary, marginBottom: 8 }}>{tarea.descripcion}</p>
+                              <div style={{ display: "flex", gap: 16, fontSize: FONT_SIZES.sm, color: COLORS.textSecondary }}>
+                                <span>📅 Entrega: {new Date(tarea.fecha_entrega).toLocaleDateString()}</span>
+                                <span>📁 Tipo: {tarea.tipo}</span>
+                                <span>📊 Estado: {tarea.estado || "Activa"}</span>
+                              </div>
+                            </div>
+                            <div style={{ display: "flex", gap: 8 }}>
+                              <button style={{ background: COLORS.secondary, color: COLORS.white, border: "none", padding: "6px 12px", borderRadius: 4, cursor: "pointer", fontSize: FONT_SIZES.sm }}>
+                                Ver
+                              </button>
+                              <button style={{ background: COLORS.accent, color: COLORS.white, border: "none", padding: "6px 12px", borderRadius: 4, cursor: "pointer", fontSize: FONT_SIZES.sm }}>
+                                Calificar
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      {tareas.length === 0 && (
+                        <div style={{ textAlign: "center", padding: 40, color: COLORS.textSecondary }}>
+                          <div style={{ fontSize: 48, marginBottom: 16 }}>📝</div>
+                          <p>No hay tareas asignadas para esta materia</p>
+                          <button 
+                            onClick={() => setShowTaskModal(true)}
+                            style={{ background: COLORS.primary, color: COLORS.white, border: "none", padding: "12px 24px", borderRadius: 6, cursor: "pointer", marginTop: 16 }}
+                          >
+                            Crear primera tarea
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

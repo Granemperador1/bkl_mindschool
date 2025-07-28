@@ -547,4 +547,54 @@ class CursoController extends Controller
         );
         return $this->successResponse(null, 'Inscripción exitosa');
     }
+
+    /**
+     * Crea un nuevo grupo para el curso
+     */
+    public function crearGrupo(Request $request, $idCurso)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+            'max_estudiantes' => 'nullable|integer|min:1|max:100'
+        ]);
+
+        $curso = \App\Models\Curso::findOrFail($idCurso);
+        
+        // Generar código único para el grupo
+        $codigo = 'GRP' . strtoupper(substr(md5(uniqid()), 0, 6));
+        
+        $grupo = \App\Models\GrupoTrabajo::create([
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+            'max_estudiantes' => $request->max_estudiantes ?? 20,
+            'codigo_acceso' => $codigo,
+            'estado' => 'activo',
+            'auto_asignacion' => false,
+            'curso_id' => $idCurso,
+            'creador_id' => auth()->id()
+        ]);
+
+        return $this->successResponse($grupo, 'Grupo creado exitosamente');
+    }
+
+    /**
+     * Devuelve los grupos del curso
+     */
+    public function grupos($idCurso)
+    {
+        $curso = \App\Models\Curso::findOrFail($idCurso);
+        // Si tienes relación grupos en el modelo Curso
+        return $this->successResponse($curso->grupos ?? [], 'Grupos obtenidos correctamente');
+    }
+
+    /**
+     * Devuelve los alumnos del curso
+     */
+    public function alumnos($idCurso)
+    {
+        $curso = \App\Models\Curso::findOrFail($idCurso);
+        // Si tienes relación alumnos en el modelo Curso
+        return $this->successResponse($curso->alumnos ?? [], 'Alumnos obtenidos correctamente');
+    }
 } 

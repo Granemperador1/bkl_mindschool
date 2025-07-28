@@ -237,14 +237,7 @@ const Navbar = () => {
         >
           {usuario && (
             <>
-              <Link
-                to={getDashboardPath()}
-                style={navLinkStyle}
-                onMouseEnter={navLinkHover}
-                onMouseLeave={navLinkUnhover}
-              >
-                Dashboard
-              </Link>
+
               {usuario.roles?.[0] === "admin" && (
                 <>
                   <Link
@@ -291,46 +284,7 @@ const Navbar = () => {
               )}
               {usuario.roles?.[0] === "profesor" && (
                 <>
-                  <Link
-                    to="/profesor/cursos"
-                    style={navLinkStyle}
-                    onMouseEnter={navLinkHover}
-                    onMouseLeave={navLinkUnhover}
-                  >
-                    Mis Cursos
-                  </Link>
-                  <Link
-                    to="/profesor/asesorias"
-                    style={navLinkStyle}
-                    onMouseEnter={navLinkHover}
-                    onMouseLeave={navLinkUnhover}
-                  >
-                    Mis Asesorías
-                  </Link>
-                  <Link
-                    to="/profesor/disponibilidad"
-                    style={navLinkStyle}
-                    onMouseEnter={navLinkHover}
-                    onMouseLeave={navLinkUnhover}
-                  >
-                    Disponibilidad
-                  </Link>
-                  <Link
-                    to="/profesor/pagos"
-                    style={navLinkStyle}
-                    onMouseEnter={navLinkHover}
-                    onMouseLeave={navLinkUnhover}
-                  >
-                    Pagos
-                  </Link>
-                  <Link
-                    to="/mensajes"
-                    style={navLinkStyle}
-                    onMouseEnter={navLinkHover}
-                    onMouseLeave={navLinkUnhover}
-                  >
-                    Mensajes
-                  </Link>
+                  {/* Enlaces de navegación para profesores eliminados */}
                 </>
               )}
               {usuario.roles?.[0] === "estudiante" && (
@@ -579,9 +533,7 @@ const Navbar = () => {
               {/* Enlaces de navegación (igual que en desktop) */}
               {usuario && (
                 <>
-                  <Link to={getDashboardPath()} style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                    Dashboard
-                  </Link>
+
                   {usuario.roles?.[0] === "admin" && (
                     <>
                       <Link to="/admin/usuarios" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
@@ -603,21 +555,7 @@ const Navbar = () => {
                   )}
                   {usuario.roles?.[0] === "profesor" && (
                     <>
-                      <Link to="/profesor/cursos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                        Mis Cursos
-                      </Link>
-                      <Link to="/profesor/asesorias" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                        Mis Asesorías
-                      </Link>
-                      <Link to="/profesor/disponibilidad" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                        Disponibilidad
-                      </Link>
-                      <Link to="/profesor/pagos" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                        Pagos
-                      </Link>
-                      <Link to="/mensajes" style={navLinkStyle} onClick={() => setIsMenuOpen(false)}>
-                        Mensajes
-                      </Link>
+                      {/* Enlaces de navegación para profesores eliminados */}
                     </>
                   )}
                   {usuario.roles?.[0] === "estudiante" && (

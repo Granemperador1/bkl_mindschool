@@ -45,6 +45,14 @@ class Curso extends Model
     }
 
     /**
+     * Relación con los grupos de trabajo del curso
+     */
+    public function grupos()
+    {
+        return $this->hasMany(GrupoTrabajo::class, 'curso_id');
+    }
+
+    /**
      * Relación muchos a muchos con usuarios (alumnos) a través de curso_usuario
      */
     public function alumnos()

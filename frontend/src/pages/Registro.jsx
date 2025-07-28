@@ -88,7 +88,8 @@ const Registro = () => {
     email: "",
     password: "",
     password_confirmation: "",
-    // role: "estudiante", // Eliminado del estado editable
+    tipo_usuario: "estudiante", // Cambiado de 'alumno' a 'estudiante'
+    codigo_especial: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConf, setShowPasswordConf] = useState(false);
@@ -134,16 +135,25 @@ const Registro = () => {
       setEnviando(false);
       return;
     }
-    // Forzar el rol a 'estudiante' antes de enviar
-    const dataToSend = { ...formData, role: 'estudiante' };
+    // Enviar tipo_usuario y codigo_especial al backend
+    const dataToSend = { 
+      ...formData,
+      codigo_especial: formData.codigo_especial.trim() || null
+    };
 
     try {
       const success = await register(dataToSend);
       if (success) {
         setTimeout(() => {
           setShowSorpresa(false);
-          // Redirigir a la página de pago después del registro exitoso
+          // Redirigir según tipo de usuario y código especial
+          if (formData.codigo_especial) {
+            navigate('/clases-especiales');
+          } else if (formData.tipo_usuario === 'profesor') {
+            navigate('/pago-profesor');
+          } else {
           navigate('/pago-estudiante');
+          }
         }, 2000);
         return;
       }
@@ -342,7 +352,84 @@ const Registro = () => {
     {error}
   </div>
 )}
+          {/* Mensaje de costos y primer mes gratis */}
+          <div style={{
+            background: COLORS.surfaceLight,
+            borderRadius: BORDER_RADIUS.lg,
+            padding: `${SPACING[3]} ${SPACING[4]}`,
+            marginBottom: SPACING[5],
+            color: COLORS.text,
+            fontWeight: FONT_WEIGHTS.medium,
+            fontSize: FONT_SIZES.base,
+            border: `1.5px solid ${COLORS.primary}`,
+          }}>
+            <span style={{ fontWeight: 700, color: COLORS.primary }}>¡El primer mes es gratis!</span><br/>
+            Después, el costo será de <b>$300</b> para profesores y <b>$150</b> para alumnos.<br/>
+            Si tienes un <b>código especial</b> (te lo da un maestro especial), ingrésalo abajo para acceder a clases especiales.
+          </div>
           <form onSubmit={handleSubmit}>
+            {/* Selector de tipo de usuario */}
+            <div style={{ marginBottom: SPACING[5] }}>
+              <label htmlFor="tipo_usuario" style={{ fontWeight: FONT_WEIGHTS.medium, color: COLORS.text, marginBottom: 4, display: 'block' }}>
+                ¿Eres profesor o alumno?
+              </label>
+              <select
+                id="tipo_usuario"
+                name="tipo_usuario"
+                value={formData.tipo_usuario}
+                onChange={handleChange}
+                required
+                style={{
+                  width: "100%",
+                  padding: `${SPACING[3]} ${SPACING[4]}`,
+                  border: `1.5px solid ${COLORS.border}`,
+                  borderRadius: BORDER_RADIUS.lg,
+                  fontSize: FONT_SIZES.base,
+                  fontFamily: FONTS.main,
+                  background: COLORS.surfaceLight,
+                  color: COLORS.text,
+                  outline: "none",
+                  transition: TRANSITIONS.base,
+                  boxSizing: "border-box",
+                  fontWeight: FONT_WEIGHTS.medium,
+                  letterSpacing: 0.2,
+                  marginBottom: 2
+                }}
+              >
+                <option value="estudiante">Alumno</option>
+                <option value="profesor">Profesor</option>
+              </select>
+            </div>
+            {/* Campo de código especial */}
+            <div style={{ marginBottom: SPACING[5] }}>
+              <input
+                type="text"
+                name="codigo_especial"
+                placeholder="Código especial (opcional)"
+                aria-label="Código especial"
+                value={formData.codigo_especial}
+                onChange={handleChange}
+                style={{
+                  width: "100%",
+                  padding: `${SPACING[3]} ${SPACING[4]}`,
+                  border: `1.5px solid ${COLORS.border}`,
+                  borderRadius: BORDER_RADIUS.lg,
+                  fontSize: FONT_SIZES.base,
+                  fontFamily: FONTS.main,
+                  background: COLORS.surfaceLight,
+                  color: COLORS.text,
+                  outline: "none",
+                  transition: TRANSITIONS.base,
+                  boxSizing: "border-box",
+                  fontWeight: FONT_WEIGHTS.medium,
+                  letterSpacing: 0.2,
+                }}
+                aria-describedby="codigo-ayuda"
+              />
+              <small id="codigo-ayuda" style={{ color: COLORS.textSecondary, fontSize: FONT_SIZES.xs, marginLeft: 2, display: "block", marginBottom: SPACING[2] }}>
+                Si tienes un código especial, ingrésalo aquí.
+              </small>
+            </div>
             <div style={{ marginBottom: SPACING[5] }}>
               <input
                 type="text"

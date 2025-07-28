@@ -30,7 +30,6 @@ const PagoEstudiante = () => {
     clabe: '',
     
     // Código de clase
-    codigoClase: '',
     
     // Información adicional
     intereses: '',
@@ -176,31 +175,6 @@ const PagoEstudiante = () => {
 
         <div>
           <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
-            Código de Clase (Opcional)
-          </label>
-          <input
-            type="text"
-            name="codigoClase"
-            value={formData.codigoClase}
-            onChange={handleChange}
-            placeholder="Ingresa tu código de clase especial si tienes uno"
-            style={{
-              width: '100%',
-              padding: '12px',
-              border: `1px solid ${COLORS.border}`,
-              borderRadius: BORDER_RADIUS.md,
-              fontSize: '1rem',
-              background: 'white',
-              color: COLORS.text
-            }}
-          />
-          <small style={{ color: COLORS.textSecondary, fontSize: '0.8rem', marginTop: '5px', display: 'block' }}>
-            Si tienes un código de profesor especial, ingrésalo aquí. Si no tienes uno, puedes dejarlo vacío.
-          </small>
-        </div>
-
-        <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
             Áreas de Interés
           </label>
           <textarea
@@ -306,8 +280,8 @@ const PagoEstudiante = () => {
               color: COLORS.text
             }}
           >
-            <option value="corriente">Cuenta Corriente</option>
-            <option value="ahorro">Cuenta de Ahorro</option>
+            <option value="debito">Débito</option>
+            <option value="credito">Crédito</option>
           </select>
         </div>
 
@@ -359,7 +333,7 @@ const PagoEstudiante = () => {
 
         <div>
           <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
-            CLABE (18 dígitos) *
+            Clave de Seguridad (3 dígitos) *
           </label>
           <input
             type="text"
@@ -367,8 +341,9 @@ const PagoEstudiante = () => {
             value={formData.clabe}
             onChange={handleChange}
             required
-            placeholder="CLABE interbancaria"
-            maxLength="18"
+            placeholder="Clave de 3 dígitos"
+            maxLength="3"
+            pattern="[0-9]{3}"
             style={{
               width: '100%',
               padding: '12px',

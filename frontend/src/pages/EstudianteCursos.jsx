@@ -468,7 +468,7 @@ const EstudianteCursos = () => {
 
                     {estaInscrito ? (
                       <button
-                        onClick={() => navigate(`/estudiante/curso/${curso.id}`)}
+                        onClick={() => navigate(`/estudiante/curso/${curso.id}/detalle`)}
                         style={{
                           padding: `${SPACING[2]} ${SPACING[4]}`,
                           background: COLORS.primary,

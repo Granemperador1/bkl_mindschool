@@ -7,7 +7,7 @@ import {
 import { AuthProvider } from "./context/AuthContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { COLORS, FONTS } from "./theme/branding/branding";
-import Navbar from "./components/Navbar";
+
 import Login from "./pages/Login";
 import Registro from "./pages/Registro";
 import RedireccionPorRol from "./components/RedireccionPorRol";
@@ -37,12 +37,13 @@ import ProfesorEstudiantes from "./pages/ProfesorEstudiantes";
 import SeleccionTipoUsuario from "./pages/SeleccionTipoUsuario";
 import PagoProfesor from "./pages/PagoProfesor";
 import PagoEstudiante from "./pages/PagoEstudiante";
+import MateriaIndividual from "./pages/MateriaIndividual";
+import MateriaEspecialGestion from "./pages/MateriaEspecialGestion";
 
 // Layout base para la aplicación
 function AppContent() {
   const location = useLocation();
-  // Ocultar Navbar en login, registro, bienvenida y páginas de pago
-  const hideNavbar = ["/login", "/registro", "/", "/pago-estudiante", "/pago-profesor"].includes(location.pathname);
+
 
   return (
     <div
@@ -52,7 +53,7 @@ function AppContent() {
         fontFamily: FONTS.main,
       }}
     >
-      {!hideNavbar && <Navbar />}
+
       <main>
         <Routes>
           {/* Rutas públicas */}
@@ -205,6 +206,22 @@ function AppContent() {
               </RutaConRol>
             }
           />
+          <Route
+            path="/profesor/materia/:id/gestionar"
+            element={
+              <RutaConRol rolesPermitidos={["profesor"]}>
+                <MateriaIndividual />
+              </RutaConRol>
+            }
+          />
+          <Route
+            path="/profesor/materia-especial/:materiaNombre/gestionar"
+            element={
+              <RutaConRol rolesPermitidos={["profesor"]}>
+                <MateriaEspecialGestion />
+              </RutaConRol>
+            }
+          />
 
           {/* Rutas de estudiante */}
           <Route
@@ -255,6 +272,22 @@ function AppContent() {
                   <h1>Detalle del Curso</h1>
                   <p>Página en desarrollo...</p>
                 </div>
+              </RutaConRol>
+            }
+          />
+          <Route
+            path="/estudiante/curso/:id/detalle"
+            element={
+              <RutaConRol rolesPermitidos={["estudiante"]}>
+                <MateriaIndividual />
+              </RutaConRol>
+            }
+          />
+          <Route
+            path="/estudiante/materia/:id"
+            element={
+              <RutaConRol rolesPermitidos={["estudiante"]}>
+                <MateriaIndividual />
               </RutaConRol>
             }
           />

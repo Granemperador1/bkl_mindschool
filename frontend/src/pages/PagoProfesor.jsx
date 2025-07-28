@@ -73,7 +73,7 @@ const PagoProfesor = () => {
       
       <div style={{ display: 'grid', gap: '15px' }}>
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
             Nombre Completo *
           </label>
           <input
@@ -87,13 +87,15 @@ const PagoProfesor = () => {
               padding: '12px',
               border: `1px solid ${COLORS.border}`,
               borderRadius: BORDER_RADIUS.md,
-              fontSize: '1rem'
+              fontSize: '1rem',
+              background: 'white',
+              color: COLORS.text
             }}
           />
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
             Teléfono *
           </label>
           <input
@@ -107,13 +109,15 @@ const PagoProfesor = () => {
               padding: '12px',
               border: `1px solid ${COLORS.border}`,
               borderRadius: BORDER_RADIUS.md,
-              fontSize: '1rem'
+              fontSize: '1rem',
+              background: 'white',
+              color: COLORS.text
             }}
           />
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
             Especialidad *
           </label>
           <input
@@ -128,13 +132,15 @@ const PagoProfesor = () => {
               padding: '12px',
               border: `1px solid ${COLORS.border}`,
               borderRadius: BORDER_RADIUS.md,
-              fontSize: '1rem'
+              fontSize: '1rem',
+              background: 'white',
+              color: COLORS.text
             }}
           />
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
             Años de Experiencia
           </label>
           <textarea
@@ -149,6 +155,8 @@ const PagoProfesor = () => {
               border: `1px solid ${COLORS.border}`,
               borderRadius: BORDER_RADIUS.md,
               fontSize: '1rem',
+              background: 'white',
+              color: COLORS.text,
               resize: 'vertical'
             }}
           />
@@ -165,7 +173,7 @@ const PagoProfesor = () => {
       
       <div style={{ display: 'grid', gap: '15px' }}>
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
             Título Académico *
           </label>
           <input
@@ -180,13 +188,15 @@ const PagoProfesor = () => {
               padding: '12px',
               border: `1px solid ${COLORS.border}`,
               borderRadius: BORDER_RADIUS.md,
-              fontSize: '1rem'
+              fontSize: '1rem',
+              background: 'white',
+              color: COLORS.text
             }}
           />
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
             Institución *
           </label>
           <input
@@ -201,13 +211,15 @@ const PagoProfesor = () => {
               padding: '12px',
               border: `1px solid ${COLORS.border}`,
               borderRadius: BORDER_RADIUS.md,
-              fontSize: '1rem'
+              fontSize: '1rem',
+              background: 'white',
+              color: COLORS.text
             }}
           />
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
             Fecha de Graduación *
           </label>
           <input
@@ -221,13 +233,15 @@ const PagoProfesor = () => {
               padding: '12px',
               border: `1px solid ${COLORS.border}`,
               borderRadius: BORDER_RADIUS.md,
-              fontSize: '1rem'
+              fontSize: '1rem',
+              background: 'white',
+              color: COLORS.text
             }}
           />
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
             Certificado de Título (PDF) *
           </label>
           <input
@@ -241,7 +255,9 @@ const PagoProfesor = () => {
               padding: '12px',
               border: `1px solid ${COLORS.border}`,
               borderRadius: BORDER_RADIUS.md,
-              fontSize: '1rem'
+              fontSize: '1rem',
+              background: 'white',
+              color: COLORS.text
             }}
           />
           <small style={{ color: COLORS.textLight }}>
@@ -250,7 +266,7 @@ const PagoProfesor = () => {
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
             CV/Currículum Vitae (PDF)
           </label>
           <input
@@ -263,7 +279,9 @@ const PagoProfesor = () => {
               padding: '12px',
               border: `1px solid ${COLORS.border}`,
               borderRadius: BORDER_RADIUS.md,
-              fontSize: '1rem'
+              fontSize: '1rem',
+              background: 'white',
+              color: COLORS.text
             }}
           />
           <small style={{ color: COLORS.textLight }}>
@@ -282,7 +300,7 @@ const PagoProfesor = () => {
       
       <div style={{ display: 'grid', gap: '15px' }}>
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
             Banco *
           </label>
           <select
@@ -295,7 +313,9 @@ const PagoProfesor = () => {
               padding: '12px',
               border: `1px solid ${COLORS.border}`,
               borderRadius: BORDER_RADIUS.md,
-              fontSize: '1rem'
+              fontSize: '1rem',
+              background: 'white',
+              color: COLORS.text
             }}
           >
             <option value="">Selecciona tu banco</option>
@@ -310,7 +330,7 @@ const PagoProfesor = () => {
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
             Tipo de Cuenta *
           </label>
           <select
@@ -323,16 +343,18 @@ const PagoProfesor = () => {
               padding: '12px',
               border: `1px solid ${COLORS.border}`,
               borderRadius: BORDER_RADIUS.md,
-              fontSize: '1rem'
+              fontSize: '1rem',
+              background: 'white',
+              color: COLORS.text
             }}
           >
-            <option value="corriente">Cuenta Corriente</option>
-            <option value="ahorro">Cuenta de Ahorro</option>
+            <option value="debito">Débito</option>
+            <option value="credito">Crédito</option>
           </select>
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
             Número de Cuenta *
           </label>
           <input
@@ -347,13 +369,15 @@ const PagoProfesor = () => {
               padding: '12px',
               border: `1px solid ${COLORS.border}`,
               borderRadius: BORDER_RADIUS.md,
-              fontSize: '1rem'
+              fontSize: '1rem',
+              background: 'white',
+              color: COLORS.text
             }}
           />
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
             Titular de la Cuenta *
           </label>
           <input
@@ -368,14 +392,16 @@ const PagoProfesor = () => {
               padding: '12px',
               border: `1px solid ${COLORS.border}`,
               borderRadius: BORDER_RADIUS.md,
-              fontSize: '1rem'
+              fontSize: '1rem',
+              background: 'white',
+              color: COLORS.text
             }}
           />
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-            CLABE (18 dígitos) *
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: COLORS.text }}>
+            Clave de Seguridad (3 dígitos) *
           </label>
           <input
             type="text"
@@ -383,14 +409,17 @@ const PagoProfesor = () => {
             value={formData.clabe}
             onChange={handleChange}
             required
-            placeholder="CLABE interbancaria"
-            maxLength="18"
+            placeholder="Clave de 3 dígitos"
+            maxLength="3"
+            pattern="[0-9]{3}"
             style={{
               width: '100%',
               padding: '12px',
               border: `1px solid ${COLORS.border}`,
               borderRadius: BORDER_RADIUS.md,
-              fontSize: '1rem'
+              fontSize: '1rem',
+              background: 'white',
+              color: COLORS.text
             }}
           />
         </div>
